@@ -226,9 +226,9 @@ $
     mark-scale: 80%,
 
     node((0,0), name: "1", width:  2.5cm, [Source], fill: maroon),
-    node((0.9,0), name: "2", [Transmit], fill: eastern),
-    node((1.7,0), name: "3", [Noise], fill: eastern),
-    node((2.6,0), name: "4", [Receive], fill: eastern),
+    node((0.85,0), name: "2", [Transmit], fill: eastern),
+    node((1.7,0), name: "3", [Channel], fill: eastern),
+    node((2.65,0), name: "4", [Receive], fill: eastern),
     node((3.75,0), name: "5", [Destination], fill: olive, shape: fletcher.shapes.hexagon),
 
     edge(label("1"), label("2"), "-|>"),
@@ -240,42 +240,59 @@ $
 
 This diagram present the general structure of any communication system. The communication process begins with an information source.
 
-#ntt[
+#ooc(ntt[
   Let $Sigma$ be a set:
   - $Sigma^n = Sigma times dots.c times Sigma$ is the set of words of length $n$. We take that $Sigma^0 = {epsilon}$ where $epsilon$ is the empty word.
   - $Sigma^* = union_(i >= 0) Sigma^n$ the set of all possible words over $Sigma$.
   - $Sigma^+ = union_(i >= 1) Sigma^n$ the set of all possible non-empty words over $Sigma$.
   - For $x in Sigma^*$, we define $|x| = min {n in NN | x in Sigma^n}$.
-  - The set of binary letters as $BB = {0, 1}$
-]
+  - The set of binary letters as $BB = {0, 1}$.
+  - For $x = x_1 dots x_n, y = y_1 dots y_m in Sigma^*, x y = x_1 dots x_n y_1 dots y_m in Sigma^*$.
+])
 
-#def(name: "Symbol/Message")[
+#def(name: "Symbol/Message", ovcount: false)[
   Let $cal(X)={x_1, dots, x_m}$ be a finite set of alphabets. An element of $cal(X)$ is called a symbol, and elements of $cal(X)^+$ are called a message with alphabet $cal(X)$.
 ]
 
-To model information that was given from a message, we consider the fact that a message contains more information the more unpredictable it is. For example, consider a sender that keeps sending the message "Hello!" over and over again, at each iteration, it becomes predictable what the next message would be, thus there is no more information that is passed. Uncertainty is a property of a random process, thus a good way to model a message is to consider it as a random variable $X$ that has values in $cal(X)$. From the previous example too, we can think that the information in a message is related to how uncertain it is, that is, how less probable it would be sent. 
-#ntt[
-  For the sake of simplifying notation, we will denote $P(X = x)$ as $P(x)$, same for other random variables, like $P(Y = y)$ as $P(y)$. Same for all the remaining notations like $P(y|x)$ which is $P(Y = y|X = x)$.
+#ooc[
+  To model information that was given from a message, we consider the fact that a message contains more information the more unpredictable it is. For example, consider a sender that keeps sending the message "Hello!" over and over again, at each iteration, it becomes predictable what the next message would be, thus there is no more information that is passed. Uncertainty is a property of a random process, thus a good way to model a message is to consider it as a random variable $X$ that has values in $cal(X)$. From the previous example too, we can think that the information in a message is related to how uncertain it is, that is, how less probable it would be sent.
+
+  #ntt[
+    For the sake of simplifying notation, we will denote $P(X = x)$ as $P(x)$, same for other random variables, like $P(Y = y)$ as $P(y)$. Same for all the remaining notations like $P(y|x)$ which is $P(Y = y|X = x)$.
+  ]
+
+  To define a measure for information $I: cal(X) -> RR$, we start by considering some random variable $X$ that represents a source of symbols $cal(X)$. As discussed before, $I$ would be inversely proportional to the probability $P(x)$ thus we have that $
+    I(x) = f(1/(P(x)))
+  $ $f$ would satisfy the following properties:
+  - $f$ is continuous, that is, a slight amount of information is gained from a slight difference in probability.
+  - $lim_(t -> 1) f(t) = 0$, that is, the information given from a certain event is none.
+  - The amount of information given by a joint of two independent events $x_1, x_2$ is the sum of information from each of the events, thus $I(x_1, x_2) = I(x_1) + I(x_2)$. $
+    I(x_1, x_2) &= f(1/(P(x_1, x_2))) = f(1/P(x_1) dot.c 1/P(x_2)) \
+    I(x_1, x_2) &= I(x_1) + I(x_2) = f(1/(P(x_1))) + f(1/P(x_2))
+  $
+  Thus, $f$ would satisfy $f(a b) = f(a) + f(b)$ which gives us that $f$ is just a logarithm function. Therefore, we obtain the following definition below.
 ]
 
-#def(name: "Measure Of Information")[
+#def(name: "Measure Of Information", ovcount: false)[
   Let $X$ be a random variable that represents the probability that a message $x$ is sent as $P(X = x) = P(x)$, we define the measure of information of the message $x$ as $
     I(x) = - log_2 P(x)
   $
 ]
 
-$log_2$ is taken for the usual reason that information is represented in binary, and that if it is represented in any other base, it would have just a linear factor added. In practice, transmission lines tend to cause irregularities in the signal, that is, it alters the contents of the message with some noise. Thus, in transmission lines we are interested in the distribution of the message $y$ that are received, given some sent message $x$, which will be measured by $P(y|x)$.
-
-#section[Entropy]
-After we defined a measure of information, which we discussed to be a measure of uncertainty, we need a way to quantify the average amount of uncertainty for all the values of $X$. Thus, we define the entropy as follows.
-
-#def(name: "Entropy")[
-  Let $X$ be a random variable with values in $cal(X)$, we define the entropy $H(X)$ as the average amount of information, that is $
-    H(x) = EE[I(X)] = - sum_(x in X) P(x) dot.c log_2 P(x)
-  $
+#ooc[
+  $log_2$ is taken for the usual reason that information is represented in binary, and that if it is represented in any other base, it would have just a linear factor added. In practice, transmission lines tend to cause irregularities in the signal, that is, it alters the contents of the message with some noise. Thus, in transmission lines we are interested in the distribution of the message $y$ that are received, given some sent message $x$, which will be measured by $P(y|x)$.
 ]
 
+#section[Entropy]
+#ooc[
+  After we defined a measure of information, which we discussed to be a measure of uncertainty, we need a way to quantify the average amount of uncertainty for all the values of $X$. Thus, we define the entropy as follows.
+]
 
+#def(name: "Entropy", ovcount: false)[
+  Let $X$ be a random variable with values in $cal(X)$, we define the entropy $H(X)$ as the average amount of information, that is $
+    H(X) = EE[I(X)] = - sum_(x in X) P(x) dot.c log_2 P(x)
+  $
+]
 
 
 Notice that the information of some message $x$ depends only on its unpredictability, that is, its probability of occurrence $P(x)$ not its value.
@@ -297,69 +314,122 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 #subsection[Source Coding]
 The most important part of coding theory is achieving the most efficient reliable and secure coding. The first part is the focus of this section, by assigning a code from each symbol in $cal(X)$, we try to achieve the minimum bound possible of letters to send to transmit our message.
 
-#def(name: "Coding Function")[
+#def(name: "Coding Function", ovcount: false)[
   Let $c: cal(X) -> BB^+$, we call it a coding function, which takes characters of our set of symbols, and represent it a binary string in $BB^+$.
 ]
 
 To measure the efficiency of our coding function, we define the average code length, the less the average, the more efficient the transmission will be.
 
-#def(name: "Average Code Length")[
-  Let $c: cal(X) -> BB^+$, a coding function, and consider the function $
-    tau: {c: cal(X) -> BB^x} -> RR quad quad c |-> tau_c = sum_(x in cal(X)) p(x) dot.c |c(x)|
-  $
-]
-
-#exm[
-  Take a horse race with $8$ horses, we want to send a message in binary that indicates which horse has won. And suppose that the probabilities of winning for each horse is as follows
-  #table(
-    columns: 9,
-    inset: (x: 2mm, y: 3mm),
-    align: center + horizon,
-    [Horse], ..range(1, 9).map(x => $#x$),
-    [Probability Of Winning], ..($1/2$, $1/4$, $1/8$, $1/64$, $1/64$, $1/64$, $1/64$, $1/64$).map(x => $display(#x)$)
-  )
-
-  If we just send the index of the winner horse, we get the following coding function
-
-  #table(
-    columns: 9,
-    align: center + horizon,
-    [Horse $i$], ..range(1, 9).map(x => $#x$),
-    [$c_1 (i)$], $000$, $001$, $010$, $011$, $100$, $101$, $110$, $111$
-  )
-
-  If we do it just blindly, we will need $3$ bits to describe all the possible winner horses from $000, 001, 010, dots.c, 110, 111$, calculating the average of description length we get $
-    tau_(c_1) = sum_(x in X) 3 dot.c p(x) = 3 "bits"
-  $
-
-  Giving us an average of $3$ bits for the transmission to give exactly who horse is the winner. An aspect that we did not use in the previous part is how likely do horses win in this case, which we can use to improve the amount of bits that would be sent on the channel. Consider the distribution of the horses winning as follows
-
-  Notice that if we give a smaller message for the horses that are more probable to win, and less to horses that are less likely to win, then we can reduce some of the data that will be used to specify the winner. We take the following encoding
-
-  #table(
-    columns: 9,
-    inset: (x: 2mm, y: 3mm),
-    align: center + horizon,
-    [Horse $i$], ..range(1, 9).map(x => $#x$),
-    [$c_2(i)$], $0$, $10$, $110$, $1110$, $111100$, $111101$, $1111110$, $111111$
-  )
-
-  Now, we recalculate the average description length to get $   tau_(c_2) = sum_(x in X) |c(x)| dot.c p(x) = 2 "bits"
-  $
-  we have reduced the average description length by $1$ bit. If we calculate the entropy in this case we get $H(X) = - sum_(x in X) P(x) dot.c log_2 P(x) = 1.83475$, we see that the reduced average code length is more than the entropy.
-]
-
-
-#thm(name: "Shannon's First Theorem")[
-  Let $X$ be a random variable with values in $cal(X)$, for any coding function $c: cal(X) -> BB^+$ we have $
-    tau_c >= H(X)
+#def(name: "Average Code Length", ovcount: false)[
+  Let $overline(L): cal(X) -> BB^+$, a coding function, and consider the function $
+    overline(L): {c: cal(X) -> BB^+} -> RR quad quad c |-> overline(L)_c = sum_(x in cal(X)) p(x) dot.c |c(x)|
   $
 ]
 
 #ooc[
-  #prf[
-    #lem(name: "Kraft Inequality")[
-      Let $X$ be a random variable with values in $cal(X)$, $c: cal(X) -> BB^+$ a coding function and $l(x) = |c(x)|$
-    ]
+  #exm[
+    Take a horse race with $8$ horses, we want to send a message in binary that indicates which horse has won. And suppose that the probabilities of winning for each horse is as follows
+    #table(
+      columns: 9,
+      inset: (x: 2mm, y: 3mm),
+      align: center + horizon,
+      [Horse], ..range(1, 9).map(x => $#x$),
+      [Probability Of Winning], ..($1/2$, $1/4$, $1/8$, $1/64$, $1/64$, $1/64$, $1/64$, $1/64$).map(x => $display(#x)$)
+    )
+
+    If we just send the index of the winner horse, we get the following coding function
+
+    #table(
+      columns: 9,
+      align: center + horizon,
+      [Horse $i$], ..range(1, 9).map(x => $#x$),
+      [$c_1 (i)$], $000$, $001$, $010$, $011$, $100$, $101$, $110$, $111$
+    )
+
+    If we do it just blindly, we will need $3$ bits to describe all the possible winner horses from $000, 001, 010, dots.c, 110, 111$, calculating the average of description length we get $
+      overline(L)_(c_1) = sum_(x in X) 3 dot.c p(x) = 3 "bits"
+    $
+
+    Giving us an average of $3$ bits for the transmission to give exactly who horse is the winner. An aspect that we did not use in the previous part is how likely do horses win in this case, which we can use to improve the amount of bits that would be sent on the channel. Consider the distribution of the horses winning as follows
+
+    Notice that if we give a smaller message for the horses that are more probable to win, and less to horses that are less likely to win, then we can reduce some of the data that will be used to specify the winner. We take the following encoding
+
+    #table(
+      columns: 9,
+      inset: (x: 2mm, y: 3mm),
+      align: center + horizon,
+      [Horse $i$], ..range(1, 9).map(x => $#x$),
+      [$c_2(i)$], $0$, $10$, $110$, $1110$, $111100$, $111101$, $1111110$, $111111$
+    )
+
+    Now, we recalculate the average description length to get $   overline(L)_(c_2) = sum_(x in X) |c(x)| dot.c p(x) = 2 "bits"
+    $
+    we have reduced the average description length by $1$ bit. If we calculate the entropy in this case we get $H(X) = - sum_(x in X) P(x) dot.c log_2 P(x) = 1.83475$, we see that the reduced average code length is more than the entropy.
   ]
+]
+
+#section[Shannon Theorems]
+#ooc[
+  To prove Shannon theorems, we need the following statements.
+
+  #def(name: "Prefix Code", ovcount: false)[
+    A coding function $c: cal(X) -> BB^+$ is said to have the prefix property if $forall x, y in cal(X), forall u in BB^*, c(x) != c(y) u$.
+  ]
+
+  That is, no code is a prefix of another. An example of a prefix code is ${0, 10}$ while a non-prefix code is ${1, 10}$ since $1$ is a prefix of $10$. These codes are also called instantaneous codes, that is because given a binary string, even incomplete, one can know if it maps to a symbol or not. The proof of such statement is left for the reader.
+
+  #def(name: "Uniquely Decodable Code", ovcount: false)[
+    A coding function $c: cal(X) -> BB^+$ is said to be uniquely decodable if $c$ is injective, that is, each coding is unique to the symbol.
+  ]
+
+  #pro(ovcount: false)[
+    A uniquely decodable code $c$ can be turned into a prefix code $c'$ such that $forall i in [|1, n|], |c(x_i)| = |c'(x_i)|$.
+  ]
+
+  #prf[
+    Let $c = {c_1, dots, c_m}$ be a uniquely Without loss of generality, consider 
+  ]
+
+
+  #lem(name: "Kraft Inequality", ovcount: false)[
+    Let $X$ be a random variable with values in $cal(X)$, $c: cal(X) -> BB^+$ a coding function and $l(x) = |c(x)|$, then we have that $
+      sum_(i=1)^n 2^(- l(x_i)) <= 1
+    $
+  ]
+
+]
+
+#thm(name: "Shannon's First Theorem", ovcount: false)[
+  Let $X$ be a random variable with values in $cal(X)$, for any coding function $c: cal(X) -> BB^+$ we have $
+    overline(L)_c >= H(X)
+  $
+]
+
+Huffman's algorithm provides a systematic way to construct an optimal prefix code, where symbols with higher probability should have shorter code words, and achieves a lower bound of average coding weight.
+
+#alg(name: "Huffman", ovcount: false)[
+  + Sort symbols by probability in descending order.
+  + Combine the two smallest probabilities.
+  + Repeat until one node remains.
+  + Build the tree.
+  + Assign 0 and 1 to branches.
+  + Read codewords.
+  + Compute the average code length.
+]
+
+#exm[
+]
+
+The closer this value is to the entropy, the more efficient the compression is, using Huffman coding, the message is compressed, meaning that fewer bits are needed on average per symbol compared to a fixed length code such code is called optimal code which is a code that minimizes average code length. In source coding, our goal was to remove redundancy in order to compress the message. Now, we move to a different problem, what happens when the channel is noisy?
+
+#subsection[Noise And Errors]
+To reduce the probability of error, we need to make the sent message more robust to disturbances through channel coding.
+
+
+#thm(name: "Shannon's Second Theorem", ovcount: false)[
+  For any noisy channel, there exists a code that allows reliable transmission if the rate is less than the channel capacity.
+]
+
+#chapter[Information \& Entropy][
+  Information theory is a theory founded by Claude Shannon, providing a mathematical framework for quantifying information, studying its transmission, processing, and storage. This chapter focuses on the fundamental 
 ]

@@ -117,3 +117,53 @@ A subgroup of a $p$-group is also a $p$-group by Lagrange's theorem.
 #prf[
   We have already proven this result for the case where $G$ is abelian. Suppose that $G$ is non-abelian. Consider $card G = n$. For $n = 1$, the result is trivial. Suppose that the result is true for all non-abelian groups of order less than $n$. If there is a subgroup $H$ of $G$ whose order is divisible by $p$, we get the result from the induction hypothesis. So suppose that $card H equiv.not 0 mod p$ for all subgroups $H$ of $G$ with $H != G$. Consider the conjugation action $g dot.c x = g x g^(-1)$. We have that $O_x = {»} <=> x in cal(Z)(G)$. Let $O_x_1, dots, O_x_r$ be the orbits of the action where $x_1, dots, x_s$ are in $cal(Z)(G)$. Then by class equation we have $card G = s + sum_(i=s+1)^r O_x_i$, on the other hand $card O_x_i = card G \/ card S_x_i$, we have that $card O_x_i > 1$ for $x_i in.not cal(Z)(G)$, $p$ does not divide $card S_x_i$ and it divides $card G$ thus it divides $card O_x_i$, it follows that $p$ divides $s$ and thus $p | card cal(Z)(G)$ which is a contradiction.
 ]
+
+#thm(name: "First Sylow Theorem")[
+  Let $G$ be a finite group of order $p^n m$ with $n, m in NN$, $p$ prime and $p divides.not m$, then $forall k in [|1, n|]$ there is a subgroup of order $p^k$.
+]
+
+#prf[
+  We use induction on $k$.
+  - For $k = 1$, the result is true by Cauchy.
+  - Suppose that the result is true for all $1 <= k <= n - 1$. Let $H$ be a subgroup of $G$ with order $p^k$, we have that $(N(H):H) equiv (G:H) mod p$ since $(G:H) = p^(n - k) m$ and so $p|(G:H) => p|(N(H):H)$. Consider $pi: N(H) -> N(H) \/ H$, the canonical surjection, $Ker pi = H$, $p|card (N(H)\/H)$ , by Cauchy's theorem, there exists a subgroup $K'$ of $N(H)\/H$ with order $p$. Then $pi^(-1)(K')$ is a subgroup $K$ of $N(H)$ containing $H$. Consider $pi|_K: K -> K'$, $Ker pi|_K = H$, the first isomorphism gives that $K\/H iso K'$ and thus $card K' = card H card K = p^k p = p^(k+1)$ and thus $K$ is a subgroup of $G$ such that $p^(k+1)$.
+]
+
+#def(name: "")[
+  Let $G$ be a finite group with order $p^n m$, $n, m in NN$, $p$ prime and $p divides.not m$, then a subgroup of $G$ with order $p^n$ is called a Sylow $p$-subgroup of $G$.
+]
+
+Notice that the conjugate of a Sylow $p$-subgroup of $G$, is also a Sylow $p$-subgroup.
+
+#thm(name: "Second Sylow Theorem")[
+  All Sylow $p$-subgroups are conjugates, that is, if $P_1$ and $P_2$ have order $p^n$, then $exists g in G, P_2 = g P_1 g^(-1)$.
+]
+
+#prf[
+  Consider the action $P_2 times cal(L)_(P_1) -> cal(L)_(P_1), y dot.c g P_1 = (y g) P_1$. Suppose that $O_(g P_1) = {g P_1}$ that is $forall y in P_2, y dot.c g P_1 = g P_1 => g^(-1) y g in P_1 => g^(-1) P_1 g subset P_2$ and since $card P_2 = card g^(-1) P_2 g = card P_1 $ thus $g^(-1) P_1 g = P_2$. Hence, if there is a fixed point for this action then $P_2$ and $P_1$ are conjugates. On the other hand, the class equation gives $
+    m = (m p^n) / (p^n) = (card G) / (card P_1) = card cal(L)_(P_1) = sum_(i = 1)^s card O_(g_i P_1) + sum_(i=b+1)^r card O_(g_i P_1)
+  $
+  where the first $s$ orbits are of order $1$ and the remaining are of order $>1$, we have $
+    card O_(g_i P_1) = (card P_2)/(card S(g_i P_1)) => forall i in [|s+1, dots, r|], p|card O_(g_i P_1)
+  $ Hence $p|card_(i=s+1)^r card O_(g_i P_1)$ and $p$ does not divide $m$ thus $p$ does not divide $sum_(i=1)^s card O_(g_i P_1)$ thus $sum_(i=1)^s card O_(g_i p) != 0$.
+]
+
+#ntt[
+  We denote the number of Sylow $p$-subgroups of a group $G$ as $n_p$.
+]
+
+#cor[
+  If $G$ is abelian finite and $p | card G$ prime then $n_p = 1$.
+]
+
+#thm(name: "Third Sylow's Theorem")[
+  Let $G$ be a finite group with order $p^n m$, $n, m in NN, p$ prime and $p divides.not m$, $n_p equiv 1 mod p$ and $n_p$ divides $m$.
+]
+
+#prf[
+  We will prove that $n_p$ divides $card G$. We have that $n_p equiv 1 mod p$. Let $phi$ set of Sylow $p$-subgroups $
+    G times phi &-> phi\
+    (g, P) &|-> g P g^(-1)
+  $ Let $P in phi$ then $O_p = phi$ by theorem $2$, then the class equation gives $
+    n_p = card phi = card O_p = (G:S_P)
+  $ and $card O_p$ divides $card G$ then $n_p$ divides $card G$.
+]

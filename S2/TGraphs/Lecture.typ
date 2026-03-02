@@ -510,14 +510,22 @@ The BFS builds a BFS-Tree as it searches the graph. The tree corresponds to the 
   }))
 ]
 
-Going through the same procedure as the previous example to get 
+Going through the same procedure as the previous example to get
 #align(center, diagram({
   node((0cm,  0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
-  node((1cm, -1cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
-  node((-1cm, -1cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
-  node((1cm, -2.4cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
-  node((2cm, -3.4cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
-  node((0cm, -3.4cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
+  node((2cm,  0cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
+  node((4cm,  0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
+  node((6cm,  0cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
+  node((0cm, -2cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
+  node((2cm, -2cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
+  node((4cm, -2cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
+  node((6cm, -2cm), $H$, stroke: 0.5pt, name: "H", radius: 0.4cm)
 
-  // edge(label("D"), label("H"))
+  edge(label("A"), label("B"))
+  edge(label("A"), label("E"))
+  edge(label("B"), label("F"))
+  edge(label("F"), label("G"))
+  edge(label("F"), label("C"))
+  edge(label("C"), label("D"))
+  edge(label("D"), label("H"))
 }))

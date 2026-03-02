@@ -14,15 +14,11 @@
   Given the source for reading, the definitions can be somewhat improperly explained or vague as the nature of definition depends highly on context.
 ]
 
-#def(name: "Signal/Noise")[
-  A signal is a physical representation of information that is sent from source to destination. Noise is any interference happening in the process of reading or interpreting the signal.
+A signal is a physical representation of information that is sent from source to destination. We model signals mathematically in the following way.
+#def(name: "Signal")[
+  A signal is a real function of $1$ or more variables
 ]
-
-#def(name: "Signal-Noise Ratio")[
-  Let $P_s$ and $P_n$ represent the power of the signals of signal and noise respectively, then the signal-noise ratio is defined as $xi = P_s\/P_n$.
-]
-
-This ratio represents the noise affects the signal, as in the higher $xi$ is, the more powerful is the signal to the noise. In general, we indicate it with a logarithmic measure $xi_(d B) = 10 log_10 xi$.
+// Noise is any interference happening in the process of reading or interpreting the signal.
 
 #section[Fourier Transform]
 
