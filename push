@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+cd ~/Courses/
+cp /etc/nixos/modules/typing/packages/* Template/
+git add .
+git commit -m "-"
+git push
