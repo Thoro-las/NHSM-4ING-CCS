@@ -8,6 +8,7 @@
 )
 
 #let iso = $tilde.equiv$
+#let card = math.op("#")
 
 #chapter[Introduction To Random Number Generators][
   Random number generation is an important part of many modern applications both in science and technology. It provides a source for randomness for stochastic simulations, cryptography, security, also adds realism for games by adding predictability. Yet, computers are known to be deterministic machines, that is, there is no intrinsic randomness is inside of those machines. So the goal is to study algorithms that give pseudo-random sequences that can be used in each of their appropriate application.
@@ -112,5 +113,16 @@ Here the generator depends on two prior parameters $(theta, m)$, also a seed to 
 
 #ooc[
   #prf[
+    Similarly to the SLCG, each term has at most $m$ possible values, by the pigeon-hole principle yet again, if we take the first $m^k + 1$ terms, then there is necessarily $i != j$ such that $(X_(i+l))_(l=1)^k = (X_(j+l))_(l=1)^k$ and thus by recursion we obtain that the next terms are equal, so the period is exactly the smallest $i$ such that $(X_(i+l))_(l=1)^k$ repeats which is at most $m^k$.
   ]
+]
+
+#section[Linear Feedback Shift Register]
+#ooc[
+  Define the operation XOR on ${0,1}$ as follows $a plus.o b = 1 <=> a != b$, and $plus.o.big_(i=1)^n a_n = a_1 plus.o a_2 plus.o dots.c plus.o a_n$ and it is easy to prove by induction that this can be simplified into $plus.o.big_(i=1)^n a_n = 1 <=> card {i in [|1, n|] | a_i = 1}$ is odd.
+]
+#def(name: "Linear Feedback Shift Register")[
+  Let $n, k in NN^*$ and ${i_1, dots, i_k} subset [|0, n|]$, define the sequence $(X_n)_(n in NN)$ with $X_0$ some seed and $
+    X_n = sum_(i=0)^n b_i 2^i => X_(n+1) = sum_(i=1)^(n) b_(i-1) 2^i + plus.o.big_(j=1)^k b_(i_j)
+  $
 ]
