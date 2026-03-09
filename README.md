@@ -8,7 +8,7 @@ Notice that here, I used a template that I created the "@THR" packages. I am usi
 In this case, you will have to deal with some paths, I highly recommend to use your local. To edit in the online editor, copy the `.typ` file you want to edit, also copy the contents of the template folder next to your file. Then all that remains is to change the paths of the files so that they are correctly working. Check this [project here](https://typst.app/project/rTI3Tsux6TazfyqRBUbieg), it shows how to make it work. You can just copy it and change the `Lecture.typ` by whatever file you need, and changing the first line as 
 ```diff
 - #import "@THR/<package>:<ver>": *
-- #import "THR/<package>/<ver>/template.typ": *
++ #import "THR/<package>/<ver>/template.typ": *
 ```
 
 ## Writing In Your Local (Install Typst, Go Ahead)
