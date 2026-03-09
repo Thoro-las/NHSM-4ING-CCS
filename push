@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-cd ~/Courses/
-cp /etc/nixos/modules/typing/packages/* Template/ -r
-git add .
-git commit -m "-"
-git status
-git push
