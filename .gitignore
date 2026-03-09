@@ -1,4 +1,4 @@
-./.gitignore
+.gitignore
 **/bin/*
 **/obj/*
 push
