@@ -1,5 +1,0 @@
-[package]
-name = "Sum"
-version = "1.0.0"
-authors = ["Thoro-las"]
-entrypoint = "./template.typ"

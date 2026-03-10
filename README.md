@@ -15,4 +15,4 @@ In this case, you will have to deal with some paths, I highly recommend to use y
 Put the whole contents of the Template folder in the default Typst package folder, for example in Linux it would be `.local/share/typst/packages` or `C:\Users\<username>\AppData\Local\typst\packages`. Honestly, I don't know much about other OSs, I think it's the same thing in principle, you just need to put them somewhere Typst can load packages from and it would work, hopefully.
 
 # Documentation Of The Template
-Here I will describe briefly what the templates give. I will add this later when I clean the templates, as it is now, its almost unusable.
+Here I will describe briefly what the templates give.
