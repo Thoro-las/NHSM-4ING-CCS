@@ -16,3 +16,34 @@ Put the whole contents of the Template folder in the default Typst package folde
 
 # Documentation Of The Template
 Here I will describe briefly what the templates give.
+
+## Base:1.0.0 Package
+This package contains all the important parts of my template, it define the boxes for definitions, theorems ...etc, and also the chapters and sections display.
+
+1. Titles:
+    1. ```outlines```: returns an outline of all the document
+    1. ```ctitle[title]```: centered unnumbered title
+    1. ```chapter[title][description]```: chapter with a title and a main description
+    1. ```section[title]```: section with a title
+    1. ```subsection[title]```: subsection with a title
+1. Boxes: The general formula for boxes is ```<box>([name: ""], [count: true], [ovcount: true])[...]``` where name is the name of the definition, theorem...etc, count is if it would be counted, and ovcount if it would show the overall counter, that is, the counter of the title along with which box it is.
+    1. ```def```: Definition
+	1. ```thm```: Theorem
+	1. ```pro```: Proposition
+	1. ```cor```: Corollary
+	1. ```lem```: Lemma
+    1. ```exr```: Exercise
+	1. ```qst```: Question
+	1. ```alg```: Algorithm
+    1. ```ntt```: Notation
+	1. ```nte```: Note
+1. Blocks: Here are more simple types of blocks, which are just of the form ```<block>[...]```:
+	1. ```prf```: Proof
+	1. ```exm```: Example
+	1. ```ooc```: Out-Of-Context
+    1. ```code```: Code Block
+1. Extras:
+    1. ```follow-bar[...]```: Bar to indicate a separation with some description
+
+## Course:1.0.0 & Document:1.0.0 Packages
+Here are just two types of files that use ```Base:1.0.0```, for now they are not too much more than just simplification, hopefully in the future some better features for each of these would be added.
