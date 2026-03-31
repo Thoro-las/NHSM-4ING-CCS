@@ -9,7 +9,7 @@
       This course is based on the book "Computer Networks -- A Systems Approach". It may be far from the course, but the course is not helpful in any way. This document will try to summarize the ideas of the book.
     ],
     warning: [
-      Given the source for reading, the definitions can be somewhat improperly explained or vague as the nature of definition depends highly on context.
+      This is not a course that is given in the sessions, there was no course to be given except some AI slope anyway.
     ]
   )
 )

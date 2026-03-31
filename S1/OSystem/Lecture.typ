@@ -135,28 +135,26 @@ In the scheduling information of the PCB, we have some parameters that we will u
     - Short processes may take long to execute.
     - Processes blocking others from execution.
   - *Implementation:*
-    #code(
-      ```
-      type Process
-        - id: identifier
-        - arrival_time: the arrival time
-        - burst_time: time needed for the process
-        - done: is the process done
+    ```
+    type Process
+      - id: identifier
+      - arrival_time: the arrival time
+      - burst_time: time needed for the process
+      - done: is the process done
 
-      algorithm FCFS
-        input:
-          - processes: process queue
+    algorithm FCFS
+      input:
+        - processes: process queue
 
-        sort(processes, arrive_time)
-        current_time = 0
+      sort(processes, arrive_time)
+      current_time = 0
 
-        for process in processes do
-          if current_time < process.arrival_time
-            current_time = process.arrival_time
-          end
+      for process in processes do
+        if current_time < process.arrival_time
+          current_time = process.arrival_time
         end
-      ```
-    )
+      end
+    ```
 ]
 
 #alg(ovcount: false, name: "SJN: Shortest Job Next.")[
@@ -169,26 +167,24 @@ In the scheduling information of the PCB, we have some parameters that we will u
     - slower execution by the sorting.
     - more complicated to implement.
     - starvation of longer processes.
-  
-  #code(
-    ```
-    type Process
-      - id: identifier
-      - arrival_time: the arrival time
-      - burst_time: time needed for the process
-      - done: is the process done
 
-    algorithm SJF
-      input:
-        - processes: process queue
+  ```
+  type Process
+    - id: identifier
+    - arrival_time: the arrival time
+    - burst_time: time needed for the process
+    - done: is the process done
 
-      sort(processes, burst_time)
-      while not all(processes, done)
-        - get the list of processes not done.
-        - execute the first process until its done.
-      end
-    ```
-  )
+  algorithm SJF
+    input:
+      - processes: process queue
+
+    sort(processes, burst_time)
+    while not all(processes, done)
+      - get the list of processes not done.
+      - execute the first process until its done.
+    end
+  ```
 ]
 
 #alg(name: "Priority Scheduling", ovcount: false)[
@@ -201,26 +197,24 @@ In the scheduling information of the PCB, we have some parameters that we will u
     - slower execution by the sorting.
     - starvation of processes with low priority.
     
-  #code(
-    ```
-    type Process
-      - id: identifier
-      - arrival_time: the arrival time
-      - burst_time: time needed for the process
-      - priority: priority of the process
-      - done: is the process done
+  ```
+  type Process
+    - id: identifier
+    - arrival_time: the arrival time
+    - burst_time: time needed for the process
+    - priority: priority of the process
+    - done: is the process done
 
-    algorithm PriorityScheduling
-      input:
-        - processes: process queue
+  algorithm PriorityScheduling
+    input:
+      - processes: process queue
 
-      sort(processes, priority)
-      while not all(processes, done)
-        - get the list of processes not done.
-        - execute the first process until its done.
-      end
-    ```
-  )
+    sort(processes, priority)
+    while not all(processes, done)
+      - get the list of processes not done.
+      - execute the first process until its done.
+    end
+  ```
 ]
 
 #alg(name: [RR: Round Robin], ovcount: false)[
@@ -234,26 +228,24 @@ In the scheduling information of the PCB, we have some parameters that we will u
   
   - *Disadvantages:*
     - efficency depends on quantum size.
-  
-  #code(
-    ```
-    type Process
-      - id: identifier
-      - arrival_time: the arrival time
-      - burst_time: time needed for the process
-      - done: is the process done
 
-    algorithm PriorityScheduling
-      input:
-        - processes: process queue
+  ```
+  type Process
+    - id: identifier
+    - arrival_time: the arrival time
+    - burst_time: time needed for the process
+    - done: is the process done
 
-      sort(processes, priority)
-      while not all(processes, done)
-        - get the list of processes not done.
-        - execute the first process until its done.
-      end
-    ```
-  )
+  algorithm PriorityScheduling
+    input:
+      - processes: process queue
+
+    sort(processes, priority)
+    while not all(processes, done)
+      - get the list of processes not done.
+      - execute the first process until its done.
+    end
+  ```
 ]
 
 
