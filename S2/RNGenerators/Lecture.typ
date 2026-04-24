@@ -1,4 +1,5 @@
-#import "@preview/commute:0.3.0": node, arr, commutative-diagram
+#import "@preview/commute:0.3.0": arr, commutative-diagram, node
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
 #import "@THR/Course:1.0.0": *
 #show: template.with(
@@ -6,7 +7,7 @@
     title: "Random Number Generation",
     writer: "HADIOUCHE Azouaou",
     disclaimer: [This document contains the lectures given by Dr. OUZANI.],
-  )
+  ),
 )
 
 #let iso = $tilde.equiv$
@@ -32,7 +33,7 @@ Differently from random number generation in simulations or other areas, RNG in 
 + QRNG (Quasi Random Number Generator): is also a deterministic sequence, but its goal is to have a low discrepancy, that is, the sequences are generated to be mainly equidistributed on the space, and are not as impredictible in general.
 
 #table(
-  columns: (1fr,)*4,
+  columns: (1fr,) * 4,
   [*Criteria*], [*TRNG*], [*PRNG*], [*QRNG*],
   [*Source*], [Physical], [Algorithmic], [Deterministic],
   [*Reproducible*], [No], [Yes given seed], [Yes],
@@ -40,7 +41,7 @@ Differently from random number generation in simulations or other areas, RNG in 
   [*Speed*], [Slow], [Fast], [Fast],
   [*Secure*], [Yes], [Yes], [No],
   [*Cost*], [Expensive], [Cheap], [Cheap],
-  [*Uniformity*], [Variable], [Excellent], [Optimal]
+  [*Uniformity*], [Variable], [Excellent], [Optimal],
 )
 
 #chapter[Pseudo-Random Number Generation][]
@@ -49,7 +50,7 @@ Differently from random number generation in simulations or other areas, RNG in 
   A PRNG is a deterministic algorithm which generates a sequence of numbers that seem random, which uses an initial value called the seed and generates the next terms based on previous ones.
 ]
 
-Generally, we try to use external sources to find seeds like the temperature of a CPU, the number of processes running or the current time of execution, and thus increases its unpredictability. 
+Generally, we try to use external sources to find seeds like the temperature of a CPU, the number of processes running or the current time of execution, and thus increases its unpredictability.
 
 Characteristics of such generators are:
 - From the definition, given the same seed, we can get the same sequence.
@@ -60,19 +61,30 @@ Characteristics of such generators are:
 Define the set $ZZ^(n star) = union_(n in NN) ZZ^n$ the set of all possible finite sequences from $ZZ$, and $Theta$ a set of all possible parameters $theta$.
 
 #def(name: "Congruence Generator")[
-  Let $f: ZZ^(n star) times Theta -> ZZ$, $theta in Theta$, $m in ZZ$, and ${X_n}$ a sequence with $X_0$ being the seed, and is defined as $
-    X_n = f((X_i)_(i=1)^(n-1); theta) mod m
-  $
+  Let $f: ZZ^(n star) times Theta -> ZZ$, $theta in Theta$, $m in ZZ$, and ${X_n}$ a sequence with $X_0$ being the seed, and is defined as $ X_n = f((X_i)_(i=1)^(n-1); theta) mod m $
 ]
 Here the generator depends on two prior parameters $(theta, m)$, also a seed to generate the same sequence. We start with the most basic congruence generator.
 
 #subsection[Simple Linear Congruence Generator]
 
 #def(name: "Simple Linear Congruence Generator")[
-  We consider in this case $Theta = ZZ^2$, $f((X_i)_(i=1)^(n-1); (a, b)) = a X_(n-1) + b$, and so we get $
-    X_n = a X_(n-1) + b mod m
-  $
+  We consider in this case $Theta = ZZ^2$, $f((X_i)_(i=1)^(n-1); (a, b)) = a X_(n-1) + b$, and so we get $ X_n = a X_(n-1) + b mod m $
 ]
+
+#table(
+  columns: (1fr, 1fr),
+  align: left,
+  table.header([Advantages], [Disadvantages]),
+  [
+    - Simple to implement.
+    - Quick execution.
+    - For large $m$, uniform on $[0, 1]$.
+  ],
+  [
+    - Often predictable.
+    - Bounded by $m$ values.
+  ],
+)
 
 #pro[
   A SLCG sequence is of a period at most $m$.
@@ -93,10 +105,7 @@ Here the generator depends on two prior parameters $(theta, m)$, also a seed to 
   - if $4$ divides $m$, then $4$ divides $a-1$.
 ]
 
-#ooc[
-  The proof is somewhat long and complicated since it considers many cases and some number theory, I tried to write the proof but honestly it has been 4 hours trying to simplify it into basic parts and it is still difficult, accept it, for now.
-]
-
+#colbreak()
 #exm[
   + The RANDU generator from IBM is a SLCG which takes the following iterations $X_(n+1) equiv 65539 dot.c X_n mod 2^(31)$. This generator is bad, as when plotting in 3D the values ${(X_n, X_(n+1), X_(n+2))}_(n in NN)$ we can see a clear correlation between points.
   + Park & Miller generator is good SLCG which takes the form $X_(n+1) equiv 16807 dot.c X_n mod (2^31 - 1)$ and it is considered to be a standard.
@@ -104,10 +113,22 @@ Here the generator depends on two prior parameters $(theta, m)$, also a seed to 
 
 #subsection[Multi-Linear Congruence Generator]
 #def(name: "Multi-Linear Congruence Generator")[
-  Let $k in NN^*$, We consider in here $Theta = ZZ^(k+1)$, $f((X_i)_(i=1)^(n-1); (a_1, dots, a_k, b)) = sum_(i=1)^k a_i X_(n-i) + b$, and so we get $
-    X_n = sum_(i=1)^k a_i X_(n-k) + b mod m
-  $
+  Let $k in NN^*$, We consider in here $Theta = ZZ^(k+1)$, $f((X_i)_(i=1)^(n-1); (a_1, dots, a_k, b)) = sum_(i=1)^k a_i X_(n-i) + b$, and so we get $ X_n = sum_(i=1)^k a_i X_(n-k) + b mod m $
 ]
+
+#table(
+  columns: (1fr, 1fr),
+  align: left,
+  table.header([Advantages], [Disadvantages]),
+  [
+    - Bigger period.
+    - Less correlation.
+    - For large $m$, uniform on $[0, 1]$.
+  ],
+  [
+    - Computationally expansive relative to simple LCR.
+  ],
+)
 
 #pro[
   Similar to the SLCG, a MLCG sequence has a period of at most $m^k$.
@@ -119,12 +140,78 @@ Here the generator depends on two prior parameters $(theta, m)$, also a seed to 
   ]
 ]
 
+#exm[
+  - Lewis, Goodman & Miller generator defined as #h(1fr) $ X_n equiv (6 X_(n-1) + 9 X_(n-2) mod 2^(31) $
+]
+
 #section[Linear Feedback Shift Register]
+
 #ooc[
   Define the operation XOR on ${0,1}$ as follows $a plus.o b = 1 <=> a != b$, and $plus.o.big_(i=1)^n a_n = a_1 plus.o a_2 plus.o dots.c plus.o a_n$ and it is easy to prove by induction that this can be simplified into $plus.o.big_(i=1)^n a_n = 1 <=> card {i in [|1, n|] | a_i = 1}$ is odd.
 ]
+
 #def(name: "Linear Feedback Shift Register")[
-  Let $n, k in NN^*$ and ${i_1, dots, i_k} subset [|0, n|]$, define the sequence $(X_n)_(n in NN)$ with $X_0$ some seed and $
-    X_n = sum_(i=0)^n b_i 2^i => X_(n+1) = sum_(i=1)^(n) b_(i-1) 2^i + plus.o.big_(j=1)^k b_(i_j)
+  Let $n, k in NN^*$ and ${i_1, dots, i_k} subset [|0, n|]$, define the sequence $(X_n)_(n in NN)$ with $X_0$ some seed and $ X_n = sum_(i=0)^n b_i 2^i => X_(n+1) = sum_(i=1)^(n) b_(i-1) 2^i + plus.o.big_(j=1)^k b_(i_j) $
+]
+
+#table(
+  columns: (1fr, 1fr),
+  align: left,
+  table.header([Advantages], [Disadvantages]),
+  [
+    - Very fast.
+    - Good distribution of bits.
+  ],
+  [
+    - Predictable behavior.
+    - Less flexible.
+  ],
+)
+
+#section[Quality Of RNGs]
+
+#subsection[Uniformity Tests]
+Suppose you generate $N$ points using some RNG, these are some tests that can be used to check the uniformity.
++ *$chi^2$ On Classes:*
+  - Consider a partition of $[0, 1]$ into $k$ classes.
+  - Calculate the amount of points generated inside the class $j$ and denote it $O_j$.
+  - Calculate the expected amount which is $E_j = N\/k$.
+  - The statistic is $chi^2 = sum_(j=1)^k ((O_j - E_j)^2)/E_j$ with $"dll" = k - 1$.
+  - If the $p$ value is small, reject the uniformity hypothesis.
++ *Kolmogorov-Smirnov Test:* We compare the function of empirical repartition $F_N$ to the function $f(x) = x$, which will be uniform if it is close.
++ *Autocorrelation Sampling:* We try to detect the correlation between the elements $U_n$ and $U_(n+k)$, we consider the statistic $
+  hat(rho)_h = (sum_(i=h+1)^N (U_i - overline(U))(U_(i - h) - overline(U)))/(sum_(i=1)^N (U_i - overline(U))^2)
+$ when it is independent, we get that $hat(p)_h tilde cal(N)(0, 1/N)$.
+
+#chapter[Cryptographically Secure PRNGs][
+  Random number generation can be used for many situations, depending on the situations, some properties are needed or neglected. Some of the generators we went through can be predicted, either the initial seed, the sequence terms or future states, which is unwanted in cryptographic random generation.
+]
+
+#def(name: "CSPRNG")[
+  A cryptographic secure PRNG is a PRNG which for no efficient algorithm (polynomial time) can distinguish the output of a CSPRNG sequence from a truly uniformly random generated sequence with probability significantly higher then $1\/2$.
+]
+
+To define what "distinguish with probability" means, consider the game, you have an adversary and a challenger. The challenger chooses either a true random number generator or the CSPRNG, sample a sequence from the chosen generator and sends it to the adversary. The adversary is supposed to take the generated sequence and answer to the challenger, either the sequence came from a TRNG or a CSPRNG. 
+
+#align(center)[
+  #grid(
+    columns: (5fr, 1fr, 5fr),
+    row-gutter: 3mm,
+    [*Challenger*], [], [*Adversary*],
+    [ Chose TRNG or CSPRNG ], [], [],
+    [ Generate sequence with generator ], [$-->$], [ Receive generated sequence ],
+    [], [], [Run checking algorithm],
+    [Check if adversary is right], [$<--$], [Send back the check]
+  )
+]
+
+If the adversary does not know anything about the generation and has nothing to exploit, the best he can do is to randomly chose its either a TRNG or CSPRNG, thus you get the chance to distinguish near $1\/2$, if not, then the adversary would have a way to exploit to check if it is a CSPRNG.
+
+#def(name: "Secure CSPRNG")[
+  A CSPRNG is said to be secure if for any deterministic polynomial-time tester $T$, we have $
+    |P(T(G_n) = 1) - P(T(U_n) = 1)| < epsilon(n)
   $
+  - $G_n(s)$ is the output of the CSPRNG with length $n$ and seed $s$.
+  - $U_n$ a uniformly sequence of length $n$.
+  - $epsilon(n)$ a neglegible function.
 ]

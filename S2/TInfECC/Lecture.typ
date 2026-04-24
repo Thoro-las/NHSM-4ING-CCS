@@ -1,5 +1,5 @@
-#import "@preview/commute:0.3.0": node, arr, commutative-diagram
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+#import "@preview/commute:0.3.0": arr, commutative-diagram, node
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
 #import "@THR/Course:1.0.0": *
 #show: template.with(
@@ -7,7 +7,7 @@
     title: "Information Theory & Error Correcting Codes",
     writer: "HADIOUCHE Azouaou",
     disclaimer: [This document contains the lectures given by Dr. Seffah.],
-  )
+  ),
 )
 
 #let Z(m) = $ZZ \/ #m ZZ$
@@ -38,7 +38,7 @@ We denote $ZZ\/m ZZ$, the set of all congruence classes modulo $m$.
 ]
 
 #ooc[
-  #lem(count: false)[
+  #lem(ovcount: false)[
     Let $r, m, p in NN$ where $p$ is prime, then $gcd(m, p^r) != 1 <=> p divides m$
   ]
 
@@ -112,12 +112,12 @@ This theorem is already done multiple times in algebra so no need to prove it he
 #def(name: "Legendre Symbol")[
   Let $p$ be an odd prime, define the Legendre symbol as:
   $
-    (a/p) = 
-      cases(
-        1 &"if" gcd(a, p) = 1 "and" a "is a quadratic residue" mod p,
-        -1 &"if" gcd(a, p) = 1 "and" a "is not a quadratic residue",
-        0 &"if" p "divides" a
-      )
+    (a/p) =
+    cases(
+      1 & "if" gcd(a, p) = 1 "and" a "is a quadratic residue" mod p,
+      -1 & "if" gcd(a, p) = 1 "and" a "is not a quadratic residue",
+      0 & "if" p "divides" a
+    )
   $
 ]
 
@@ -140,59 +140,39 @@ This theorem is already done multiple times in algebra so no need to prove it he
 ]
 
 #exr[
-  + Decompose into partial fractions in $RR[x]$ the rational function $
-    x/(x^4 + x^2 + 1)
-  $
+  + Decompose into partial fractions in $RR[x]$ the rational function $ x/(x^4 + x^2 + 1) $
   + Let $K$ be a commutative field, and let $p: x^2 + lambda x + mu$ be a monic polynomial of degree $2$, show that $p$ is reducible over $K$ if and only if it has a root in $K$.
   + Let $K = ZZ\/5 ZZ$ be the field of residue classes, factor the polynomial $(x^2 + 4)(x^2 + 3)$ into irreducible factors over $K$.
-  + Still with $K = ZZ\/5 ZZ$, decompose into partial fractions the rational function $
-    (x - overline(2))/((x^2 + overline(4))(x^2 + overline(3)))
-  $
+  + Still with $K = ZZ\/5 ZZ$, decompose into partial fractions the rational function $ (x - overline(2))/((x^2 + overline(4))(x^2 + overline(3))) $
 ]
 
-+ Decomposing into partial fractions: we have that the denominator decomposes into the following two irreducible polynomials $
-  x^4 + x^2 + 1 &= x^4 + 2 x^2 + 1 - x^2\
-  &= (x^2 + 1)^2 - x^2\
-  &= (x^2 + x + 1)(x^2 - x + 1)
-$ and thus we have that the fraction decomposes as follows $
-  x/(x^4 + x^2 + 1) &= (a x + b)/(x^2 + x + 1) + (c x + d)/(x^2 - x + 1)\
-$ by multiplying both sides by $x^4 + x^2 + 1$ we get $
-  x &= (a x + b)(x^2 - x + 1) + (c x + d)(x^2 + x + 1)\
-  0 &= a x^3 - a x^2 + a x + b x^2 - b x + b + c x^3 + c x^2 + c x + d x^2 + d x + d - x\
-  0 &= (a + c) x^3 + (- a + b + c + d) x^2 + (a - b + c + d - 1) x + (b + d)\
-  & #h(1.5cm) => cases(
-    a + c &= 0,
-    - a + b + c + d &= 0,
-    a - b + c + d - 1 &= 0,
-    b + d &= 0
-  ) quad => quad cases(
-    a = 0,
-    b = -1\/2,
-    c = 0,
-    d = 1\/2
-  )
-$ thus we get $
-  x/(x^4 + x^2 + 1) = 1/(2(x^2 - x + 1)) - 1/(2(x^2 + x + 1))
-$
++ Decomposing into partial fractions: we have that the denominator decomposes into the following two irreducible polynomials $ x^4 + x^2 + 1 & = x^4 + 2 x^2 + 1 - x^2 \
+                & = (x^2 + 1)^2 - x^2 \
+                & = (x^2 + x + 1)(x^2 - x + 1) $ and thus we have that the fraction decomposes as follows $ x/(x^4 + x^2 + 1) & = (a x + b)/(x^2 + x + 1) + (c x + d)/(x^2 - x + 1) \ $ by multiplying both sides by $x^4 + x^2 + 1$ we get $ x & = (a x + b)(x^2 - x + 1) + (c x + d)(x^2 + x + 1) \
+  0 & = a x^3 - a x^2 + a x + b x^2 - b x + b + c x^3 + c x^2 + c x + d x^2 + d x + d - x \
+  0 & = (a + c) x^3 + (- a + b + c + d) x^2 + (a - b + c + d - 1) x + (b + d) \
+    & #h(1.5cm) => cases(
+        a + c & = 0,
+        - a + b + c + d & = 0,
+        a - b + c + d - 1 & = 0,
+        b + d & = 0
+      ) quad => quad cases(
+        a = 0,
+        b = -1\/2,
+        c = 0,
+        d = 1\/2
+      ) $ thus we get $ x/(x^4 + x^2 + 1) = 1/(2(x^2 - x + 1)) - 1/(2(x^2 + x + 1)) $
 + Let $K$ be a commutative field and let $P(x) = x^2 + lambda x + mu$. $=>$ Suppose that $P(x)$ is reducible, then $P(x) = Q(x) dot.c R(x)$ with $deg(Q) != 0$ and $deg(R) != 0$ and since $deg(Q) + deg(R) = deg(P)$ then necessarily $deg(Q) = deg(R) = 1$, so $Q(x) = a x + b$ and $R(x) = c x + d$ and since $a, b in K$ then $-a/b in K$ which is a root of $Q$ and thus a root of $P$ so $P$ has a root in $K$. $arrow.double.l$ Suppose that $P(x)$ has a root $alpha$, then $(x - alpha)$ divides $P$ and thus we get that $P$ is reducible.
 + Let $K = ZZ\/5ZZ$, factor $(x^2 + 4)(x^2 + 3)$ into irreducible factors over $K$, $-3=2 mod 5$ is not a quadratic residue since $2^((5-1)/2) = 4 = -1 mod 5$ thus $x^2 + 3$ is irreducible given it has no roots. While $-4=1$ is a quadratic residue with roots $-1$ and $1$ so $(x^2 + 4)(x^2 + 3) = (x^2 - 1)(x^2 + 3) = (x - 1)(x + 1)(x^2 + 3)$.
-+ Decomposing now the partial fraction in $ZZ\/5ZZ$, $
-  (x-2)/((x^2 + 4)(x^2 + 3)) &= (x-2)/((x + 4)(x + 1)(x^2 + 3))\
-  &= a/(x + 4) + b/(x + 1) + (c x + d)/(x^2 + 3)
-$ by multiplying all parts by $(x^2 + 4)(x^2 + 3)$ we get $
-  x - 2 = a(x+1)(x^2 + 3) + b(x+4)(x^2 + 3) + (c x + d)(x + 4)(x + 1)
-$ we set the following values for $x$
++ Decomposing now the partial fraction in $ZZ\/5ZZ$, $ (x-2)/((x^2 + 4)(x^2 + 3)) & = (x-2)/((x + 4)(x + 1)(x^2 + 3)) \
+                             & = a/(x + 4) + b/(x + 1) + (c x + d)/(x^2 + 3) $ by multiplying all parts by $(x^2 + 4)(x^2 + 3)$ we get $ x - 2 = a(x+1)(x^2 + 3) + b(x+4)(x^2 + 3) + (c x + d)(x + 4)(x + 1) $ we set the following values for $x$
   - $x = -1$: $-3 = b(-1 + 4)(1 + 3) = 12 b = 2 b => b = 3*(-3) = -9 = 1$.
   - $x = +1$: $-1 = a(1 + 1)(1 + 3) = 8 a = 3 a => a = 2*(-1) = -2 = 3$.
 
 #exr[
   + Decompose $561$ into prime factors.
-  + Let $a$ be an indeterminate, for any integer $n >= 1$, justify the formula $
-    a^n - 1 = (a - 1) (a^(n-1) + a^(n - 2) + dots.c + a + 1)
-  $
-  + Justify for any integer $m >= 1$ and any integer $n >= 1$ the formula $
-    a^(m n) - 1 = (a^m - 1) (a^((n-1)m) + a^((n-2)m) + dots.c + a^m + 1)
-  $
+  + Let $a$ be an indeterminate, for any integer $n >= 1$, justify the formula $ a^n - 1 = (a - 1) (a^(n-1) + a^(n - 2) + dots.c + a + 1) $
+  + Justify for any integer $m >= 1$ and any integer $n >= 1$ the formula $ a^(m n) - 1 = (a^m - 1) (a^((n-1)m) + a^((n-2)m) + dots.c + a^m + 1) $
   + Let $a in ZZ$ be an integer, prove $a^(561) - a = a (a^(2 dot.c 280) - 1) = a (a^2 - 1) m$ for some integer $m$.
   + For any $a in ZZ$, show that $a (a - 1) (a + 1)$ is divisible by $3$.
   + Show that $a^(561) - a$ is a multiple of $3$.
@@ -202,10 +182,7 @@ $ we set the following values for $x$
 ]
 
 + The prime decomposition of $561$ is $3 dot.c 11 dot.c 17$.
-+ Let $a$ be a formal variable, we have $
-  (a - 1)sum_(i = 0)^(n-1) a^i = sum_(i=0)^(n-1) a^(i+1) - a^i
-  &= sum_(i = 1)^n a^i - sum_(i=0)^(n-1) a^i = a^n - 1
-$
++ Let $a$ be a formal variable, we have $ (a - 1)sum_(i = 0)^(n-1) a^i = sum_(i=0)^(n-1) a^(i+1) - a^i & = sum_(i = 1)^n a^i - sum_(i=0)^(n-1) a^i = a^n - 1 $
 + By taking $a = a^m$ in the previous inequality we get the result.
 + Clearly $561 = 2 dot.c 280 + 1$ thus $a^561 - a = a(a^560 - 1) = a(a^(2 dot.c 280) - 1)$ and we have from the previous question by taking $m = 2$ and $n = 280$ that $a^(561) - a = a (a^2 - 1)(sum_(i=1)^(279) a^(2i)) = a (a^2 - 1) m$.
 + Let $a in ZZ$, we have that $a = 3 q + r$ with $0 <= r < 2$ from the Euclidean division algorithm, then $a (a - 1) (a + 1) = (3 q + r) (3 q + (r - 1)) (3 (q + 1) + (r - 2))$ and since $0 <= r < 2$ then necessarily either $r$, $r-1$ or $r-2$ is $0$, and thus it has one of the factors divisible by $3$.
@@ -227,11 +204,11 @@ $
     edge-corner-radius: 8pt,
     mark-scale: 80%,
 
-    node((0,0), name: "1", width:  2.5cm, [Source], fill: maroon),
-    node((0.85,0), name: "2", [Transmit], fill: eastern),
-    node((1.7,0), name: "3", [Channel], fill: eastern),
-    node((2.65,0), name: "4", [Receive], fill: eastern),
-    node((3.75,0), name: "5", [Destination], fill: olive, shape: fletcher.shapes.hexagon),
+    node((0, 0), name: "1", width: 2.5cm, [Source], fill: maroon),
+    node((0.85, 0), name: "2", [Transmit], fill: eastern),
+    node((1.7, 0), name: "3", [Channel], fill: eastern),
+    node((2.65, 0), name: "4", [Receive], fill: eastern),
+    node((3.75, 0), name: "5", [Destination], fill: olive, shape: fletcher.shapes.hexagon),
 
     edge(label("1"), label("2"), "-|>"),
     edge(label("2"), label("3"), "-|>"),
@@ -282,7 +259,7 @@ The receiver performs these receiver operations.
   - $Sigma^n = Sigma times dots.c times Sigma$ is the set of words of length $n$. We take that $Sigma^0 = {epsilon}$ where $epsilon$ is the empty word.
   - $Sigma^* = union_(i >= 0) Sigma^n$ the set of all possible words over $Sigma$.
   - $Sigma^+ = union_(i >= 1) Sigma^n$ the set of all possible non-empty words over $Sigma$.
-  - For $x in Sigma^*$, we define $|x| = min {n in NN | x in Sigma^n}$.
+  - For $x in Sigma^*$, we define $|x| = min {n in NN|x in Sigma^n}$.
   - The set of binary letters as $BB = {0, 1}$.
   - For $x = x_1 dots x_n, y = y_1 dots y_m in Sigma^*, x y = x_1 dots x_n y_1 dots y_m in Sigma^*$.
 ])
@@ -314,31 +291,27 @@ Also, clearly $phi$ would be continuous since a tiny difference in probability w
 ]
 
 #def(name: "Measure Of Information", ovcount: false)[
-  Let $X$ be a random variable that represents the probability that a message $x$ is sent as $P(X = x) = P(x)$, we define the measure of information of the message $x$ as $
-    I(x) = - log_2 P(x)
-  $
+  Let $X$ be a random variable that represents the probability that a message $x$ is sent as $P(X = x) = P(x)$, we define the measure of information of the message $x$ as $ I(x) = - log_2 P(x) $
 ]
 
 #ooc[
   $log_2$ is taken for the usual reason that information is represented in binary, and that if it is represented in any other base, it would have just a linear factor added. In practice, transmission lines tend to cause irregularities in the signal, that is, it alters the contents of the message with some noise. Thus, in transmission lines we are interested in the distribution of the message $y$ that are received, given some sent message $x$, which will be measured by $P(y|x)$.
 ]
 
-#section[Entropy]
+#section[Measures Of Entropy]
 #ooc[
   After we defined a measure of information, which we discussed to be a measure of uncertainty, we need a way to quantify the average amount of uncertainty for all the values of $X$. Thus, we define the entropy as follows.
 ]
 
 #def(name: "Entropy", ovcount: false)[
-  Let $X$ be a random variable with values in $cal(X)$, we define the entropy $H(X)$ as the average amount of information, that is $
-    H(X) = EE[I(X)] = - sum_(x in X) P(x) dot.c log_2 P(x)
-  $
+  Let $X$ be a random variable with values in $cal(X)$, we define the entropy $H(X)$ as the average amount of information, that is $ H(X) = EE[I(X)] = - sum_(x in X) P(x) dot.c log_2 P(x) $
 ]
 
 
 Notice that the information of some message $x$ depends only on its unpredictability, that is, its probability of occurrence $P(x)$ not its value.
 
-#pro[
-  Let $X, Y$ with symbols in $cal(X), cal(Y)$ be two i.i.d sources.
+#pro(ovcount: false)[
+  Let $X, Y$ with symbols in $cal(X), cal(Y)$ be two sources.
   + Non-negativity: $H(X) >= 0$.
   + Maximum Entropy: $H(X) <= log_2 card cal(X)$.
   + Independent Additivity: $X perp Y$ $=>$ $H(X Y) = H(X) + H(Y)$.
@@ -347,7 +320,7 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 #ooc[
   #prf[
     + $forall x in cal(X), I(x) >= 0$, then $H(X) = EE[I(X)] >= 0$
-    + Here, we optimize on the distribution of $X$, $max_(P) H(X) = - min_P sum_(x in X) P(x) dot.c log_2 P(x),$ hence for $I$ a finite set $min_({y_i in [0, 1]}_(i in I)) sum_(i in I) y_i log_2 (y_i)$ with $sum_(i in I) y_i = 1$. Notice that all the terms have the same sign so $min sum_(i in I) dots = sum_(i in I) min dots$. $y_i$ all having the same range would mean that we just need to find $c$ such that $y_i = c$ and satisfies the second inequality, which is clearly $c = 1/(card I)$. 
+    + Here, we optimize on the distribution of $X$, $max_(P) H(X) = - min_P sum_(x in X) P(x) dot.c log_2 P(x),$ hence for $I$ a finite set $min_({y_i in [0, 1]}_(i in I)) sum_(i in I) y_i log_2 (y_i)$ with $sum_(i in I) y_i = 1$. Notice that all the terms have the same sign so $min sum_(i in I) dots = sum_(i in I) min dots$. $y_i$ all having the same range would mean that we just need to find $c$ such that $y_i = c$ and satisfies the second inequality, which is clearly $c = 1/(card I)$.
 
     So $X$ would be a uniform distribution over $cal(X)$, $H_u (X) = EE[I(X)] = - sum_(x in X) 1\/(card cal(X)) log_2 (1\/(card cal(X))) = log_2 card cal(X) >= H(X)$.
     + Let $X, Y$ be two independent variables, then $H(X Y) = EE[I(X Y)] = EE[I(X) + I(Y)] = EE[I(X)] + EE[I(Y)] = H(X) + H(Y)$.
@@ -355,17 +328,15 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 ]
 
 #exm[
-  Let $cal(X) = {0, 1}$, and $X$ a discrete random variable with values in $cal(X)$, which has the distribution $
-    P(x) = cases(
-      0.9 &"if" x = 0,
-      0.1 &"if" x = 1
-    ) 
-    quad quad => quad quad
-    I(x) = cases(
-      0.152 &"if" x = 0,
-      3.321 &"if" x = 1
-    )
-  $ And the measure of average amount of information is $H(X) = 0.4689$.
+  Let $cal(X) = {0, 1}$, and $X$ a discrete random variable with values in $cal(X)$, which has the distribution $ P(x) = cases(
+    0.9 & "if" x = 0,
+    0.1 & "if" x = 1
+  )
+  quad quad => quad quad
+  I(x) = cases(
+    0.152 & "if" x = 0,
+    3.321 & "if" x = 1
+  ) $ And the measure of average amount of information is $H(X) = 0.4689$.
 ]
 
 #exm[
@@ -377,14 +348,12 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 
 #subsection[Joint Entropy]
 
-#def(name: "Joint Entropy", count: false)[
-  Let $X$, $Y$ be two random variables with joint distribution $P(x,y)$, the joint entropy is $
-    H(X, Y)  = - sum_(x in X) sum_(y in Y) P(x, y) log_2 P(x, y)
-  $
+#def(name: "Joint Entropy", ovcount: false)[
+  Let $X$, $Y$ be two random variables with joint distribution $P(x,y)$, the joint entropy is $ H(X, Y) = - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y) = - EE[log_2 P(X, Y)] $
 ]
 
-#pro[
-  Let $X, Y$ be two i.i.d sources.
+#pro(ovcount: false)[
+  Let $X, Y$ be two sources.
   + Symmetry: $H(X, Y) = H(Y, X)$.
   + Non-Negativity: $H(X, Y) >= 0$.
   + Upperbound: $H(X, Y) <= H(X) + H(Y)$.
@@ -394,27 +363,248 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 #ooc[
   #prf[
     + trivial by $P(x, y) = P(X = x, Y = y) = P(Y = y, X = x) = P(y, x)$.
-    + $forall x in X, forall y in Y, 0 <= P(x, y) <= 1 => log_2 P(x, y) <= 0$ so we have $P(x, y) log_2 P(x, y) <= 0$. Hence, $
-      H(X, Y) = - sum_(x in X) sum_(y in Y) P(x, y) log_2 P(x, y) >= 0
-    $
-    + We have $H(X, Y) - H(X) - H(Y) = sum_(x in X) P(x) log_2 P(x) + sum_(y in Y) P(y) log_2 P(y) - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y)$, by using the fact that $P(x) = sum_(y in Y) P(x, y)$, we can transform all the sums to be indexed with $X times Y$ as follows: $
-      sum_(x in X) P(x) log_2 P(x) &= sum_((x, y) in X times Y) P(x, y) log_2 P(x) \
-      sum_(y in Y) P(x) log_2 P(y) &= sum_((x, y) in X times Y) P(x, y) log_2 P(y)
-    $ Thus we obtain the writing $
-      H(X, Y) - H(X) - H(Y) = sum_((x,y) in X times Y) P(x, y) log_2 ((P(x) P(y))/(P(x, y)))
-    $ We have that $forall t >= 0, log_2 (t) <= t - 1$ thus $
-      H(X, Y) - H(X) - H(Y) &= sum_((x, y) in X times Y) P(x, y) log_2 ((P(x) P(y))/(P(x, y))) \
-      & <= sum_((x, y) in X times Y) P(x, y) ((P(x) P(y))/(P(x,y)) - 1)\
-      & <= sum_((x, y) in X times Y) P(x) P(y) - P(x, y) \
-      & <= sum_((x, y) in X times Y) P(x) P(y) - sum_((x, y) in X times Y) P(x, y) \
-      & <= 1 - 1 = 0
-    $ Therefore $
-      H(X, Y) <= H(X) + H(Y)
-    $
+    + $forall x in X, forall y in Y, 0 <= P(x, y) <= 1 => log_2 P(x, y) <= 0$ so we have $P(x, y) log_2 P(x, y) <= 0$. Hence, $ H(X, Y) = - sum_(x in X) sum_(y in Y) P(x, y) log_2 P(x, y) >= 0 $
+    + We have $H(X, Y) - H(X) - H(Y) = sum_(x in X) P(x) log_2 P(x) + sum_(y in Y) P(y) log_2 P(y) - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y)$, by using the fact that $P(x) = sum_(y in Y) P(x, y)$, we can transform all the sums to be indexed with $X times Y$ as follows: $ sum_(x in X) P(x) log_2 P(x) & = sum_((x, y) in X times Y) P(x, y) log_2 P(x) \
+      sum_(y in Y) P(x) log_2 P(y) & = sum_((x, y) in X times Y) P(x, y) log_2 P(y) $ Thus we obtain the writing $ H(X, Y) - H(X) - H(Y) = sum_((x,y) in X times Y) P(x, y) log_2 ((P(x) P(y))/(P(x, y))) $ We have that $forall t >= 0, log_2 (t) <= t - 1$ thus $ H(X, Y) - H(X) - H(Y) & = sum_((x, y) in X times Y) P(x, y) log_2 ((P(x) P(y))/(P(x, y))) \
+                            & <= sum_((x, y) in X times Y) P(x, y) ((P(x) P(y))/(P(x,y)) - 1) \
+                            & <= sum_((x, y) in X times Y) P(x) P(y) - P(x, y) \
+                            & <= sum_((x, y) in X times Y) P(x) P(y) - sum_((x, y) in X times Y) P(x, y) \
+                            & <= 1 - 1 = 0 $ Therefore $ H(X, Y) <= H(X) + H(Y) $
     + Without loss of generality, we prove that $H(X, Y) >= H(X)$, we have from before that $P(x) = sum_(y in Y) P(x,y)$ and since $forall (x, y) in X times Y, P(x, y) >= 0$ then $forall (x, y) in X times Y, P(x, y) <= P(x)$.
-    $
-      H(X, Y) &= - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y) \
-      &>= - sum_((x, y) in X times Y) P(x) log_2 P(x) = H(X)
-    $ and same to prove that $H(X, Y) >= H(Y)$ and hence we obtain the inequality $H(X, Y) >= max(H(X), H(Y))$.
+    $ H(X, Y) & = - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y) \
+            & >= - sum_((x, y) in X times Y) P(x) log_2 P(x) = H(X) $ and same to prove that $H(X, Y) >= H(Y)$ and hence we obtain the inequality $H(X, Y) >= max(H(X), H(Y))$.
   ]
 ]
+
+#subsection[Conditional Entropy]
+#ooc[
+  The other useful measure of entropy is the conditional entropy, which measures the amount of information remaining in a random variable knowing another.
+]
+
+#def(name: "Conditional Entropy", ovcount: false)[
+  Let $X, Y$ be two random variables with joint distribution $P(x, y)$, the conditional entropy is $ H(X|Y) = - sum_((x, y) in X times Y) P(x, y) log_2 P(x|y) = - EE[log_2 P(X|Y)] $
+]
+
+#pro(ovcount: false)[
+  Let $X, Y$ be two sources.
+  + Non-Negativity: $H(X|Y) >= 0$.
+  + Chain Rule: $H(X, Y) = H(X) + H(Y|X)$.
+  + Reduction Of Uncertainty: $H(X|Y) <= H(X)$.
+]
+
+#ooc[
+  #prf[
+    + $forall (x, y) in X times Y, 0 < P(x|y) <= 1 => log_2 P(x|y) <= 0 => H(X|Y) = -sum_((x, y) in X times Y) P(x, y) log_2 P(x|y) >= 0$.
+    + We have #h(1fr) $ H(X, Y) & = - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y) \
+              & = - sum_((x, y) in X times Y) P(x, y) log_2 (P(x) P(y|x) $
+      $
+        & = - sum_((x, y) in X times Y) P(x, y) log_2 P(x) - sum_((x, y) in X times Y) P(x, y) log_2 P(y|x) \
+        & = - sum_(x in X) (sum_(y in Y) P(x, y)) log_2 P(x) - sum_((x, y) in X times Y) P(x, y) log_2 P(y|x) \
+        & = - sum_(x in X) P(x) log_2 P(x) - sum_((x, y) in X times Y) P(x, y) log_2 P(y|x) \
+        & = H(X) + H(Y|X)
+      $
+    + $H(X|Y) =^a H(X, Y) - H(Y) <=^b H(X) + H(Y) - H(Y) = H(X)$, where $a$ comes from the chain rule and $b$ from the subadditivity of joint entropy.
+  ]
+]
+
+#subsection[Mutual Information]
+#ooc[
+  Conditional entropy measures the amount of information is remaining in a random variable knowing another, it is easy to see that by subtracting the amount of information a variable has with the amount of remaining information knowing another we get the information that is "shared" between them.
+]
+
+#def(ovcount: false, name: "Mutual Information")[
+  Let $X, Y$ be two sources, we define the mutual information as $ I(X; Y) = EE[log((P(X, Y))/(P(X) P(Y)))] = sum_((x, y)) P(x, y) log_2 ((P(x, y))/(P(x) P(y))) $
+]
+
+#pro(ovcount: false)[
+  Let $X, Y$ be two sources.
+  + Equivalent Formulas: #h(1fr) $ I(X;Y) & = H(X) - H(X|Y) \
+           & = H(Y) - H(Y|X) \
+           & = H(X) + H(Y) - H(X, Y) \
+           & = H(X, Y) - H(X|Y) - H(Y|X) \ $
+  + Symmetry: $I(X;Y) = I(Y;X)$.
+  + Non-Negativity: $I(X; Y) >= 0$.
+  + Upperbound: $I(X;Y) <= min(H(X), H(Y))$.
+  + Self-Information: $I(X;X) = H(X)$.
+]
+
+#ooc[
+  #prf[
+    + Trivial, just write the formulas.
+    + Direct consequence of the first two formulas of $1$.
+    + We have from the reduction of uncertainty that $H(X|Y) <= H(X)$ thus $I(X;Y) = H(X) - H(X|Y) >= 0$.
+    + We have from the lowerbound of joint entropy that $H(X, Y) >= max(H(X), H(Y))$ then #h(1fr) $ & I(X;Y) = H(X) + H(Y) - H(X, Y) \
+      & <= H(X) + H(Y) - max(H(X), H(Y)) = min(H(X), H(Y)). $
+    + $I(X;X) = H(X) - H(X|X) = H(X)$.
+  ]
+]
+
+#subsection[Data-Processing Inequality]
+
+#ooc[
+  Another important property is the data processing inequality, stating informally that, given some information, one cannot process it to obtain more information. So, we start with defining what is "data-processing".
+
+  #def(ovcount: false, name: "Markov Chain")[
+    Let $X, Y, Z$ be three random variables, we say that they form a Markov chain in that order, and we denote it $X -> Y -> Z$ if the conditional probability of $Z$ depends only on $Y$ and not on $X$, which can be written as $ P(z|x, y) = P(z|y) $
+  ]
+
+  This definition is natural, since in our case, we take that we have the two random variables $X$ and $Y$, and we produce $Z$ with some processing on $Y$ without knowing anything about $X$, the process can be deterministic or not.
+
+  To prove the data-processing inequality, we need the following lemma.
+  #lem(count: false)[
+    $I(X;Y,Z) = I(X;Y) + I(X;Z|Y)$ where
+    - $I(X; Y, Z) = EE[P(X, Y, Z)\/(P(X) P(Y, Z))]$.
+    - $I(X; Z|Y) = EE[P(X, Z|Y)\/(P(X|Y) P(Z|Y))]$.
+  ]
+
+  It is left for the reader to prove, it is mainly algebraic manipulation.
+]
+
+#thm(name: "Data-Processing Inequality", ovcount: false)[
+  Let $X, Y, Z$ be three sources such that $X -> Y -> Z$, we have that $ I(X; Y) >= I(X; Z). $
+]
+
+#ooc[#prf[
+  Since $X -> Y -> Z$ then there is no extra information given from $Z$ knowing $Y$ thus $I(X; Z|Y) = 0$ we have $
+    I(X; Y, Z) &= I(X;Y) + I(X; Z|Y)\
+    I(X; Y, Z) &= I(X;Z) + I(X; Y|Z)
+  $ hence $
+    I(X;Y) + I(X;Z|Y) = I(X;Z) + I(X;Y|Z)\
+    => I(X;Y) = I(X;Z) + I(X;Y|Z)
+  $ since $I(X;Y|Z) >= 0$ then $I(X;Y) >= I(X;Z)$.
+]]
+
+#chapter[Source Coding][
+  Source coding is a fundamental part of communication that deals with representing data to be sent in the most compressible manner to get an efficient communication. From Shannon's theorem, we will see that the amount of data compression is bounded, and thus we will see algorithms that acheive an average length $1$ bit away from the bound.
+]
+
+
+#section[Source Coding]
+The most important part of coding theory is achieving the most efficient reliable and secure coding. The first part is the focus of this section, by assigning a code from each symbol in $cal(X)$, we try to achieve the minimum bound possible of letters to send to transmit our message.
+
+
+
+#def(name: "Coding Function", ovcount: false)[
+  Let $c: cal(X) -> DD^+$, we call it a coding function, which takes characters of our set of symbols, and represent it as a string in $DD^+$ which is the set of words with $d$ alphabets.
+]
+
+To measure the efficiency of our coding function, we define the average code length, the less the average, the more efficient the transmission will be.
+
+#def(name: "Average Code Length", ovcount: false)[
+  Let $c: cal(X) -> DD^+$, a coding function, and consider the function $
+    overline(L): {c: cal(X) -> DD^+} &-> RR quad c &|-> overline(L)_c = sum_(x in cal(X)) p(x) dot.c |c(x)|
+  $
+]
+
+#ooc[
+  #exm[
+    Take a horse race with $8$ horses, we want to send a message in binary that indicates which horse has won. And suppose that the probabilities of winning for each horse is as follows
+    #table(
+      columns: 9,
+      inset: (x: 2mm, y: 3mm),
+      align: center + horizon,
+      [Horse], ..range(1, 9).map(x => $#x$),
+      [Probability Of Winning], ..($1/2$, $1/4$, $1/8$, $1/64$, $1/64$, $1/64$, $1/64$, $1/64$).map(x => $display(#x)$)
+    )
+
+    If we just send the index of the winner horse, we get the following coding function
+
+    #table(
+      columns: 9,
+      align: center + horizon,
+      [Horse $i$], ..range(1, 9).map(x => $#x$),
+      [$c_1 (i)$], $000$, $001$, $010$, $011$, $100$, $101$, $110$, $111$
+    )
+
+    If we do it just blindly, we will need $3$ bits to describe all the possible winner horses from $000, 001, 010, dots.c, 110, 111$, calculating the average of description length we get $
+      overline(L)_(c_1) = sum_(x in X) 3 dot.c p(x) = 3 "bits/sym"
+    $
+
+    Giving us an average of $3$ bits for the transmission to give exactly who horse is the winner. An aspect that we did not use in the previous part is how likely do horses win in this case, which we can use to improve the amount of bits that would be sent on the channel.
+
+    Notice that if we assign a smaller message for the horses that are more probable to win, and longer message to horses that are less likely to win, then we can reduce some of the data that will be used to specify the winner. We take the following encoding
+
+    #table(
+      columns: 9,
+      inset: (x: 2mm, y: 3mm),
+      align: center + horizon,
+      [Horse $i$], ..range(1, 9).map(x => $#x$),
+      [$c_2(i)$], $0$, $10$, $110$, $1110$, $111100$, $111101$, $1111110$, $111111$
+    )
+
+    Now, we recalculate the average description length to get $   overline(L)_(c_2) = sum_(x in X) |c(x)| dot.c p(x) = 2 "bits/sym"
+    $
+    we have reduced the average description length by $1$ bit. If we calculate the entropy in this case we get $H(X) = - sum_(x in X) P(x) dot.c log_2 P(x) = 1.83475$, we see that the reduced average code length is more than the entropy.
+  ]
+]
+
+#def(name: "Properties Of Codes", ovcount: false)[
+  Let $c: cal(X) -> DD^+$ be a coding function. We say that it is:
+  - Non-Singular: if $forall x, y in cal(X), c(x) != c(y)$.
+  - Uniquely Decodable: if $forall y_1, dots, y_n in DD^+, exists ! x_1, dots, x_m, y_1 y_2 dots y_n = c(x_1) c(x_2) dots c(x_n)$, that is, any sequence $y_1, dots, y_n$ of $DD^+$ can be uniquely decoded into a sequence $x_1, dots, x_m$ of $cal(X)$.
+  - Instantaneous/Prefix-Free: if $forall x, y in cal(X), exists.not m in DD^+, x = y m$, that is, no code-word is a prefix of another code-word.
+]
+
+
+
+// #section[Shannon Theorems]
+// #ooc[
+//   To prove Shannon theorems, we need the following statements.
+//
+//   #def(name: "Prefix Code", ovcount: false)[
+//     A coding function $c: cal(X) -> BB^+$ is said to have the prefix property if $forall x, y in cal(X), forall u in BB^*, c(x) != c(y) u$.
+//   ]
+//
+//   That is, no code is a prefix of another. An example of a prefix code is ${0, 10}$ while a non-prefix code is ${1, 10}$ since $1$ is a prefix of $10$. These codes are also called instantaneous codes, that is because given a binary string, even incomplete, one can know if it maps to a symbol or not. The proof of such statement is left for the reader.
+//
+//   #def(name: "Uniquely Decodable Code", ovcount: false)[
+//     A coding function $c: cal(X) -> BB^+$ is said to be uniquely decodable if $c$ is injective, that is, each coding is unique to the symbol.
+//   ]
+//
+//   #pro(ovcount: false)[
+//     A uniquely decodable code $c$ can be turned into a prefix code $c'$ such that $forall i in [|1, n|], |c(x_i)| = |c'(x_i)|$.
+//   ]
+//
+//   // #prf[
+//   //   Let $c = {c_1, dots, c_m}$ be a uniquely Without loss of generality, consider 
+//   // ]
+//
+//
+//   #lem(name: "Kraft Inequality", ovcount: false)[
+//     Let $X$ be a random variable with values in $cal(X)$, $c: cal(X) -> BB^+$ a coding function and $l(x) = |c(x)|$, then we have that $
+//       sum_(i=1)^n 2^(- l(x_i)) <= 1
+//     $
+//   ]
+//
+// ]
+//
+// #thm(name: "Shannon's First Theorem", ovcount: false)[
+//   Let $X$ be a random variable with values in $cal(X)$, for any coding function $c: cal(X) -> BB^+$ we have $
+//     overline(L)_c >= H(X)
+//   $
+// ]
+//
+// Huffman's algorithm provides a systematic way to construct an optimal prefix code, where symbols with higher probability should have shorter code words, and achieves a lower bound of average coding weight.
+//
+// #alg(name: "Huffman", ovcount: false)[
+//   + Sort symbols by probability in descending order.
+//   + Combine the two smallest probabilities.
+//   + Repeat until one node remains.
+//   + Build the tree.
+//   + Assign 0 and 1 to branches.
+//   + Read codewords.
+//   + Compute the average code length.
+// ]
+//
+// #exm[
+// ]
+//
+// The closer this value is to the entropy, the more efficient the compression is, using Huffman coding, the message is compressed, meaning that fewer bits are needed on average per symbol compared to a fixed length code such code is called optimal code which is a code that minimizes average code length. In source coding, our goal was to remove redundancy in order to compress the message. Now, we move to a different problem, what happens when the channel is noisy?
+//
+// #subsection[Noise And Errors]
+// To reduce the probability of error, we need to make the sent message more robust to disturbances through channel coding.
+//
+//
+// #thm(name: "Shannon's Second Theorem", ovcount: false)[
+//   For any noisy channel, there exists a code that allows reliable transmission if the rate is less than the channel capacity.
+// ]

@@ -57,8 +57,8 @@
   #v(1mm)
 ]
 
-#let subsection(title) = [
-  #counter("title-counter").step(level: 3)
+#let subsection(title, level: 3) = [
+  #counter("title-counter").step(level: level)
   #context counter("title-counter").display((..i) => [=== #i.pos().map(str).join("."). #title])
   #text(context counter("title-counter").display("1.") + " " + title, size: 1.3em, weight: "bold") \
   #v(0mm)

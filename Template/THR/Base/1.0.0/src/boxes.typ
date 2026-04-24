@@ -26,7 +26,14 @@
 #let __ctbox(hue, title, subtitle, content, count: true, level: 1, ovcount: true, countval: -1) = {
   if (count) { counter("box-counter").step(level: level) }
   let ctitle = {
-    title + if (count) {[ #context {if (ovcount) {counter("title-counter").display("1.") } else { "" } + counter("box-counter").display("1.1")}]} + if subtitle != "" {" (" + subtitle + ")"}
+    title + if (count) {
+      context {
+        if (ovcount) {
+          " " + counter("title-counter").display("1.")
+      } else {
+        " "
+      } + counter("box-counter").display("1.1")}
+    } + if subtitle != "" {" (" + subtitle + ")"}
   }
   __cbox(hue, ctitle, content)
 }
@@ -53,7 +60,7 @@
   #block(width: 100%, {
     [_Proof. _]
     body
-    place(right + bottom, $square.stroked$)
+    place(right + bottom, $square.filled$)
   })
 ]
 

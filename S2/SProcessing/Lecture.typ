@@ -17,10 +17,7 @@
 #let tri = math.op("tri")
 #let ig = math.op("ig")
 #let rep = math.op("rep")
-
-#let hatches(size: 20pt, color: black) = tiling(size: (size, size))[
-  #place(line(stroke: color, start: (0%, 100%), end: (100%, 0%)))
-]
+#let Si = math.op("Si")
 
 #chapter[Fundamental Concepts][
   Signals are a physical representation of information that is sent from source to destination. Signal processing is the discipline of measuring, storing, and interpreting the information transmitted by signals and how to process the signals themselves in order to achieve lower noise and better transmissions.
@@ -157,21 +154,23 @@ Let $x(t), y(t)$ two signals and let $T > 0$ a window, we define the follow oper
 ]
 
 #section[Quantities Of Signals]
-Let $x(t), y(t)$ two signals and $T > 0$.
+Let $x(t), y(t)$ two signals and $t_1, t_2 in RR$ such that $t_1 <= t_2$.
 #table(
   columns: (1cm, 2fr, 3fr),
   align: (horizon + center, horizon + left, horizon + left),
 
-  table.cell(rowspan: 4, rotate(90deg, reflow: true)[On Interval $T$]),
+  table.cell(rowspan: 4, rotate(90deg, reflow: true)[On Interval $[t_1, t_2]$]),
 
-  [Average value], $ overline(x)(T) = 1/T integral_(-T\/2)^(T\/2) x(t) dif t, $,
-  [Quadratic value \ (Normalized energy)], $ W_x (T) = integral_(-T\/2)^(T\/2) x^2 (t) dif t $,
-  [Average quadratic value \ (Normalized power)], $ P_x (T) = 1/T integral_(-T\/2)^(T\/2) x^2(t) dif t $,
+  [Average value], $ overline(x)(t_1, t_2) = 1/T integral_(t_1)^(t_2) x(t) dif t, $,
+  [Quadratic value \ (Normalized energy)], $ W_x (t_1, t_2) = integral_(t_1)^(t_2) x^2 (t) dif t $,
+  [Average quadratic value \ (Normalized power)], $ P_x (T) = 1/(t_2 - t_1) integral_(t_1)^(t_2) x^2(t) dif t $,
   [Effective Value Of Signal], [$ x_"eff" (T) = sqrt(P_x (T)) $],
 
-  table.cell(rowspan: 2, rotate(90deg, reflow: true)[Globally]),
+  table.cell(rowspan: 4, rotate(90deg, reflow: true)[Globally]),
   [Running Average], $ overline(x)(t, T) = 1/T integral_(t-T)^t x(s) dif s $,
   [Average Value], $ overline(x) = lim_(T -> infinity) 1/T integral_(T\/2)^(T\/2) x(t) dif t $,
+  [Quadratic value \ (Total energy)], $ W_x = integral_(-infinity)^(infinity) x^2 (t) dif t $,
+  [Average quadratic value \ (Total power)], $ P_x = lim_(T -> infinity) 1/(T) integral_(T\/2)^(T\/2) x^2(t) dif t $,
 )
 
 #def(name: "Period Sequence Of Dirac Impulses")[
@@ -187,4 +186,24 @@ If we multiply this sequence by a signal $x(t) delta_T (t) = x(t) sum_(k = -infi
   $
     rep_T (x) (t) = sum_(k=-infinity)^infinity x(t - k T) = x(t) convolve delta_T (t)
   $
+]
+
+A useful function that will be used often later is the sinc function defined as follows $
+  sinc (x) = (sin(pi x))/(pi x)
+$ which has the following properties $
+  integral_(-infinity)^infinity sinc (t) dif t = 1 quad quad integral_(-infinity)^infinity sinc^2 (t) dif t = 1
+$ also, by abuse of notation $
+  lim_(T -> infinity) T sinc (T t) = delta(t)
+$ a function that comes from this is the sinus integral function defined as $
+  Si(x) = integral_0^x sinc(t) dif t
+$
+
+#section[Signal Energy And Power]
+
+#def(name: "Finite Energy Signal")[
+  A signal is said to have finite energy if their energy is finite, that is $W_x < infinity$.
+]
+
+#def(name: "Finite Average Power Signal")[
+  A signal is said to have a finite average power if the power is finite and non-zero $0 < P_x < infinity$.
 ]

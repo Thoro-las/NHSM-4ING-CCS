@@ -10,7 +10,6 @@
   )
 )
 
-#let subset = $subset.eq$
 #let Id = math.op("Id")
 #let Ker = math.op("Ker")
 #let Im = math.op("Im")
@@ -199,4 +198,39 @@ If $X subset G$, $X$ generates $G$ if $forall g in G, exists {x_i}_(i=1)^n subse
   + $ZZ^n$ is free with basis ${e_i = (0, dots, 0, 1, 0, dots, 0)}_(i=1)^n$
   + $ZZ_n$ is not free, we have that $forall a in ZZ_n, n a = 0$.
   + All finite groups are not free, since by Lagrange, if $G$ is a finite group with order $n$ then $forall g in G, n g = e$.
+  + $QQ$ is not a free group.
+]
+
+#follow-bar[Big Gap Here]
+
+#thm[
+  Let $G$ be a free abelian group with rank $n$. Let $H != {0}$ subgroup of $G$. Then, $H$ is a free of rank $s <= n$. Therefore, there is a basis ${v_1, dots, v_n} subset G$ and integers $2 <= d_1, dots, d_s$, $d_1 | d_2 | dots.c | d_s$ and ${d_1 v_1, dots, d_s v_s}$ is a basis of $H$.
+]
+
+#thm[
+  Same hypothesis as before, $s = n$ if and only if $G\/H$ is finite. Moreover, if $s=n$ ${x_1, dots, x_n}$ is a basis for $G$, ${y_1, dots, y_n}$ a basis for $H$, $y_i = sum_(i=1)^n a_(i j) x_j$, then $card G\/H = abs(det(a_(i j)))$.
+]
+
+#pro[
+  Let $G$ be a finitely generated group with $n$ generators, and $H$ a subgroup of $G$, then $H$ is finitely generated.
+]
+
+#thm[
+  Let $G$ be a finitely generated abelian group. Then $G$ is a direct product of (possible) finite groups and (possible) free abelian groups. Also, $G$ is a direct product of cyclic groups.
+]
+
+#prf[
+  Suppose ${x_1, dots, x_n}$ generates $G$, consider the homomorphism $
+    phi: ZZ^n -> G, (k_1, dots, k_n) |-> k_1 x_1 + dots.c + k_n x_n
+  $ take $K = Ker h$, we consider the cases for $K$:
+  - $K = {0}$: then $G iso ZZ^n$.
+  - $K != {0}$: we have that $G iso ZZ^n \/ K$ by the first isomorphism theorem, since $ZZ^n$ is a free group and $K$ is a subgroup of $ZZ^n$ then there is a basis ${v_1, dots, v_n}$ of $ZZ^n$ and ${d_1 v_1, dots, d_s v_s}$ a basis of $K$ with $2 <= d_1, dots, d_s$ with $d_1 | d_2 | dots.c | d_s$, consider the map $psi: ZZ^n -> ZZ^n, k_1 v_1 + dots + k_n v_n |-> (k_1, dots, k_n)$ and we have that $psi(K) = {(k_1 d_1, dots, k_s d_s, 0, dots, 0) | k_1, dots, k_s in ZZ} = d_1 ZZ times dots.c times d_s ZZ times {0}^(n-s)$, and thus we get $
+    ZZ^n\/K &iso (ZZ times ZZ times dots.c times ZZ)/(d_1 ZZ times d_2 ZZ times dots.c times ZZ_s times {0}^(n-s)) \
+    & iso (ZZ/(d_1 ZZ)) times dots.c times (ZZ/(d_s ZZ)) times ZZ^(n-s)\
+    &iso ZZ_(d_1) times dots.c times dots.c ZZ_(d_s) times ZZ^(n-s)
+  $
+]
+
+#cor[
+  Let $G != {0}$ be a finite abelian group, then there exists $d_1, dots, d_s in NN_(>=2), d_1 | d_2 | dots.c | d_s$, $G iso ZZ_(d_1) times dots.c times ZZ_(d_s)$.
 ]

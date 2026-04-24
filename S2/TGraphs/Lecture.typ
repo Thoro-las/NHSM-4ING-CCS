@@ -538,3 +538,101 @@ Going through the same procedure as the previous example to get
 #exr(count: false)[
   The transpose of a directed graph $G=(V, E)$ is the graph $G^T=(V, E^T)$ where $E^T = {u v | u, v in V, v u in E}$. Write an efficient algorithm for computing $G^T$ for both representations. Analyze its complexity.
 ]
+
+#follow-bar[Big Gap Here]
+#subsection[Kruskal's Algorithm]
+Kruskals algorithm process the edges in increasing weight order and greedily includes each edges in the MST as long as it does not form a cycle with edges already selected.
+
+```pcode
+T = ∅
+!=
+for v in V do
+  makeset(v)
+end
+
+sort E in non-decreasing order of weight
+
+for edge (u, v) in E do
+  if findset(u) ≠ findset(v) then
+    T = T ∪ {(u, v)}
+    union(u, v)
+  endif
+end
+```
+
+#section[Binary Search Tree]
+
+#def(name: "Binary Tree", ovcount: false)[
+  Binary tree node $x$ stores a key $x."key"$ and three attributes, $x."left"$, $x."right"$ (children) and $x."parent"$, if any of the values is NIL indicates their absence.
+]
+
+The unique node with $x."parent" = "NIL"$ is the root. A node with $x."left" = x."right" = "NIL"$ is a leaf. The height of the tree is the length of the longest root to leaf path.
+
+#def(name: "BST Property", ovcount: false)[
+  A binary tree is said to satisfy the BST property if for every node $x$, then for all $y$ in the left subtree of $x$, $y."key" <= x."key"$ and for all $z$ in the right subtree of $x$, $z."key" >= x."key"$.
+]
+
+- The in-order traversal: $L -> x -> R$.
+- The pre-order traversal: $x -> L -> R$.
+- The post-order traversal: $L -> R -> x$.
+
+#subsection[BST Operations]
+- *Search:*
+  ```pcode
+  procedure BSTsearch(x, k):
+    if k < x.key then return BSTsearch(x.left, k) end
+    if k > x.key then return BSTsearch(x.right, k) end
+    return x
+  ```
+- *Minimum/Maximum:*
+  ```pcode
+  procedure BSTminimum(x):
+    while x.left != NIL do x <- x.left end
+    return x
+  ```
+- *Predecessor/Successor:*
+  ```pcode
+    procedure BSTpredecessor(x):
+      if x.left != NIL then
+        return BSTmaximum(x.left)
+      end
+
+      y = x.parent
+      while y != NIL and x = y.left do
+        x = y
+        y = y.parent
+      end
+      return y
+  ```
+
+#colbreak()
+#exr(count: false)[
+  - Write the pseudocode for the following operations:
+    + Find a successor of $x$.
+    + Insert a key into the BST.
+    + Delete a key from the BST.
+  - Calculate the complexity of search, insert, delete, minimum, maximum each run in $O(h)$ time where $h$ is the height of the tree.
+]
+
+#section[Graph Coloring]
+
+#def(name: "Proper Vertex Coloring/Chromatic Number", ovcount: false)[
+  A proper vertex coloring of a graph $G$ is a function $c: V(G) -> {1, dots, k}$ such that $forall (u, v) in E(G), c(u) != c(v)$. The minimum number of colors for which we can obtain a proper vertex coloring exists, denoted $chi(G)$.
+]
+
+#thm(ovcount: false)[
+  - $chi(G) >= omega(G)$ where $omega(G)$ is the clique number.
+  - $chi(G) <= Delta(G) + 1$.
+  - $chi(G) <= n$.
+]
+
+#exr(count: false)[Prove the theorem]
+
+```pcode
+procedure GreedyColoring(G):
+  initialize all vertices to uncolored
+  for v in V(G) do
+    - find the smallest color not used by any neighbor
+    - assign this color for v
+  end
+```
