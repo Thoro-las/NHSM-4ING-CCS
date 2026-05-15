@@ -13,7 +13,7 @@
         fill: fill-color,
         stroke: (left: 1mm + border-color),
         align(left)[
-          #text(weight: "bold", style: "normal", fill: title-color, title + ":")
+          #text(weight: "bold", style: "normal", fill: title-color)[*#{title + ":"}*]
           #text(style: "italic", content)
         ]
       )

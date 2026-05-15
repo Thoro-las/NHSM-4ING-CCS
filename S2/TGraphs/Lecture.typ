@@ -15,24 +15,24 @@
 
 #section[Definitions & Notations]
 #subsection[Types Of Graphs]
-#def(name: "Undirected Graph")[
+#def(name: "Undirected Graph", ovcount: false)[
   An undirected graph $G$ is an ordered pair $G=(V, E)$ where $V$ is a finite set called the vertex set (vertices) and $E subset {{u, v} | u, v in V}$ called the set of edges.
 ]
 
-#def(name: "Directed Graph")[
+#def(name: "Directed Graph", ovcount: false)[
   A directed graph $G$ is an ordered pair $G=(V, A)$ where $V$ is the set of vertices and $A subset V times V$ called the set of arcs or directed edges.
 ]
 
-#def(name: "Unweighted Graph")[
+#def(name: "Unweighted Graph", ovcount: false)[
   An unweighted graph $G$ is a graph is a graph where all edges are considered equal.
 ]
 
-#def(name: "Weighted Graph")[
+#def(name: "Weighted Graph", ovcount: false)[
   A weighted graph $G=(V, E)$ is a graph where there is a function $w: E -> RR$ where for each edge $e in E$, the weight of $e$ is $w(e)$.
 ]
 
 #subsection("Concepts On Vertices & Edges")
-#def(name: "Adjacent/Incident/Isolated")[
+#def(name: "Adjacent/Incident/Isolated", ovcount: false)[
   Let $G = (V, E)$ a graph:
   + Two vertices $u, v in V$ are adjacent or neighbors if ${u, v} in E$.
   + A vertex $v$ is called incident to an edge $e$ if $v$ is an endpoint of $e$.
@@ -49,7 +49,7 @@
   + The number of edges incident to $v$ with maximum degree of $G$, $Delta (G) = max_(v in V) d(v)$ and minimum degree is $delta (G) = min_(v in V) d(v)$.
 ]
 
-#lem(name: "Handshake")[
+#lem(name: "Handshake", ovcount: false)[
   For an undirected graph $G=(V, E)$ then $
     sum_(v in V) deg(v) = 2 card E
   $
@@ -59,7 +59,7 @@
   Every edge ${u, v} in E$ contributes exactly $1$ to $deg(u)$ and $1$ to $deg(v)$ thus adding $2$ to $sum_(v in V) deg(v)$, so all edges counted twice in the sum of all edges.
 ]
 
-#thm[
+#thm(ovcount: false)[
   The number of vertices with odd degree is even.
 ]
 
@@ -70,11 +70,11 @@
 ]
 
 #subsection[Simple & Multigraphs]
-#def(name: "Simple/Multi Graph")[
+#def(name: "Simple/Multi Graph", ovcount: false)[
   A graph $G$ is said to be simple if it has no loops and no multiple edges. A multigraph is a graph that may have loops and have multiple edges.
 ]
 
-#thm[
+#thm(ovcount: false)[
   In any simple graph $G$ with order $n >= 2$, there exists at least two vertices with same degree.
 ]
 
@@ -86,7 +86,7 @@
   There are $binom(n, 2)$ maximum edges in a simple graph.
 ]
 
-#def(name: "Walk/Trail")[
+#def(name: "Walk/Trail", ovcount: false)[
   Let $G=(V, E)$ be a graph
   + A walk of length $k$ is a sequence $v_1, e_2, v_2, dots, e_k, v_k$ with $e_i = {v_(i-1), v_i} in E$.
   + A trail is a walk with no repeated edges.
@@ -94,15 +94,15 @@
   + A walk is closed if $v_0 = v_k$.
 ]
 
-#thm[
+#thm(ovcount: false)[
   If there is a walk from vertex $u$ to $v$ then there is also a path from $u$ to $v$.
 ]
 
 #prf[
-  By induction on the length of the walk $n$. For $n = 1$, it is trivial since any $1$-walk is a path, now consider a walk of length $n$, $v_1, e_1, v_2, dots, v_(n-1), e_n, v_n$ , if $forall i, j in [|1, n|], i != j => v_i != v_j$ then it is a path, otherwise there exists $i, j$ such that $v_i, v_j$, we consider the new walk $v_1, e_1, v_2, dots, e_i, v_i, e_j, dots, e_n, v_n$, this walk has a strictly less length then the original, and thus by induction hypothesis, there is a walk from $v_1$ to $v_n$.
+  By induction on the length of the walk $n$. For $n = 1$, it is trivial since any $1$-walk is a path, now consider a walk of length $n$, $v_1, e_1, v_2, dots, v_(n-1), e_n, v_n$ , if $forall i, j in [|1, n|], i != j => v_i != v_j$ then it is a path, otherwise there exists $i, j$ such that $v_i = v_j$, we consider the new walk $v_1, e_1, v_2, dots, e_i, v_i, e_j, dots, e_n, v_n$, this walk has a strictly less length then the original, and thus by induction hypothesis, there is a walk from $v_1$ to $v_n$.
 ]
 
-#def(name: "Circuit/Cycle")[
+#def(name: "Circuit/Cycle", ovcount: false)[
   + A circuit is a closed trail.
   + A cycle is a closed path.
   + A cycle of length $k$ is denoted $C_k$, unless otherwise specified.
@@ -113,15 +113,15 @@
   + A spanning subgraph $H$ of $G$ is a subgraph such that $V(H) = V(G)$.
 ]
 
-#thm[
-  In a connected graph, any two longest paths share at least one vertex.
+#thm(ovcount: false)[
+  In a connected graph, for any two longest paths in the graph, there exists a vertex they intersect in.
 ]
 
 #prf[
   Suppose that there is a graph where two longest paths do not share a vertex, denote them $v_1, e_1, dots, e_(n-1), v_n$ and $v'_1, e'_1, dots, e'_(n-1), v'_n$, given that the graph is connected, then there is a path from some $v_i$ to $v'_j$ that does not intersect with the previous paths. Consider the path that goes through the furthest endpoint $v_1$ or $v_n$ from $v_i$, the path until $v_i$, then the path from $v_i$ to $v'_j$ and lastly to the furthest endpoint $v'_1$ or $v'_n$ from $v'_j$.
 ]
 
-#def(name: "Induced/Complement Graph")[
+#def(ovcount: false, name: "Induced/Complement Graph")[
   + An induced subgraph $G'$ is a subset $S subset V$ and all edges from $G$ that have both endpoints in $S$.
   + A complement graph $overline(G)$ of a graph $G$ has the same vertex set $V$, and $u v in E(overline(G)) <=> u v in.not E(G)$.
 ]
@@ -187,7 +187,7 @@ For a graph $G=(V, E)$ the adjacency list representation consists of an array Ad
 
 For a weighted graph, we just add a couple $(v_j, w)$ if $v_i v_j in E$ with $w = w(v_i v_j)$.
 
-#def(name: "Sparse/Dense Graph")[
+#def(name: "Sparse/Dense Graph", ovcount: false)[
   Let $G=(V, E)$ a graph, we say that $G$ is a sparse graph if $card E << card V^2$ and we call it dense if $card E approx Theta(card V^2)$.
 ]
 
@@ -297,27 +297,31 @@ Graph traversal algorithms systematically explores the vertices of the graph. Th
 #subsection[Breadth-First Search]
 Fundamental graph traversal algorithm explores a graph layer by layer, starting from a source vertex, it visits all its directed neighbors (vertices at distance 1) before moving on to the neighbors of those neighbors, (vertices at distance 2) and so on. BFS uses a Queue data structure (First-In First-Out) to manage the order of exploration. The goal of BFS is to discover all vertices reachable from source $s$ and compute the shortest path distance $s$ to each reachable vertex.
 
-#let c(body) = [#h(1cm) #text(fill: gray)[$<-$ #body]]
+```pcode
+procedure BFS(G, s):
+  - Create a queue Q.
+  - Create a set visited.
+  - Create a map distance with values infinity.
 
-#alg(ovcount: false)[
-  Procedure BFS(G, s):
-  + Create a queue $Q$ and a set visited. #c($O(1)$)
-  + Create a map distance with all values initialized to $infinity$. #c($O(n)$)
-  + visited.add(s) #c($O(1)$)
-  + distance[s] $<-$ 0 #c($O(1)$)
-  + Q.enqueue(s) #c($O(1)$)
-  + while $Q$ is not empty #c($O(n)$)
-    + v $<-$ Q.dequeue() #c($O(1)$)
-    + Process vertex v. #c($O(1)$)
-    + for each neighbor w of v #c($O(m)$)
-      + if w is not visited then
-        + visited.add(w) #c($O(1)$)
-        + distance[w] = distance[v] + 1 #c($O(1)$)
-        + Q.enqueue(w) #c($O(1)$)
-      + endif
-    + endfor
+  visited.add(s)
+  distance[s] = 0
+  Q.enqueue(s)
+
+  while Q not empty do
+    v = Q.dequeue()
+    - Process vertex v.
+
+    for each neighbor w of v
+      if w is not visited then
+        visited.add(w)
+        distance[w] = distance[v] + 1
+        Q.enqueue(w)
+      end
+    end
+  end
+
   return distance
-]
+```
 
 Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)$.
 
@@ -448,7 +452,7 @@ Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)
 ]
 
 #prf[
-  Using induction on the shortest path $delta(s, v) = k$, because for $k = 0$ the only vertex $v$ such that $delta(s, v) = 0$ is $s$ itself. BFS initialize $d[s] = 0$ thus $d[s] = delta(s, s) = 0$. By induction, assume that forall vertices $u$ with $delta(s, u) = k$, BFS assign correctly $d[u] = k$, consider a vertex $v$ such that $delta(s, v) = k + 1$. By definition of shortest distance there exists a vertex $x$ such that $(u, v) in E$ and $delta(s, u) = k$. By inductive step $d[u]=k$. When $x$ is dequeued, the algorithm examines all neighbors of $v$ is undiscovered. BFS sets $d[v] = d[u] + 1$. Since BFS explores vertices in non-decreasing order of distance, $v$ cannot have been discovered at a distance smaller than $k + 1$ (otherwise a shortest path to $v$ would be contradicting $delta(s, v) = k + 1$. Thus, the first time $v$ is reached, it is assigned $d[v] = k + 1$.
+  Using induction on the shortest path $delta(s, v) = k$, because for $k = 0$ the only vertex $v$ such that $delta(s, v) = 0$ is $s$ itself. BFS initialize $d[s] = 0$ thus $d[s] = delta(s, s) = 0$. By induction, assume that forall vertices $u$ with $delta(s, u) = k$, BFS assign correctly $d[u] = k$, consider a vertex $v$ such that $delta(s, v) = k + 1$. By definition of shortest distance there exists a vertex $u$ such that $(u, v) in E$ and $delta(s, u) = k$. By inductive step $d[u]=k$. When $u$ is dequeued, the algorithm examines all neighbors of $v$ is undiscovered. BFS sets $d[v] = d[u] + 1$. Since BFS explores vertices in non-decreasing order of distance, $v$ cannot have been discovered at a distance smaller than $k + 1$ (otherwise a shortest path to $v$ would be contradicting $delta(s, v) = k + 1$. Thus, the first time $v$ is reached, it is assigned $d[v] = k + 1$.
 ]
 
 #exr(count: false)[
@@ -457,28 +461,37 @@ Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)
   $ that is the longest of all shortest path distances in the tree. Give an efficient algorithm to compute the diameter of a tree and analyze its complexity.
 ]
 
-The algorithm is as follows: \
-- *Algorithm:* BFS-Modified(T, s)
-  + create a queue $Q$, and distances $d$
-  + initialize $d$ for all vertices to $0$
-  + d[s] $<-$ 0
-  + $Q$.enqueue(s)
-  + while $Q$ is not empty do
-    + v $<-$ $Q$.dequeue()
-    + for each neighbor $w$ of $v$ do
-      + if d[w] = $infinity$ then
-        + d[w] $<-$ d[v] = 1
-        + $Q$.enqueue(w)
-      + endif
-    + endfor
-  + endwhile
-  + let $x$ be a vertex maximizing d[$x$]
-  + return $(x, "d"[x])$
-- *Algorithm:* Tree-Diameter(T)
-  + chose an arbitrary vertex $v in V$
-  + (u, \_) $<-$ BFS-Modified(T, s)
-  + (v,  d) $<-$ BFS-Modified(T, u)
-  + return d
+```pcode
+procedure BFSmodified(T, s):
+  - create a queue Q 
+  - create distances d
+  - initialize d for all vertices to infinity
+
+  d[s] = 0
+  Q.enqueue(s)
+  while Q not empty do
+    v = Q.dequeue()
+    for each neighbor w of v do
+      if d[w] = infinity then
+        d[w] = d[v] + 1
+        Q.enqueue(w)
+      end
+    end
+  end
+
+  x = argmax(d)
+  return (x, d[x])
+```
+
+Now that we have the modified BFS, we can use it to search the diameter of the tree, that is, we start with a random vertex, go to the furthest vertex, and from that vertex, we apply the same thing again, which will give us the longest path.
+
+```pcode
+procedure TREEdiameter(T)
+  - chose an arbitrary vertex s in V
+  (u, _) = BFSmodified(T, s)
+  (v, d) = BFSmodified(T, u)
+  return d
+```
 The complexity of the pseudocode $O(n)$.
 
 The BFS builds a BFS-Tree as it searches the graph. The tree corresponds to the $p$ attributes. For a graph $G=(V, E)$ with sources. Let $G_p = (V_p, E_p)$ where $V_p = {v in V | p(v) != "Nil"} union {s}$ and $E_p = {(p(v),v) | v in V_p \\ {s}}$. The predecessor subgraph $G_q$ is a BFS tree if $V_p$ consists of the vertices reachable from $s$ and for all $v in V_p$, the subgraph $G_p$ contains a unique simple path from $s$ to $v$, that is the shortest path from $s$ to $v$ in $G$. A BFS-Tree is in fact a tree, since it is connected by construction and $|E_p| = |V_p| - 1$.
@@ -539,18 +552,344 @@ Going through the same procedure as the previous example to get
   The transpose of a directed graph $G=(V, E)$ is the graph $G^T=(V, E^T)$ where $E^T = {u v | u, v in V, v u in E}$. Write an efficient algorithm for computing $G^T$ for both representations. Analyze its complexity.
 ]
 
-#follow-bar[Big Gap Here]
+
+#subsection[Depth-First Search]
+DFS is a graph traversal algorithm that explores as far as possible along each branch before backtracking. DFS uses stack data structure (LIFO) to manage the exploration path.
+
+There are two ways to implement DFS, either recursive or iterative.
+
+- *Recursive*
+  ```pcode
+  procedure DFSvisit(G, v, visited):
+    visited.add(v)
+
+    for each neighbor w of v do
+      if w not visited then
+        P[w] = v
+        DFSvisit(G, w, visited)
+      end
+    end
+
+  procedure DFS(G):
+    - create a set visited
+    - create a parent array P
+
+    for each v in G do
+      if v not visited then
+        DFSvisit(G, v, visited)
+      end
+    end
+  ```
+
+- *Iterative*
+  ```pcode
+  procedure DFS(G, s):
+    - create a stack S
+    - create a set visited
+    - create a parent array P
+
+    while S not empty do
+      v = S.pop()
+      if v not visited then
+        visited.add(v)
+        - Process vertex v
+        for neighborhood w of v in reverse order do
+          if w not visited then
+            P[w] = v
+            S.push(w)
+          end
+        end
+      end
+    end
+  ```
+
+#exm[
+  We consider the following graph, and we apply the DFS starting from the vertex $S$.
+  #align(center, diagram({
+    node((0cm,  0cm), $S$, stroke: 0.5pt, name: "S", radius: 0.4cm)
+    node((3cm,  0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
+    node((6cm,  0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
+    node((9cm,  0cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
+    node((0cm, -3cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
+    node((3cm, -3cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
+    node((6cm, -3cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
+    node((9cm, -3cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
+
+    edge(label("S"), label("A"), "->")
+    edge(label("S"), label("B"), "->")
+    edge(label("A"), label("C"), "->")
+    edge(label("A"), label("D"), "->")
+    edge(label("A"), label("F"), "->")
+    edge(label("C"), label("E"), "->")
+    edge(label("E"), label("G"), "->")
+    edge(label("B"), label("C"), "->")
+    edge(label("B"), label("D"), "->")
+    edge(label("D"), label("C"), "->")
+    edge(label("F"), label("C"), "->")
+    edge(label("F"), label("G"), "->")
+    edge(label("G"), label("C"), "->")
+  }))
+  #colbreak()
+  
+  #grid(columns: (1fr, 1fr),
+    [
+      + Initialization:
+        - $Q = [S]$
+        - $"visited" = {}$
+        - $P[S] = "None"$
+      + Step 1: Pop $S$
+        - Neighbors $A$, $B$
+        - $"visited" = {S}$.
+        - $P[A] = S, P[B] = S$.
+        - $S = [B, A]$.
+      + Step 2: Pop $A$
+        - Neighbors $D$, $F$.
+        - $"visited" = {S, A}$.
+        - $P[D] = A, P[F] = A$.
+        - $S = [B, F, D]$.
+      + Step 3: Pop $D$
+        - Neighbors $C$.
+        - $"visited" = {S, A, D}$.
+        - $P[C] = D$.
+        - $S = [B, F, C]$.
+      + Step 4: Pop $C$
+        - Neighbors $E$.
+        - $"visited" = {S, A, D, C}$.
+        - $P[E] = C$.
+        - $S = [B, F, E]$.
+    ],
+    [
+      + Step $5$: Pop $E$
+        - Neighbors $G$.
+        - $"visited" = {S, A, D, C, E}$.
+        - $P[G] = E$.
+        - $S = [B, F, G]$.
+      + Step $6$: Pop $G$
+        - Neighbors $C$, $F$.
+        - All visited.
+        - $S = [B, F]$.
+      + Step $7$: Pop $F$
+        - Neighbors $C$, $G$.
+        - All visited.
+        - $"visited" = {S, A, D, C, E, G, F}$.
+        - $S = [B]$.
+      + Step $8$: Pop $B$
+        - Neighbors $C$, $D$
+        - All visited.
+        - $S = []$.
+    ]
+  )
+]
+
+*Discovering And Finishing Time:*
+#def(name: "Discovering/Finishing Time", ovcount: false)[
+  We define the following functions:
+  - $d[U]$: the time when $U$ was visited first.
+  - $f[U]$: the time when the exploration of $U$ adjacency list is completed.
+]
+
+It is clear that $d[U] < f[U]$ for any vertex $U$.
+
+#def(name: "Edge Classification", ovcount: false)[
+  Let $(u, v)$ be an edge of a direct graph explored during DFS, then we define the following classes:
+  - Tree edge: if $v$ is first discovered when exploring $u$, $P[v] = u$.
+  - Back edge: if $v$ is an ancestor of $u$.
+  - Forward edge: if $v$ is a descendent of $u$, $d[u] < d[v]$.
+  - Cross edge: $d[u] > d[v]$ and $u, v$ are in different branches.
+]
+
+*Pranthesis Structure:* A fundamental property of DFS is that discovery and finishing times of vertices follow a parenthesis structure, more precisely, if we denote the discovering of a vertex by $(u$ and its finishing time by $u)$ then the sequence of events produced by a DFS forms a properly parenthesized expression.
+
+#exm[
+  #align(center, diagram({
+    node((0cm,    0cm), $Y$, stroke: 0.5pt, name: "Y", radius: 0.4cm)
+    node((2cm,    0cm), $Z$, stroke: 0.5pt, name: "Z", radius: 0.4cm)
+    node((4cm,    0cm), $S$, stroke: 0.5pt, name: "S", radius: 0.4cm)
+    node((6cm,    0cm), $T$, stroke: 0.5pt, name: "T", radius: 0.4cm)
+    node((0cm, -1.5cm), $X$, stroke: 0.5pt, name: "X", radius: 0.4cm)
+    node((2cm, -1.5cm), $W$, stroke: 0.5pt, name: "W", radius: 0.4cm)
+    node((4cm, -1.5cm), $V$, stroke: 0.5pt, name: "V", radius: 0.4cm)
+    node((6cm, -1.5cm), $U$, stroke: 0.5pt, name: "U", radius: 0.4cm)
+
+    edge(label("Y"), label("X"), "->")
+    edge(label("Z"), label("W"), "->")
+    edge(label("Z"), label("Y"), "->")
+    edge(label("S"), label("Z"), "->")
+    edge(label("S"), label("W"), "->")
+    edge(label("T"), label("V"), "->")
+    edge(label("T"), label("U"), "->")
+    edge(label("X"), label("Z"), "->")
+    edge(label("W"), label("X"), "->")
+    edge(label("V"), label("W"), "->")
+    edge(label("V"), label("S"), "->")
+    edge(label("U"), label("V"), "->")
+  }))
+  we get the following expression $
+    (S(Z(Y(X X)Y)(W W)Z)S)(T(U(V V)U)T)
+  $
+]
+
+#thm(ovcount: false)[
+  Int a DFS of a graph $G$ for any two vertices $u$ and $v$ exactly one of the following holds:
+  + $[d[u], f[u]$ and $[d[v], f[v]]$ are entirely disjoint.
+  + $[d[u], f[u]] subset [d[v], f[v]]$.
+  + $[d[v], f[v]] subset [d[u], f[v]]$.
+]
+
+#prf[
+  Without loss of generality, assume $d[u] < d[v]$, since all timestamps are distinct (the clock increments before each assignment, so all $2|V|$ timestamps are distinct). There are two subcases according to wether $d[v] < f[u]$ or not.
+  - Case 1: $d[v] < f[u]$, so $v$ is discovered while $u$ is still open (not finished), which implies that $v$ is a descendent of $u$. Moreover, since $v$ is discovered after $u$ it is finished before $u$, hence $[d[v], f[v]] subset [d[u], f[u]]$.
+  - Case 2: $d[v] > f[u]$ then $d[u] < f[u] < d[v] < f[v]$, thus the intervals are entirely disjoint no vertex is a descendent of another, it is obtained by the symmetry $d[v] < d[u]$.
+]
+
+#thm(ovcount: false, name: "Cycle Detection")[
+  A directed graph contains a cycle if and only if DFS discovered a back edge.
+]
+
+#prf[
+  $arrow.double.l$ Suppose DFS discovers a back edge $u v$, by definition of back edge in DFS, the vertex $v$ is an ancestor of $u$ in the DFS tree. Therefore, there exists a path from $v$ to $u$ consisting of tree edges in DFS tree, together with the edge $u v$, we get a cycle.
+  $=>$ suppose the graph contains a directed cycle $v_1 -> v_2 -> dots v_k -> v_1$, let $v_1$ be the first vertex of this cycle discovered by DFS, when DFS visits $v_1$ all other vertices of the cycle are still undiscovered, DFS will explore along the cycle through tree edge until it reaches the vertex $v_K$ that has an edge back to $v_1$, since $v_1$ is still active in the recursive stack, this edge points to an ancestor in DFS tree therefore it is a back edge.
+]
+
+#exr(ovcount: false)[
+  Prove the following theorem.
+  #thm(count: false)[
+    In a DFS of an undirected graph $G$, every edge of $G$ is either a tree edge or a back edge.
+  ]
+]
+
+#subsection[Application Of Traversal Algorithms]
+- *Finding The Shortest Path:* using BFS we can find the shortest path from a starting vertex $s$ to an end vertex $e$.
+  ```pcode
+  procedure BFSshortpath(G, s, e):
+    BFS(G, s)
+    if P[e] = NIL and e ≠ s then return "No Path" end
+    return BFSreconstructpath(P, s, e)
+
+  procedure BFSreconstructpath(P, s, e):
+    path = []
+    current = e
+
+    while current ≠ NIL do
+      path.add(current)
+      current = P[current]
+    end
+
+    return path
+  ```
+- *Connected Components:* a connected components of an undirected graph $G$ is a maximal subset $C subset V$ such that for every pair $u, v in C$, there is a path from $u$ to $v$ in $G$. We can use BFS/DFS to find connected components.
+  ```pcode
+  procedure FSfindcomponents(G):
+    - initialize components array to -1 for vertices.
+    count = 0
+
+    for vertex v in G do
+      if component[v] = -1 then
+        count = count + 1
+        FSlabelcomponent(G, v, count)
+      end
+    end
+
+    return count, components
+
+  procedure FSlabelcomponent(G, s, label):
+    - use BFS/DFS starting from s
+    for vertex v in visited do
+      components[v] = label
+    end
+  ```
+- *Topological Sort:* Let $G$ be a direct acyclic graph "DAG" is a linear ordering of all its vertices such that $u v in E(G) => u <= v$.
+  #lem(ovcount: false)[
+    A directed graph $G$ is acyclic if and only if DFS produces no back edge.
+  ]
+  #prf[
+    $=>$ if DFS produces a back edge $u v$ then there is a cycle. $arrow.double.l$ if $G$ contains a cycle, DFS will eventually discover a back edge.
+  ]
+
+  ```pcode
+  procedure DFStopsort(G):
+    - initialize empty list L
+    - Run DFS in G and compute the finishing times f[v]
+    - as each vertex if finished insert it in front of L
+    return L
+  ```
+- *Trees:* 
+  #def(name: "Tree", ovcount: false)[
+    A tree is a connected non-cyclic graph.
+    - we say it is rooted if it has one designated vertex called a root.
+    - the depth of a vertex is the length from the root to the vertex.
+    - the height of the tree is the maximum depth of any vertex.
+    - spanning tree: a spanning tree of a connected graph $G$ is a subgraph $T$ such that $T$ is a tree and contains all vertices of $G$.
+  ]
+
+  #thm(ovcount: false)[
+    Every connected graph has at least one spanning tree.
+  ]
+
+  #prf[
+    Let $G$ a connected graph, for any cycle, remove an edge from the cycle, the graph remains connected. Repeat until no cycles remain, which is a tree.
+  ]
+
+  ```pcode
+  procedure FSspanningtree(G, s):
+    - run BFS/DFS on G starting from S
+    return FSconstructtree(P)
+
+  procedure FSconstructtree(P):
+    - Initialize T = (V, {})
+    for v in V do
+      if P[v] ≠ NIL then
+        - add edge(P[v], v) to T
+      end
+    end
+
+    return T
+  ```
+
+#colbreak()
+#exr(ovcount: false, name: "The Word Transformer")[
+  + Each word $D union {S}$ is a vertex. An edge links two vertices (words) differencing in exactly one letter.
+  + All edges are weight $1$, any valid transformation sequence is a path in $G$ and the shortest path gives the minimum chain length which BFS guarantee.
+  + 
+]
+
+#section[Minimum Spanning Tree]
+
+Given a connected weighted graph $G=(V, E, W)$ where $W: E -> RR$. A minimum spanning tree is a spanning tree $T$ such that $sum_(e in E(T)) W(e)$ is minimized.
+
+#subsection[Prim's Algorithm]
+Prim's algorithm grows the MST one vertex at a time from a source $s$, at every step it selects the cheapest edge.
+```pcode
+procedure PrimMST(G, r):
+  for each v in V do
+    key[v] = ∞
+    P[v] = NIL
+  end
+  
+  key[r] = 0
+  Q = V
+
+  while Q not empty do
+    u = extractmin(Q)
+    for each neighbor v of u do
+      if v in Q and w(uv) < key(v) then
+        key[v] = w(uv)
+        P[v] = u
+      end
+    end
+  end
+
+  return P
+```
+
 #subsection[Kruskal's Algorithm]
 Kruskals algorithm process the edges in increasing weight order and greedily includes each edges in the MST as long as it does not form a cycle with edges already selected.
 
 ```pcode
 T = ∅
-!=
-for v in V do
-  makeset(v)
-end
+for v in V do makeset(v) end
 
-sort E in non-decreasing order of weight
+- sort E in non-decreasing order of weight
 
 for edge (u, v) in E do
   if findset(u) ≠ findset(v) then
@@ -559,6 +898,7 @@ for edge (u, v) in E do
   endif
 end
 ```
+
 
 #section[Binary Search Tree]
 
@@ -605,7 +945,6 @@ The unique node with $x."parent" = "NIL"$ is the root. A node with $x."left" = x
       return y
   ```
 
-#colbreak()
 #exr(count: false)[
   - Write the pseudocode for the following operations:
     + Find a successor of $x$.
@@ -614,6 +953,7 @@ The unique node with $x."parent" = "NIL"$ is the root. A node with $x."left" = x
   - Calculate the complexity of search, insert, delete, minimum, maximum each run in $O(h)$ time where $h$ is the height of the tree.
 ]
 
+#colbreak()
 #section[Graph Coloring]
 
 #def(name: "Proper Vertex Coloring/Chromatic Number", ovcount: false)[
@@ -635,4 +975,46 @@ procedure GreedyColoring(G):
     - find the smallest color not used by any neighbor
     - assign this color for v
   end
+```
+
+#follow-bar[Big Gap Here Again]
+
+The complexity of the Djikstra algorithm is $O(n^2 + m) tilde.eq O(n^2)$.
+
+#thm(name: "Djikstra's Algorithm Correctness", ovcount: false)[
+  Djikstra's algorithm gives the shortest algorithm on a postive weighted graph.
+]
+
+#prf[
+  We proceed by induction on $S$.
+  - $S = emptyset$, the first extracted vertex is $S$, $d[s] = 0 = delta(s, s)$, holds.
+  - Assume for all vertices $x in S$ we have $d[x] = delta(s, x)$. Let $v in S$ be the next vertex extracted from the priority queue. By definition $d[v] = min_(x in.not S) d[x]$, assume by contradiction that $d[v] > delta(s, v)$, consider a shortest path from $s$ to $v$ and $(x, y))$ be the first edge on this path such that $x in S$, $y in.not S$, by inductive hypothesis $d[x] = delta(s, x)$, when $x$ is processed, the relaxation step ensures that $d[y] <= d[x] + w(x, y) = delta(s, x) + w(x, y) = delta(s, y)$. Since all weights are non-negative, the remaining path from $y$ to $v$ cannot decrease the distance so $delta(s, y) <= delta(s, v)$ thus $d[y] <= delta(s, v)$. But since $v$ is chosen to be the minimum then $d[x] <= d[y]$ since $y in.not S$, thus $d[v] <= d[y] <= delta(s, y) <= delta(s, v)$ which contradicts the assumption of $d[v] > delta(s, v)$.
+]
+
+#section[Bellman-Ford Algorithm]
+Which Djikstra's algorithm works efficiently for graphs with non-negative weights if fails when negative wieghts are present. The Bellman-Ford algorithm solves this single source.
+
+```pcode
+procedure Bellman-Ford(G, s):
+  - initilize distances d[v] to infinity
+  for v vertex in G do
+    d[s] = 0
+  end
+
+  for i = 1 to #V - 1 do
+    for each edge (v, u) with weight w in G do
+      if d[v] + w < d[v] do
+        d[v] = d[u] + w
+        p[v] = u
+      end
+    end
+  end
+
+  for each edge (u, v) with weight w in G do
+    if d[u] + w < d[v] then
+      return "negative cycle"
+    end
+  end
+
+  return d[], p[]
 ```

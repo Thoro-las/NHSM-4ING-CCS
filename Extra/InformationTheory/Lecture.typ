@@ -1,485 +1,290 @@
-#import "@preview/finite:0.5.0" as finite: automaton
-#import "@preview/wrap-it:0.1.1": wrap-content
-
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@THR/Course:1.0.0": *
 #show: template.with(
   cover: (
-    title: [Complexity Theory],
+    title: [Information Theory & Error Correcting Codes],
     writer: "HADIOUCHE Azouaou",
-    disclaimer: [This course is one I write from some sources I read. Please be careful about the information given here.]
-  )
+    hide-page: true,
+  ),
 )
 
 #let card = math.op("#")
 #let subset = $subset.eq$
 
-#chapter([Introduction])[
-  Computational complexity theory, or complexity theory in short, is a theory made for classifying algorithms and computational problems by their time, memory, or other resources usage throughout their runtime which allows a clear objective comparison between algorithms performance in general.
+#counter("title-counter").update(2)
+#chapter([Channel Coding])[
+  Coding has two parts, the source coding and channel coding, the first handles how to compress data to get the least redundancy possible while containing all information to get exactly the same message. Channel coding on the other hand, adds redundancy in way to make it more resilient to noise affecting the signal.
 ]
 
-It is easy to notice that for different kind of machines, the same algorithm will lead to different running times, and even sometimes in the same machine. To be objective, we will start by making a model for a universal machine, the Turing machine, that allows us to compare algorithms independent of the hardware they run on, thus giving us an objective measure for efficiency of algorithms.
+#section[What Is A Channel?]
+Suppose you have a transmission medium, where given a stream of symbols $X^n$ from an alphabet $cal(X)$, it can transport it to a stream of symbols $Y^n$. The way it transmits can be affected by randomness. We will call the transmission medium a channel, as it takes information from an input and moves it to an output.
 
-#ntt[
-  Let $Sigma$ be a set of alphabets. We define the following:
-  - $NN = {0, 1, 2, dots}$ and for $n<m$, $[|n, m|] = {n, n+1, dots, m-1, m}$.
-  - $Sigma^n = Sigma times dots.c times Sigma$ the set of all words written with $n$ alphabets of $Sigma$, for $n = 0$, we get $Sigma^n = {epsilon}$ where $epsilon$ is the empty word.
-  - If $Sigma = {a}$ then $Sigma^n = {a}^n$ and we denote it $a^n$.
-  - $Sigma^* = union_(n in NN) Sigma^n$ the set of all possible words written with alphabets of $Sigma$.
-  - Instead of using the notation $x = (x_1, x_2, dots, x_n)$ we will use the word notation $x=x_1 x_2 dots x_n$.
-  - If $x=x_1 x_2 dots x_n in Sigma^n, y = y_1 y_2 dots y_m in Sigma^m$, we define the concatenation operation $x y$ such that $x y = x_1 x_2 dots x_n y_1 y_2 dots y_m in Sigma^(n + m)$ and for $S_1, S_2$ two sets of words, we define $S_1 S_2 = {x y | x in S_1, y in S_2}$.
-  - Define the length $|dot.c|: Sigma^star -> NN, S |-> |S|=min{n in N | S in Sigma^n}$.
-]
+To formalize the idea of a channel, we can think of a simple example. Suppose you are typing on a keypad, you will represent the sender, the keypad would be the receiver, and your hand would be the channel. There is a non-zero chance that you will do a mistake and write an unwanted symbol, what we would like to know, is the probability of for example clicking $3$ by mistake when you wanted to type $6$. If we represent the wanted key as a random variable $X$ and the pressed key as $Y$, the question becomes really easy in this case, we just want to calculate the probability $P(Y = 3|X = 6)$. So, in general, when considering any channel, it is best to know what is the behavior of the conditional probability $P(Y|X)$.
 
-#colbreak()
-#section("Machines & Automata")
-We will present briefly some more basic machines and their workflow, to give a general idea of how computation is formalized and a motivation for some later concepts that will be used with Turing machines.
-
-#subsection("Deterministic Automaton")
-#def(name: "DFA", count: false)[
-  Let $M = (Sigma, Q, delta, q_0, F)$ a _deterministic finite automaton_ (DFA), it satisfies: 
-  - $Sigma$ an alphabet.
-  - $Q$ a finite set of states.
-  - $delta: Q times Sigma -> Q$ a transition function.
-  - $q_0 in Q$ a starting state.
-  - $F subset Q$ a set of accepted/final states.
-  A _computation in $M$_ is done as follows: let $S = s_1 s_2 dots s_m in Sigma^*$, define the sequence ${D_i}_(i in [|1, m|]) subset Q$ that satisfies the recursion
-  #v(-1mm)
-  $
-    cases(
-      D_0 = q_0,
-      D_(i) = delta(D_(i-1), s_(i)) "with" i in [|1, m|]
-    )
-  $
-  #v(-2mm)
-  $M$ is said to accept $S$ if and only if $D_m in F$, it is said to be rejected otherwise. We define the _language_ of $M$ denoted $cal(L)(M)$ as the set of all strings in $Sigma^*$ that the machine $M$ accepts.
+#def(name: "Channel")[
+  A channel is a conditional probability $P(y|x)$, describing the probability of receiving an output $y$ when sending an input $x$ called the transition probability.
 ]
 
 
-#wrap-content(
-  align: right,
-  scale(100%)[#align(center)[
-    #table(
-      columns: 2,
-      gutter: 1cm,
-      stroke: 0mm,
-      table(
-        columns: 3,
-        [$q in Q$], [$c in Sigma$], [$delta(q, c)$],
-        [$q_0$], [$a$], [$q_1$],
-        [$q_0$], [$b$], [$q_2$],
-        [$q_1$], [$a$], [$q_2$],
-        [$q_1$], [$b$], [$q_1$],
-        [$q_2$], [$a, b$], [$q_3$],
-        [$q_3$], [$a, b$], [$q_2$]
+#def(name: "Discrete Channel")[
+  A channel is said to be discrete if the random variables describing the input and output both are discrete, that is, they have values in finite sets $cal(X) = {x_1, dots, x_n}$ and $cal(Y) = {y_1, dots, y_m}$ of symbols, in this case, the transition probability is a matrix of the following form $ Q = mat(
+    P(y_1|x_1), P(y_2|x_1), dots.c, P(y_m|x_1);
+    P(y_1|x_2), P(y_2|x_2), dots.c, P(y_m|x_2);
+    dots.v, dots.v, dots.down, dots.v;
+    P(y_1|x_n), P(y_2|x_n), dots.c, P(y_m|x_n);
+  ) $ and we define the channel as the triplet $cal(C) = (cal(X), P(Y|X), cal(Y))$.
+]
+
+#def(name: "Discrete Memoryless Channel")[
+  A discrete channel is said to be memoryless if for $x=(x_1, dots, x_n)$ and $y=(y_1, dots, y_n)$ we have $ P(y|x) = product_(i=1)^n P(y_i|x_i) $ that is, the distribution of the output only depends on the input and not previous channel inputs or outputs.
+]
+
+
+Most of the remaining of the course will focus mainly on discrete memoryless channels as in they are the simplest types of channels and are more enough for practical purposes in general.
+
+#exm[
+  - *Binary Noiseless Channel:* a noiseless channel is a channel where we have that $P(y=b|x=b) = 1$, that is, the transmission is perfect.
+    #align(center)[
+      #diagram(
+        node((0, 0), $0$, name: "00"),
+        node((3, 0), $0$, name: "01"),
+        node((0, 0.7), $1$, name: "10"),
+        node((3, 0.7), $1$, name: "11"),
+
+        edge(label("00"), label("01"), "->", label: $1$),
+        edge(label("10"), label("11"), "->", label: $1$),
       )
-    )
-  ]],
-  [
-    Note that the finite in DFA comes from the fact that the set of states is finite. We have a natural way to represent DFAs as a graph which is similar to discrete Markov chains. We take the following example: Let $M = (Sigma, Q, delta, q_0, F)$ with $Sigma = {a, b}$, $Q = {q_0, q_1, q_2, q_3}$ and $F = {q_3}$ and the transition function is
+    ]
+  - *Binary Useless Channel:* given any input, it returns $0$, it is useless as it can't pass information, which will reexplained later.
+  - *Noisy Binary Channel:* given $0 <= p, q < 1$ and we have the following transition matrix $ Q = mat(1 - p, p; q, 1 - q) $ this channel represents a binary channel where $0$ has probability $1 - p$ of getting flipped to one, and $1$ has probability $1 - q$ of getting flipped to zero.
+    #align(center)[
+      #diagram(
+        node((0, 0), $0$, name: "00"),
+        node((3, 0), $0$, name: "01"),
+        node((0, 1), $1$, name: "10"),
+        node((3, 1), $1$, name: "11"),
 
-    We represent the machine in the previous diagram, the starting state has an arrow "start" pointing to it, the final states having a double circle around them, the states are represented using circles with the name of the state inside, and the transitions are represented going from the state to the one it has to go through with the input given.
-  ]
-)
+        edge(label("00"), label("01"), "->", label: text(fill: green, $1-p$), stroke: green),
+        edge(
+          label("10"),
+          label("01"),
+          "->",
+          label: text(fill: red, $q$),
+          stroke: red,
+          label-pos: 70%,
+          label-sep: 0pt,
+        ),
+        edge(
+          label("00"),
+          label("11"),
+          "->",
+          label: text(fill: blue, $p$),
+          stroke: blue,
+          label-pos: 65%,
+          label-sep: -15pt,
+        ),
+        edge(label("10"), label("11"), "->", label: text(fill: purple, $1-q$), stroke: purple, label-sep: -20pt),
+      )
+    ]
 
+  - *Binary Symmetric Channel:* this channel represents the most intuitive idea of a noisy binary channel, where we consider just a noisy binary channel with $p = q$, that is, the probability of getting a flip for $1$ and $0$ is the same.
+    #align(center)[
+      #diagram(
+        node((0, 0), $0$, name: "00"),
+        node((3, 0), $0$, name: "01"),
+        node((0, 1), $1$, name: "10"),
+        node((3, 1), $1$, name: "11"),
 
+        edge(label("00"), label("01"), "->", label: text(fill: green, $1-p$), stroke: green),
+        edge(
+          label("10"),
+          label("01"),
+          "->",
+          label: text(fill: red, $p$),
+          stroke: red,
+          label-pos: 70%,
+          label-sep: -2pt,
+        ),
+        edge(
+          label("00"),
+          label("11"),
+          "->",
+          label: text(fill: red, $p$),
+          stroke: red,
+          label-pos: 65%,
+          label-sep: -15pt,
+        ),
+        edge(label("10"), label("11"), "->", label: text(fill: green, $1-p$), stroke: green, label-sep: -20pt),
+      )
+    ]
+  - *Binary Erasure Channel:* this channel models the phenomenon of having an erasure or a corruption of data in the channel, where we have a way to recognize where the erasure has happened. We consider $cal(X) = {0, 1}$ and $cal(Y) = {0, 1, perp}$ where $perp$ denotes the erasure, and the following transition matrix.
+    #align(center)[
+      #grid(
+        columns: (1fr, 1fr),
+        align: center + horizon,
+        $ Q = mat(1-p, p, 0; 0, p, 1-p) $,
+        diagram(
+          node((0, 0), $0$, name: "00"),
+          node((3, 0), $0$, name: "01"),
+          node((3, 0.3), $perp$, name: "p"),
+          node((0, 0.6), $1$, name: "10"),
+          node((3, 0.6), $1$, name: "11"),
+
+          edge(label("00"), label("01"), "->", label: text(fill: green, $1-p$), stroke: green),
+          edge(label("10"), label("p"), "->", stroke: red, label-pos: 80%, label-sep: -2pt),
+          edge(
+            label("00"),
+            label("p"),
+            "->",
+            label: text(fill: red, $p$),
+            stroke: red,
+            label-pos: 50%,
+            label-sep: -14pt,
+          ),
+          edge(label("10"), label("11"), "->", label: text(fill: green, $1-p$), stroke: green, label-sep: -20pt),
+        ),
+      )
+    ]
+]
+
+#section[Noise & Redundancy]
+
+We have seen some examples of channels, the question that comes to mind is how and when is a reliable communication establishable. Consider the binary symmetric channel with probability $p$ of flipping a bit. When sending a single bit $x$, there is a chance that the received bit would be $overline(x)$. To avoid such an error, we can think of sending the same bit multiple times and then do a majority vote to decide which bit has been sent. So the encoding function is $x |-> x^n$ for some fixed $n$, and the decoding function is $(y_1, dots, y_n) |-> 1$ if $card 1(y_i) > card 0(y_i)$ and $0$ otherwise. Notice now that when we have $1$ error and $n >= 3$, we can determine and correct the error just with those encoding and decoding functions. From Algebra & Coding lectures, we know that we can detect up to $n/2$ errors, and thus, the probability of actually making an error in a BSC is $ P_e (n) = sum_(k=ceil.l n\/2 ceil.r)^n binom(n, k) p^k (1-p)^(n-k). $
+By taking $p = 0.1$ for example we get the following probabilities for $n$ errors.
 #align(center)[
-  #automaton(
-    (
-      q0: (q1: "a", q3: "b"),
-      q1: (q2: "a", q1: "b"),
-      q2: (q3: "a, b"),
-      q3: (q3: "a, b")
-    ), 
-    final: "q2",
-    layout: (
-      q0: (0, 0),
-      q1: (3, 0),
-      q2: (6, 0),
-      q3: (3, -2)
-    ),
-    style: (
-      q3-q3: (anchor: bottom),
-      q0-q1: (curve: 0),
-      q1-q2: (curve: 0),
-      q0-q3: (curve: -1, label: (dist: -.43, angle: 0deg)),
-      q2-q3: (curve: 1, label: (dist: .43, angle: 0deg)),
-    ),
-  )
+  #box(width: 80%, table(
+    columns: (1fr,) * 6,
+    $n$, $1$, $3$, $5$, $7$, $9$,
+    $P_e (n)$, $0.1$, $0.0280$, $0.0085$, $0.0027$, $0.0008$,
+  ))
+]
+All beautiful, $P_e$ is decreasing by Chernoff's bound and converges to $0$ when $n$ tends to infinity. But notice that we have a trade-off, to reduce the possibility for an error happening, we reduced in the rate of transmission, that is, to just receive one symbol, we need to send $n$ bits, thus giving us a rate of $1\/n$ bits per symbol. The problem with this scheme is that the more errors we want to fix, we lose rate. The question now is the following "If we take a rate $R$, how much can we reduce the probability of errors.", which is answered by Shannon's Channel Coding Theorem.
+
+Before that, we formalize the ideas and the question we have until now with the following definitions. We start by defining a communication system using those channels, which will represent how a real communication system would look and interact like and how codes work in such a system.
+
+#def(name: "Communication System")[
+  Let $cal(C) = (cal(X), P(Y|X), cal(Y))$ be a discrete channel.
+  - A message $W$ drawn from an index set $[|1, M|]$.
+  - A sender sequence $X^n (W)$.
+  - A receiver sequence $Y^n tilde P(Y^n|X^n)$.
+  - A decoding function $hat(W) = g(Y^n)$.
+  #align(center)[
+    #diagram(
+      edge-stroke: 0.3mm,
+      node-corner-radius: 0pt,
+      edge-corner-radius: 8pt,
+      mark-scale: 70%,
+      node-stroke: 0.2mm,
+
+      node((0.3, 0), name: "2", [Encoder\ $X^n (M)$]),
+      node((1.7, 0), name: "3", [Channel\ $cal(C)$]),
+      node((2.9, 0), name: "4", [Decoder\ $g(Y^n)$]),
+
+      edge((-1, 0), label("2"), "-|>", label: $W$),
+      edge(label("2"), label("3"), "-|>", label: $X^n$),
+      edge(label("3"), label("4"), "-|>", label: $Y^n$),
+      edge(label("4"), (4, 0), "-|>", label: $hat(W)$),
+    )
+  ]
+
+  An error happens when $hat(W) != W$.
 ]
 
-We will run it on multiple examples, 
-- $S = a b b a$
-  + $D_0 = q_0$, $S <- a b b a$
-  + $D_1 = delta(D_0, s_1) = delta(q_0, a) = q_1$, $S <- b b a$
-  + $D_2 = delta(D_1, s_2) = delta(q_1, b) = q_1$, $S <- b a$
-  + $D_3 = delta(D_2, s_3) = delta(q_1, b) = q_1$, $S <- a$
-  + $D_4 = delta(D_3, s_4) = delta(q_1, a) = q_2$, $S <- epsilon$
-Notice that $D_4 = q_2 in F$ thus $S in cal(L)(M)$, we will represent these transitions using the machine and we will get the same result.
-
-#table(
-  columns: 1,
-  stroke: 0mm,
-  align: horizon + center,
-  [
-    #scale(100%)[
-      #automaton(
-        (
-          q0: (q1: "a", q3: "b"),
-          q1: (q2: "a", q1: "b"),
-          q2: (q3: "a, b"),
-          q3: (q3: "a, b")
-        ), 
-        final: "q2",
-        layout: (
-          q0: (0, 0),
-          q1: (3, 0),
-          q2: (6, 0),
-          q3: (3, -2)
-        ),
-        style: (
-          q3-q3: (anchor: bottom),
-          q0-q1: (curve: 0),
-          q1-q2: (curve: 0),
-          q0-q3: (curve: -1, label: (dist: -.43, angle: 0deg)),
-          q2-q3: (curve: 1, label: (dist: .43, angle: 0deg)),
-          
-          q0: (fill: green.lighten(50%))
-        ),
-      )
-    ]
-  ],
-  [
-    #scale(100%)[
-      #automaton(
-        (
-          q0: (q1: "a", q3: "b"),
-          q1: (q2: "a", q1: "b"),
-          q2: (q3: "a, b"),
-          q3: (q3: "a, b")
-        ), 
-        final: "q2",
-        layout: (
-          q0: (0, 0),
-          q1: (3, 0),
-          q2: (6, 0),
-          q3: (3, -2)
-        ),
-        style: (
-          q3-q3: (anchor: bottom),
-          q0-q1: (curve: 0),
-          q1-q2: (curve: 0),
-          q0-q3: (curve: -1, label: (dist: -.43, angle: 0deg)),
-          q2-q3: (curve: 1, label: (dist: .43, angle: 0deg)),
-          
-          q1: (fill: green.lighten(50%))
-        ),
-      )
-    ]
-  ],
-  table.cell([
-    #scale(100%)[
-      #automaton(
-        (
-          q0: (q1: "a", q3: "b"),
-          q1: (q2: "a", q1: "b"),
-          q2: (q3: "a, b"),
-          q3: (q3: "a, b")
-        ), 
-        final: "q2",
-        layout: (
-          q0: (0, 0),
-          q1: (3, 0),
-          q2: (6, 0),
-          q3: (3, -2)
-        ),
-        style: (
-          q3-q3: (anchor: bottom),
-          q0-q1: (curve: 0),
-          q1-q2: (curve: 0),
-          q0-q3: (curve: -1, label: (dist: -.43, angle: 0deg)),
-          q2-q3: (curve: 1, label: (dist: .43, angle: 0deg)),
-          q2: (fill: green.lighten(50%))
-        ),
-      )
-    ]
-  ], colspan: 1),
-)
-
-// #exr(count: false)[
-//   Check which one of these strings is accepted by the automaton $M$.
-//   #table(
-//     columns: 2,
-//     align: left,
-//     stroke: 0mm,
-//     column-gutter: 0.5cm,
-//     $S = a b a b a$,
-//     $S = a b b a a b$,
-//     $S = b a a b$,
-//     $S = a a b$
-//   )
-// ]
-
-It is easy to notice that $cal(L)(M) = {a b^k a | k in NN}$, we will prove it
-#pro(count: false)[
-  Let $M$ the defined automaton in the previous example, then $cal(L)(M) = {a b^k a | k in NN}$.
+#def(name: [$(M, n)$-Code])[
+  Let $cal(C) = (cal(X), P(Y|X), cal(Y))$ be a discrete channel, an $(M, n)$-code consists of the following:
+  - An index set $[|1, M|]$.
+  - An encoding function $X^n: [|1, M|] -> cal(X)^n$, which gives codewords $x^n (1), x^n (2), dots, x^n (M)$, we call the set of codewords the codebook.
+  - A decoding function $g: cal(Y)^n -> [|1, M|]$ which assigns a guess $hat(W)$ of what message was sent $W$.
+  We define the rate of the code $R = log(M)\/n$.
 ]
-#prf[
-  Let $S=s_1 s_2 dots.c s_n in cal(L)(M)$ and $D_i$ the associated sequence of steps.
-    - $s_1 = a$: suppose by contradiction that $s_1 = b$, then $D_1 = delta(D_0, b) = q_3$ thus we get $forall i in [|1, n|], D_i = q_3$ but $q_3 in.not F$, so $s_1 = a$.
-    - $forall i in [|2, n-1|], s_i = b$: since $s_1 = a$ then $D_2 = q_1$, if for some $i in [|2, n-1|], s_i = a$ then $D_i = q_2$ thus $D_(i+1) = q_3$ and using the same argument as before we get that $q_3 in.not F$ which is a contradiction, thus $forall i in [|2, n-1|], s_i = b$.
-    - $s_n = a$: notice that $D_(n-1) = q_1$ thus if $s_n = b$, $D_n = q_1 in.not F$ hence $s_n = a$.
+
+The rate of an $(M, n)$ code represents how many bits of information are needed for a single message $M$ to be sent.
+
+#exm[
+  - Consider for example a set of messages with $M = 2$ and $n = 10$, what we mean is that for each message we need a block of $10$ symbols in the transmission to send $1$ bit, if we calculate the rate it would be $log(2)/10 = 1/10$ bit per transmission, so we take $9$ extra bits to counter the noise from the channel.
+  - We take the previously stated example of repetition code, with $n = 3$, we have that $M = 2$ since we just send a bit, which has values $0$ or $1$, the encoding function would be as follows $x^3 (0) = 000$ and $x^3 (1) = 111$ and $g$ to be a majority vote decoder, the rate would be $log(2)/3 = 1/3$ bit per transmission which is indeed what we found before.
 ]
-#v(-2mm)
 
-We will go through a series of examples of automata and their languages. We consider $Sigma = {a, b}$.
+#def(name: "Conditional Probability Error")[
+  Consider an $(M, n)$-code, we define the conditional probability error of index $i in [|1, M|]$ as $ lambda_i^((n)) = P(g(Y^n) != i|X^n = x^n (i)) $
+]
 
-+ The language of the automaton below is the set of words with length exactly $2$ which we can write as $cal(L)(M) = Sigma^2$
-  #v(-0.4cm)
-  #align(center)[
-    #automaton(
-      (
-        q0: (q1: "a, b"),
-        q1: (q2: "a, b"),
-        q2: (q3: "a, b"),
-        q3: (q3: "a, b"),
-      ),
-      final: "q2",
-      style: (
-        transition: (curve: 0, label: (angle: 0deg, dist: 0.5)),
-        q1-q1: (anchor: right),
-        q2-q2: (anchor: right),
-      )
-    )
-  ]
-  #v(0.5cm)
+The conditional probability is meant to represent the probability of getting an error on message $i$, which naturally gives us a way to define what is the most probable error we can get while decoding.
 
-+ The language of the automaton below is the set of words starting with $a$, written as $cal(L)(M) = a Sigma^* = {a w | w in Sigma^*}$.
-  #v(0.5cm)
-  #align(center)[
-    #automaton(
-      (
-        q0: (q1: "a", q2: "b"),
-        q1: (q1: "a, b"),
-        q2: (q2: "a, b")
-      ),
-      final: "q1",
-      layout: (
-        q0: (0, 0),
-        q1: (2, 1),
-        q2: (2, -1)
-      ),
-      style: (
-        transition: (curve: 0, label: (angle: 0deg, dist: 0.5)),
-        q1-q1: (anchor: right),
-        q2-q2: (anchor: right),
-        q0-q1: (label: (dist: -0.5))
-      )
-    )
-  ]
-  #v(0.5cm)
+#def(name: "Maximal/Average Probability Of Error")[
+  The maximal probability of error $lambda^((n))$ for an $(M, n)$-code is $ lambda^((n)) = max_(i in [|1, M|]) lambda_i^((n)) $ and the average probability of error $P_e (n)$ as $ P_e (n) = 1/M sum_(i=1)^M lambda_(i)^((n)) $
+]
 
-+ The language of the automaton below is the set of words that have an even number of $b$s, $cal(L)(M) = { S in Sigma^* | card b(S) "is even"}$, notice in this case the $epsilon in cal(L)(M)$ since $card b(epsilon) = 0$ is even too.
-  #v(-1mm)
-  #align(center)[
-    #automaton(
-      (
-        q0: (q1: "b", q0: "a"),
-        q1: (q0: "b", q1: "a"),
-      ),
-      final: "q0",
-      style: (
-        transition: (curve: 0.8)
-      )
-    )
-  ]
-  #v(-1mm)
+#def(name: "Achievable Rate")[
+  A rate $R$ is said to be achievable if there exists a sequence of $(2^(n R), n)$-codes such that $lambda^((n)) -->_(n -> infinity) 0$.
+]
 
-+ The language of the automaton below is the set of words that are of the form $a a$, $a a a a$, $a a a a a a$, ..., $a^(2 n)$, $cal(L)(M) = {a^(2 n) | n in NN}$.
-  #v(-1mm)
-  #align(center)[
-    #automaton(
-      (
-        q0: (q1: "a", q2: "b"),
-        q1: (q0: "a", q2: "b"),
-        q2: (q2: "a, b")
-      ),
-      final: "q0",
-      layout: (
-        q0: (0, 0),
-        q1: (3, 0),
-        q2: (1.5, -3)
-      ),
-      style: (
-        q0-q2: (curve: -1, label: (dist: -.33)),
-        q1-q0: (label: (dist: -0.33)),
-        transition: (label: (angle: 0deg))
-      )
-    )
-  ]
+#def(name: "Channel Rate Capacity")[
+  The rate capacity of a channel is the supremum of all achievable rates.
+]
 
-+ The language of the automaton below is the set of words that have either $1$ or $3$ $mod 5$ $a$s, $cal(L)(M)={S in Sigma^* | (card a(S) mod 5) in {1, 3}}$.
-  #align(center)[
-    #automaton(
-      (
-        q0: (q1: "a", q0: "b"),
-        q1: (q2: "a", q1: "b"),
-        q2: (q3: "a", q2: "b"),
-        q3: (q4: "a", q3: "b"),
-        q4: (q0: "a", q4: "b"),
-      ),
-      final: ("q1", "q3"),
-      layout: finite.layout.circular,
-      style: (
-        transition: (curve: 0, label: (angle: 0deg)),
-        q0: (initial: bottom + left),
-        q0-q0: (anchor: top + left),
-        q1-q1: (anchor: bottom),
-        q2-q2: (anchor: top + right),
-        q3-q3: (anchor: bottom + right),
-        q4-q4: (anchor: bottom + left),
-      )
-    )
-  ]
+Now we have all definitions needed, we can describe the problem in a formal way.
 
-The expression of such a machine is really limited, that is, if the set of languages $cal(L) subset Sigma^*$ that deterministic finite automatas can determine is really limited, the set of languages that the deterministic finite automata can detect is called regular languages. An example of a language that is not regular is $cal(L) = {a^n b^n | n in NN}$ where $Sigma = {a, b}$.
+#align(center)[_ Which rates $R$ are achievable? _]
 
-#subsection("Non-Deterministic Finite Automaton")
-A non-deterministic automaton is a generalization of the automaton, where we give it more abilities to be stronger than the deterministic finite automata.
 
-#def(name: "NFA", count: false)[
-  Let $M=(Sigma, Q, delta, q_0, F)$ a _non-deterministic finite automaton_ (NDFA or NFA), it satisfies:
-  - $Sigma$ an alphabet.
-  - $Q$ a finite set of states.
-  - $delta: Q times (Sigma union {epsilon}) -> Q$.
-  - $q_0$ a starting state.
-  - $F subset Q$ a set of accepted/final states.
-  A computation in $M$ is done as follows: let $S = s_1 s_2 dots s_m in Sigma^*$, $S$ is said to be accepted by $S$ if there exists a sequence ${D_i}_(i in [|1, m|]) subset Q$ that satisfies the recursion. $
-    cases(
-      D_0 = q_0,
-      D_i in delta(D_(i-1), s_i)
-    )
+#section[Channel Information Capacity]
+As we discussed before, the mutual information of two variables $X$ and $Y$ represents how much information is shared between the two variables $X$ and $Y$. Statistically speaking, this represents how much $Y$ correlates with $X$. If the channel is noiseless, we have that $I(X;Y) = H(X)$ which signifies that all the information has been passed without any noise, while $I(X;Y) = 0$ just means that $Y$ is independent of $X$ thus no information has been passed at all.
+
+Notice that the more information that can be passed, the better the channel is. But given a channel, we can never change $P(y|x)$ since it comes from the physical implementation of the channel. So the only parameter we have to improve the mutual information in a channel is the distribution of $X$, since $I(X;Y)= H(X) - H(X|Y)$. Thus, we define the following bound.
+#def(name: "Channel Information Capacity")[
+  Let $cal(C)$ be a channel, $X, Y$ represent the random variables of input and output respectively. We define the channel capacity as the distribution of $X$ that maximizes the information that can be passed through it, that is,
   $
-  and $D_m in F$, it is said to reject otherwise.
+    C_(cal(C)) = max_(P(x)) I(X; Y)
+  $
 ]
 
-#ooc[
-  The definition above is taken directly from Wikipedia, I have a doubt about it so here is how I formalized it, even though it is a mouthful.
-  $ cases(
-    D_0 = {(q_0, S)},
-    D_i = limits(union.big)_((q, S) in D_(i-1)\ S = s_1 s_2 dots s_n) (union_(q' in delta(q, s_1)) {(q', s_2 s_3 dots s_n)}) union (union_(q' in delta(q, epsilon)) {(q', S)})
-  ) $
-  $M$ is said to accept $S$ if and only if $exists (q, epsilon) in D_m, q in F$ and it is said to reject otherwise.
+To appreciate this definition, we consider the following two examples. Start with the useless binary channel $cal(C)$, we have that $P(Y = 0|X = x) = 1$ for any $x$ and thus $I(X;Y) = 0$ since $X perp Y$, therefore $C_(cal(C)) = 0$, hence this channel is useless, since it indeed cannot send any information. Now suppose we have a noiseless channel $cal(C)'$, and a sender always sends $X = 0$, we will also have $I(X;Y) = 0$, which is a misuse of the channel. To get the best from the channel, we consider a distribution that maximizes the information.
+
+#exm[
+  - *Capacity Of Binary Symmetric Channel:* Consider a BSC $cal(C)$ with probability of a bit flip $p$, we have $ I(X; Y) & = H(Y) - H(Y|X) \
+            & = H(Y) - sum_(x in X) P(x) H(Y|X=x) \
+            & =^((a)) H(Y) - sum_(x in X) P(x) H(p) \
+            & = H(Y) - H(p) <=^((b)) 1 - H(p) $
+    where in $(a)$ we used the fact that $Y|X = x$ is a Bernoulli distribution and thus its entropy is $H(p) = - p log p - (1 - p) log (1-p)$ and $(b)$ the fact that $Y$ is a binary random variable thus $H(Y) <= 1$ which is attained only if $Y$ has a uniform distribution. And thus we get that $C_(cal(C)) = 1 - H(p)$.
+  - *Capacity Of Binary Erasure Channel:* Consider a BEC $cal(C)$ with probability $p$ of having an erasure, we have $ I(X; Y) & = H(Y) - H(Y|X) \
+            & = H(Y) - sum_(x in X) P(x) H(Y|X=x) \
+            & = H(Y) - sum_(x in X) P(x) H(p) = H(Y) - H(p) $
+    If we denote $pi = P(X = 1)$, we have that $H(Y) = H(p) + (1-p)H(pi)$, and hence $I(X; Y) = (1-p)H(pi) <= 1 - p$ with equality satisfied when $pi = 1/2$, so the capacity is $C_(cal(C)) = 1 - p$.
 ]
 
-In this new model, we have 3 additional features:
-+ The ability to jump without consuming any character from the string with the $epsilon$-transitions, that is, the transitions that have $epsilon$ as the character.
-+ The ability to jump to multiple states using just one letter of the string, this comes from the fact that $delta(q, c)$ is a set of possible paths to take.
-+ The implicit transitions to trap states, that is, if $delta(q, c)$ is not defined, then we assume implicitly that it jumps to a state $q_(emptyset)$ and does not transition to anything else. To do this, we just create a new state $q_(-1)$, and whenever there is no transition from a state $q_i$ with letter $c$ then we define $delta(q_i, c) = {q_(-1)}$ and we define $forall c in Sigma union {epsilon}, delta(q_(-1), c) = {q_(-1)}$.
-
-#align(center)[
-  #table(
-    columns: 3,
-    stroke: 0mm,
-    align: center + horizon,
-    column-gutter: 0.3cm,
-    [
-      #automaton(
-        (
-          q0: (q1: "a"),
-          q1: (q1: "b")
-        ),
-        style: (
-          q0-q1: (curve: 0)
-        )
-      )
-    ],
-    text($equiv$, size: 1.5em),
-    [
-      #automaton(
-        (
-          q0: (q1: "a", q2: "b"),
-          q1: (q1: "b", q2: "a"),
-          q2: (q2: "a, b")
-        ),
-        final: "q1",
-        labels: (
-          q2: [q#sub([-1])],
-        ),
-        layout: (
-          q0: (0, 0),
-          q1: (1.7, 1),
-          q2: (1.7, -1)
-        ),
-        style: (
-          transition: (curve: 0, label: (angle: 0deg, dist: 0.33)),
-          q1-q1: (anchor: right),
-          q2-q2: (anchor: right),
-          q0-q1: (label: (dist: -0.33)),
-          q1-q2: (label: (dist: -.33))
-        )
-      )
-    ]
-  )
+#pro[
+  Let $cal(C) (X -> Y)$ be a channel and $C$ the capacity of $cal(C)$.
+  - $0 <= C <= min(log card X, log card Y)$.
+  - $I(X;Y)$ is continuous and concave function of $P(x)$.
+  - The capacity is well defined since $I(X;Y)$ is upper bounded for $P(x)$ and a local maximum is global by the concavity.
 ]
 
-The non-determinism comes from the fact that we do not have a deterministic path we walk along, but each step may lead to many paths. We will go through a series of examples of NFAs to see how those features add expression.
+#section[Typical Sequences & AEP]
+To discuss the theorem, we have to define a type of sequences that come from the Asymptotic Equipartition Property, which are the typical sequences.
 
-+ The language of the automaton below is the set of words that end with $3$ $a$s, which we can write as $cal(L)(M) = Sigma^* a a a$. Notice that there are two transitions with $a$ that go from $q_0$.
-  #align(center)[
-    #automaton(
-      (
-        q0: (q0: "a, b", q1: "a"),
-        q1: (q2: "a"),
-        q2: (q3: "a"),
-      ),
-      final: "q3",
-      style: (
-        transition: (curve: 0, label: (angle: 0deg, dist: 0.5)),
-      )
-    )
-  ]
-  #v(2cm)
-+ The language of the automaton below is the set of words that either have an odd number of $b$s or have an even number of $a$s, which can be written as follows $cal(L)(M) = { S in Sigma | card a(S) "is even" or card b(S) "is odd"}$.
-  #align(center)[
-    #automaton(
-      (
-        q0: (q1: "a", q3: "a"),
-        q1: (q1: "b", q2: "b"),
-        q2: (q2: "a", q1: "b"),
-        q3: (q3: "b", q4: "a"),
-        q4: (q3: "a", q4: "b")
-      ),
-      final: ("q2", "q3"),
-      labels: (
-        q0-q1: $epsilon$,
-        q0-q3: $epsilon$,
-      ),
-      layout: (
-        q0: (0, 0),
-        q1: (2, 1.5),
-        q2: (4, 1.5),
-        q3: (2, -1.5),
-        q4: (4, -1.5)
-      ),
-      style: (
-        q0-q1: (curve: 0, label: (text: $epsilon$, dist: -.33, angle: 0deg)),
-        q0-q3: (curve: 0, label: (text: $epsilon$, dist: .33, angle: 0deg)),
-      )
-    )
-  ]
-
-
-From the previous examples, we can assume that an NFA will be stronger than an NFA, which is wrong. The set of languages that can be determined with an NFA is exactly the one that can be determined by a DFA. It is clear that any DFA is an NFA. Now we will prove that the languages from NFA can be determined using DFA too.
-
-#thm(count: false)[
-  Let $M$ be a non-deterministic automaton, then there exists a deterministic automaton $M'$ such that $cal(L)(M) = cal(L)(M')$.
-]
-#prf[
-  Let $M=(Sigma, Q, delta, q_0, F)$ be an NFA and define the function $r: Q -> cal(P)(Q)$ such that $r(q) = {q' in Q | exists (q_j)_(j in [|1, k|]), q_1 = q, q_k = q', q_j in delta(q_(j-1), epsilon)}$, that is, $r(q)$ is the set of states that $q$ can reach with using only $epsilon$-transitions. We define the DFA $M'=(Sigma, Q', delta', q_0', F')$ where $Q' = cal(P)(Q)$, $delta'({q_1, dots, q_k}, c) = union_(i=1)^k r(delta(q_i), a)$, $q_0' = r(q_0)$, $F' = {f subset Q | f inter F != emptyset}$. 
+#def(name: "Typical Sequence")[
+  Let $X_1, dots, X_n tilde P(x)$ be an i.i.d random variables with entropy $H(X)$, and let $epsilon > 0$ fixed. $ A_epsilon^((n)) = {x^n in cal(X)^n | abs(1/n log P(x^n) - H(X)) < epsilon}. $ A $epsilon$-typical sequence is an element $x^n in A_epsilon^((n))$.
 ]
 
-#nte[
-  The proof is incomplete, given that we have to prove that the languages are the same. I am finding a difficulty to prove it given that the definition given by Wikipedia seems to not make sense with the $epsilon$-transitions, and my definition is not usable in this context.
+#thm(name: "Asymptotic Equipartition Property")[
+  Let a sequence of i.i.d random variables $X_1, dots, X_n tilde P(x)$ with entropy $H(X)$, $forall epsilon > 0$:
+  - If $x_n in A_epsilon^((n))$ then $2^(-n(H(X) + epsilon)) <= P(x^n) <= 2^(-n(H(X) - epsilon))$.
+  - $P(A_epsilon^((n))) -> 1$ as $n -> infinity$.
+  - $(1-delta) 2^(n(H(X)-epsilon)) <= card A_epsilon^((n)) <= 2^(n(H(X)+epsilon))$ for large $n$ and any $delta > 0$.
 ]
 
-We have proved the equivalence of expression of both models, but there is a difference. A DFA explores a single, unique path of computation for each step and goes step by step while the NFA can explore multiple paths in parallel. So even though in theory they express the same languages, in practice using the method given in the proof results in an exponential increase of time for the simulation of the same language using the DFA instead of NFA.
+#exm[
+  When the sources generates a long sequence of symbols, the Law Of Large Numbers guarantees that it will almost surely be a typical sequence. A more intuitive way to think of it is to consider a coin toss, with $P(1) = 0.9, P(0) = 0.1$, and consider the two following sequences: $  s & = 11100111010000110010101100101011101010001000111001 \
+  s' & = 11111111111011110001110111111111111111111111111111 $ notice that $s'$ is more likely to be generated by the distribution $P$ then $s$, this is what the idea a typical sequence tries to capture, sequence that are in essence resemble the distribution. If we calculate the number of typical sequences we get that the number of typical sequences for $n = 100$, we get approximately $2^(100 H(0.9)) = 2^(100 dot.c 0.46890...) tilde.eq 2^(46.89)$, while the number of actual sequences is $2^(100)$, notice that $2^(46.89) / 2^(100) = 2^(-53.1)$ thus we have that a really small set of sequences actually might be the outcome, while the others are extremely unlikely, asymptotically.
+]
+
+#section[Channel Coding Theorem]
+
+From the Asymptotic Equipartition Property, we have that for each typical $n$-sequence generated with $X$, there are approximately $2^(n H(Y|X))$ possible $Y$ sequences which are all equiprobable with probability around $2^(-n H(Y|X))$, now if we consider the set of typical $n$-sequences generated with $Y$, we have that there are around $2^(n H(Y))$ typical sequences. In our encoding, we would like the set of sequences of $Y$ generated from the noise of the channel after sending a sequence in $X$ to be disjoint so we have no ambiguity in decoding the sequence to the original message, the total number of such disjoint sets is $2^(n H(Y))/2^(n H(Y|X)) = 2^(n I(X;Y))$, and hence we can send at most around $2^(n I(X; Y))$ distinct sequences. To maximize $2^(n I(X; Y))$ is to maximize $I(X; Y)$ which we know is exactly the information capacity of the channel. But also, notice that $2^(n I(X;Y))$ is really close to the form $2^(n R)$, indeed, if an $(M,n)$-code is being sent through the channel, then $M <= 2^(n I(X; Y))$ to be able to decode without confusion, and thus $ R = log(M) / n <= log(2^(n I(X;Y)))/n = I(X;Y) $, thus necessarily the rate would be at most the information sent through the channel. Conversely, if we take $R > C$ then $M = 2^(n R) > 2^(n C)$ codewords, and from our discussion before, we know that we can have at most $2^(n C)$ disjoint sets, so in this case we will indeed get two sets that are not disjoint and hence, not achieve the rate with errors going to $0$ since the element in the intersection of the codewords sent from two different $x$ vectors would always be confused.
+
+#thm(name: "Channel Coding Theorem")[
+  Let $cal(C)$ be a discrete memoryless channel. 
+  - *Achievability:* any rate $R < C_(cal(C))$ where $C_(cal(C))$ is the information capacity of the channel $cal(C)$ is achievable, that is, there exists a sequence of $(2^(n R), n)$-codes with maximum probability error $lambda^((n)) -->_(n -> infinity) 0$. 
+  - *Converse:* any sequence of $(2^(n R), n)$-codes satisfying $lambda^((n)) -->_(n -> infinity) 0$ must satisfy $R <= C$.
+]

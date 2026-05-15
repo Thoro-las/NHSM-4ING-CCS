@@ -291,11 +291,7 @@ Also, clearly $phi$ would be continuous since a tiny difference in probability w
 ]
 
 #def(name: "Measure Of Information", ovcount: false)[
-  Let $X$ be a random variable that represents the probability that a message $x$ is sent as $P(X = x) = P(x)$, we define the measure of information of the message $x$ as $ I(x) = - log_2 P(x) $
-]
-
-#ooc[
-  $log_2$ is taken for the usual reason that information is represented in binary, and that if it is represented in any other base, it would have just a linear factor added. In practice, transmission lines tend to cause irregularities in the signal, that is, it alters the contents of the message with some noise. Thus, in transmission lines we are interested in the distribution of the message $y$ that are received, given some sent message $x$, which will be measured by $P(y|x)$.
+  Let $X$ be a random variable that represents the probability that a message $x$ is sent as $P(X = x) = P(x)$, we define the measure of information of the message $x$ as $ I_D (x) = - log_D P(x) $
 ]
 
 #section[Measures Of Entropy]
@@ -304,25 +300,22 @@ Also, clearly $phi$ would be continuous since a tiny difference in probability w
 ]
 
 #def(name: "Entropy", ovcount: false)[
-  Let $X$ be a random variable with values in $cal(X)$, we define the entropy $H(X)$ as the average amount of information, that is $ H(X) = EE[I(X)] = - sum_(x in X) P(x) dot.c log_2 P(x) $
+  Let $X$ be a random variable with values in $cal(X)$, we define the entropy $H(X)$ as the average amount of information, that is $ H_D (X) = EE[I_D (X)] = - sum_(x in X) P(x) dot.c log_D P(x) $
 ]
 
-
-Notice that the information of some message $x$ depends only on its unpredictability, that is, its probability of occurrence $P(x)$ not its value.
+If $D$ is not specified then we consider $D = 2$ in general. Notice that the information of some message $x$ depends only on its unpredictability, that is, its probability of occurrence $P(x)$ not its value.
 
 #pro(ovcount: false)[
   Let $X, Y$ with symbols in $cal(X), cal(Y)$ be two sources.
-  + Non-negativity: $H(X) >= 0$.
-  + Maximum Entropy: $H(X) <= log_2 card cal(X)$.
-  + Independent Additivity: $X perp Y$ $=>$ $H(X Y) = H(X) + H(Y)$.
+  + Non-negativity: $H_D (X) >= 0$.
+  + Maximum Entropy: $H_D (X) <= log_D card cal(X)$.
+  + Independent Additivity: $X perp Y$ $=>$ $H_D (X Y) = H_D (X) + H_D (Y)$.
 ]
 
 #ooc[
   #prf[
     + $forall x in cal(X), I(x) >= 0$, then $H(X) = EE[I(X)] >= 0$
-    + Here, we optimize on the distribution of $X$, $max_(P) H(X) = - min_P sum_(x in X) P(x) dot.c log_2 P(x),$ hence for $I$ a finite set $min_({y_i in [0, 1]}_(i in I)) sum_(i in I) y_i log_2 (y_i)$ with $sum_(i in I) y_i = 1$. Notice that all the terms have the same sign so $min sum_(i in I) dots = sum_(i in I) min dots$. $y_i$ all having the same range would mean that we just need to find $c$ such that $y_i = c$ and satisfies the second inequality, which is clearly $c = 1/(card I)$.
-
-    So $X$ would be a uniform distribution over $cal(X)$, $H_u (X) = EE[I(X)] = - sum_(x in X) 1\/(card cal(X)) log_2 (1\/(card cal(X))) = log_2 card cal(X) >= H(X)$.
+    + Here, we optimize on the distribution of $X$, $max_(P) H(X) = - min_P sum_(x in X) P(x) dot.c log_2 P(x),$ hence for $I$ a finite set $min_({y_i in [0, 1]}_(i in I)) sum_(i in I) y_i log_2 (y_i)$ with $sum_(i in I) y_i = 1$. Notice that all the terms have the same sign so $min sum_(i in I) dots = sum_(i in I) min dots$. $y_i$ all having the same range would mean that we just need to find $c$ such that $y_i = c$ and satisfies the second inequality, which is clearly $c = 1/(card I)$. So $X$ would be a uniform distribution over $cal(X)$, $H_u (X) = EE[I(X)] = - sum_(x in X) 1\/(card cal(X)) log_2 (1\/(card cal(X))) = log_2 card cal(X) >= H(X)$.
     + Let $X, Y$ be two independent variables, then $H(X Y) = EE[I(X Y)] = EE[I(X) + I(Y)] = EE[I(X)] + EE[I(Y)] = H(X) + H(Y)$.
   ]
 ]
@@ -349,30 +342,30 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 #subsection[Joint Entropy]
 
 #def(name: "Joint Entropy", ovcount: false)[
-  Let $X$, $Y$ be two random variables with joint distribution $P(x,y)$, the joint entropy is $ H(X, Y) = - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y) = - EE[log_2 P(X, Y)] $
+  Let $X$, $Y$ be two random variables with joint distribution $P(x,y)$, the joint entropy is $ H_D (X, Y) = - sum_((x, y) in X times Y) P(x, y) log_D P(x, y) = - EE[log_D P(X, Y)] $
 ]
 
 #pro(ovcount: false)[
   Let $X, Y$ be two sources.
-  + Symmetry: $H(X, Y) = H(Y, X)$.
-  + Non-Negativity: $H(X, Y) >= 0$.
-  + Upperbound: $H(X, Y) <= H(X) + H(Y)$.
-  + Lowerbound: $H(X, Y) >= max(H(X), H(Y))$.
+  + Symmetry: $H_D (X, Y) = H_D (Y, X)$.
+  + Non-Negativity: $H_D (X, Y) >= 0$.
+  + Upperbound: $H_D (X, Y) <= H_D (X) + H_D (Y)$.
+  + Lowerbound: $H_D (X, Y) >= max(H_D (X), H_D (Y))$.
 ]
 
 #ooc[
   #prf[
     + trivial by $P(x, y) = P(X = x, Y = y) = P(Y = y, X = x) = P(y, x)$.
-    + $forall x in X, forall y in Y, 0 <= P(x, y) <= 1 => log_2 P(x, y) <= 0$ so we have $P(x, y) log_2 P(x, y) <= 0$. Hence, $ H(X, Y) = - sum_(x in X) sum_(y in Y) P(x, y) log_2 P(x, y) >= 0 $
-    + We have $H(X, Y) - H(X) - H(Y) = sum_(x in X) P(x) log_2 P(x) + sum_(y in Y) P(y) log_2 P(y) - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y)$, by using the fact that $P(x) = sum_(y in Y) P(x, y)$, we can transform all the sums to be indexed with $X times Y$ as follows: $ sum_(x in X) P(x) log_2 P(x) & = sum_((x, y) in X times Y) P(x, y) log_2 P(x) \
-      sum_(y in Y) P(x) log_2 P(y) & = sum_((x, y) in X times Y) P(x, y) log_2 P(y) $ Thus we obtain the writing $ H(X, Y) - H(X) - H(Y) = sum_((x,y) in X times Y) P(x, y) log_2 ((P(x) P(y))/(P(x, y))) $ We have that $forall t >= 0, log_2 (t) <= t - 1$ thus $ H(X, Y) - H(X) - H(Y) & = sum_((x, y) in X times Y) P(x, y) log_2 ((P(x) P(y))/(P(x, y))) \
+    + $forall x in X, forall y in Y, 0 <= P(x, y) <= 1 => log_D P(x, y) <= 0$ so we have $P(x, y) log_D P(x, y) <= 0$. Hence, $ H_D (X, Y) = - sum_(x in X) sum_(y in Y) P(x, y) log_D P(x, y) >= 0 $
+    + We have $H_D (X, Y) - H_D (X) - H_D (Y) = sum_(x in X) P(x) log_D P(x) + sum_(y in Y) P(y) log_D P(y) - sum_((x, y) in X times Y) P(x, y) log_D P(x, y)$, by using the fact that $P(x) = sum_(y in Y) P(x, y)$, we can transform all the sums to be indexed with $X times Y$ as follows: $ sum_(x in X) P(x) log_D P(x) & = sum_((x, y) in X times Y) P(x, y) log_D P(x) \
+      sum_(y in Y) P(x) log_D P(y) & = sum_((x, y) in X times Y) P(x, y) log_D P(y) $ Thus we obtain the writing $ H_D (X, Y) - H_D (X) - H_D (Y) = sum_((x,y) in X times Y) P(x, y) log_D ((P(x) P(y))/(P(x, y))) $ We have that $forall t >= 0, log_D (t) <= t - 1$ thus $ H_D (X, Y) - H_D (X) - H_D (Y) & = sum_((x, y) in X times Y) P(x, y) log_D ((P(x) P(y))/(P(x, y))) \
                             & <= sum_((x, y) in X times Y) P(x, y) ((P(x) P(y))/(P(x,y)) - 1) \
                             & <= sum_((x, y) in X times Y) P(x) P(y) - P(x, y) \
                             & <= sum_((x, y) in X times Y) P(x) P(y) - sum_((x, y) in X times Y) P(x, y) \
-                            & <= 1 - 1 = 0 $ Therefore $ H(X, Y) <= H(X) + H(Y) $
-    + Without loss of generality, we prove that $H(X, Y) >= H(X)$, we have from before that $P(x) = sum_(y in Y) P(x,y)$ and since $forall (x, y) in X times Y, P(x, y) >= 0$ then $forall (x, y) in X times Y, P(x, y) <= P(x)$.
-    $ H(X, Y) & = - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y) \
-            & >= - sum_((x, y) in X times Y) P(x) log_2 P(x) = H(X) $ and same to prove that $H(X, Y) >= H(Y)$ and hence we obtain the inequality $H(X, Y) >= max(H(X), H(Y))$.
+                            & <= 1 - 1 = 0 $ Therefore $ H_D (X, Y) <= H_D (X) + H_D (Y) $
+    + Without loss of generality, we prove that $H_D (X, Y) >= H_D (X)$, we have from before that $P(x) = sum_(y in Y) P(x,y)$ and since $forall (x, y) in X times Y, P(x, y) >= 0$ then $forall (x, y) in X times Y, P(x, y) <= P(x)$.
+    $ H_D (X, Y) & = - sum_((x, y) in X times Y) P(x, y) log_D P(x, y) \
+            & >= - sum_((x, y) in X times Y) P(x) log_D P(x) = H_D (X) $ and same to prove that $H_D (X, Y) >= H_D (Y)$ and hence we obtain the inequality $H_D (X, Y) >= max(H_D (X), H_D (Y))$.
   ]
 ]
 
@@ -382,28 +375,25 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 ]
 
 #def(name: "Conditional Entropy", ovcount: false)[
-  Let $X, Y$ be two random variables with joint distribution $P(x, y)$, the conditional entropy is $ H(X|Y) = - sum_((x, y) in X times Y) P(x, y) log_2 P(x|y) = - EE[log_2 P(X|Y)] $
+  Let $X, Y$ be two random variables with joint distribution $P(x, y)$, the conditional entropy is $ H_D (X|Y) = - sum_((x, y) in X times Y) P(x, y) log_D P(x|y) = - EE[log_D P(X|Y)] $
 ]
 
 #pro(ovcount: false)[
   Let $X, Y$ be two sources.
-  + Non-Negativity: $H(X|Y) >= 0$.
-  + Chain Rule: $H(X, Y) = H(X) + H(Y|X)$.
-  + Reduction Of Uncertainty: $H(X|Y) <= H(X)$.
+  + Non-Negativity: $H_D (X|Y) >= 0$.
+  + Chain Rule: $H_D (X, Y) = H_D (X) + H_D (Y|X)$.
+  + Reduction Of Uncertainty: $H_D (X|Y) <= H_D (X)$.
 ]
 
 #ooc[
   #prf[
-    + $forall (x, y) in X times Y, 0 < P(x|y) <= 1 => log_2 P(x|y) <= 0 => H(X|Y) = -sum_((x, y) in X times Y) P(x, y) log_2 P(x|y) >= 0$.
-    + We have #h(1fr) $ H(X, Y) & = - sum_((x, y) in X times Y) P(x, y) log_2 P(x, y) \
-              & = - sum_((x, y) in X times Y) P(x, y) log_2 (P(x) P(y|x) $
+    + $forall (x, y) in X times Y, 0 < P(x|y) <= 1 => log_D P(x|y) <= 0 => H_D (X|Y) = -sum_((x, y) in X times Y) P(x, y) log_D P(x|y) >= 0$.
+    + We have #h(1fr) $ H_D (X, Y) & = - sum_((x, y) in X times Y) P(x, y) log_D P(x, y) \
+        & = - sum_((x, y) in X times Y) P(x, y) log_D P(x) - sum_((x, y) in X times Y) P(x, y) log_D P(y|x) \
+        &= - sum_(x in X) (sum_(y in Y) P(x, y)) log_D P(x) - sum_((x, y) in X times Y) P(x, y) log_D P(y|x) \
+        & = - sum_(x in X) P(x) log_D P(x) - sum_((x, y) in X times Y) P(x, y) log_D P(y|x) \ &= H_D (X) + H_D (Y|X)
       $
-        & = - sum_((x, y) in X times Y) P(x, y) log_2 P(x) - sum_((x, y) in X times Y) P(x, y) log_2 P(y|x) \
-        & = - sum_(x in X) (sum_(y in Y) P(x, y)) log_2 P(x) - sum_((x, y) in X times Y) P(x, y) log_2 P(y|x) \
-        & = - sum_(x in X) P(x) log_2 P(x) - sum_((x, y) in X times Y) P(x, y) log_2 P(y|x) \
-        & = H(X) + H(Y|X)
-      $
-    + $H(X|Y) =^a H(X, Y) - H(Y) <=^b H(X) + H(Y) - H(Y) = H(X)$, where $a$ comes from the chain rule and $b$ from the subadditivity of joint entropy.
+    + $H_D (X|Y) =^a H_D (X, Y) - H_D (Y) <=^b H_D (X) + H_D (Y) - H_D (Y) = H_D (X)$, where $a$ comes from the chain rule and $b$ from the subadditivity of joint entropy.
   ]
 ]
 
@@ -413,29 +403,29 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 ]
 
 #def(ovcount: false, name: "Mutual Information")[
-  Let $X, Y$ be two sources, we define the mutual information as $ I(X; Y) = EE[log((P(X, Y))/(P(X) P(Y)))] = sum_((x, y)) P(x, y) log_2 ((P(x, y))/(P(x) P(y))) $
+  Let $X, Y$ be two sources, we define the mutual information as $ I_D (X; Y) = EE[log_D ((P(X, Y))/(P(X) P(Y)))] = sum_((x, y)) P(x, y) log_D ((P(x, y))/(P(x) P(y))) $
 ]
 
 #pro(ovcount: false)[
   Let $X, Y$ be two sources.
-  + Equivalent Formulas: #h(1fr) $ I(X;Y) & = H(X) - H(X|Y) \
-           & = H(Y) - H(Y|X) \
-           & = H(X) + H(Y) - H(X, Y) \
-           & = H(X, Y) - H(X|Y) - H(Y|X) \ $
-  + Symmetry: $I(X;Y) = I(Y;X)$.
-  + Non-Negativity: $I(X; Y) >= 0$.
-  + Upperbound: $I(X;Y) <= min(H(X), H(Y))$.
-  + Self-Information: $I(X;X) = H(X)$.
+  + Equivalent Formulas: #h(1fr) $ I_D (X;Y) & = H_D (X) - H_D (X|Y) \
+           & = H_D (Y) - H_D (Y|X) \
+           & = H_D (X) + H_D (Y) - H_D (X, Y) \
+           & = H_D (X, Y) - H_D (X|Y) - H_D (Y|X) \ $
+  + Symmetry: $I_D (X;Y) = I_D (Y;X)$.
+  + Non-Negativity: $I_D (X; Y) >= 0$.
+  + Upperbound: $I_D (X;Y) <= min(H_D (X), H_D (Y))$.
+  + Self-Information: $I_D (X;X) = H_D (X)$.
 ]
 
 #ooc[
   #prf[
     + Trivial, just write the formulas.
     + Direct consequence of the first two formulas of $1$.
-    + We have from the reduction of uncertainty that $H(X|Y) <= H(X)$ thus $I(X;Y) = H(X) - H(X|Y) >= 0$.
-    + We have from the lowerbound of joint entropy that $H(X, Y) >= max(H(X), H(Y))$ then #h(1fr) $ & I(X;Y) = H(X) + H(Y) - H(X, Y) \
-      & <= H(X) + H(Y) - max(H(X), H(Y)) = min(H(X), H(Y)). $
-    + $I(X;X) = H(X) - H(X|X) = H(X)$.
+    + We have from the reduction of uncertainty that $H_D (X|Y) <= H_D (X)$ thus $I_D (X;Y) = H_D (X) - H_D (X|Y) >= 0$.
+    + We have from the lowerbound of joint entropy that $H_D (X, Y) >= max(H_D (X), H_D (Y))$ then #h(1fr) $ & I_D (X;Y) = H_D (X) + H_D (Y) - H_D (X, Y) \
+      & <= H_D (X) + H_D (Y) - max(H_D (X), H_D (Y)) = min(H_D (X), H_D (Y)). $
+    + $I_D (X;X) = H_D (X) - H_D (X|X) = H_D (X)$.
   ]
 ]
 
@@ -452,26 +442,26 @@ Notice that the information of some message $x$ depends only on its unpredictabi
 
   To prove the data-processing inequality, we need the following lemma.
   #lem(count: false)[
-    $I(X;Y,Z) = I(X;Y) + I(X;Z|Y)$ where
-    - $I(X; Y, Z) = EE[P(X, Y, Z)\/(P(X) P(Y, Z))]$.
-    - $I(X; Z|Y) = EE[P(X, Z|Y)\/(P(X|Y) P(Z|Y))]$.
+    $I_D (X;Y,Z) = I_D (X;Y) + I_D (X;Z|Y)$ where
+    - $I_D (X; Y, Z) = EE[log_D (P(X, Y, Z)\/(P(X) P(Y, Z)))]$.
+    - $I_D (X; Z|Y) = EE[log_D (P(X, Z|Y)\/(P(X|Y) P(Z|Y)))]$.
   ]
 
   It is left for the reader to prove, it is mainly algebraic manipulation.
 ]
 
 #thm(name: "Data-Processing Inequality", ovcount: false)[
-  Let $X, Y, Z$ be three sources such that $X -> Y -> Z$, we have that $ I(X; Y) >= I(X; Z). $
+  Let $X, Y, Z$ be three sources such that $X -> Y -> Z$, we have that $ I_D (X; Y) >= I_D (X; Z). $
 ]
 
 #ooc[#prf[
-  Since $X -> Y -> Z$ then there is no extra information given from $Z$ knowing $Y$ thus $I(X; Z|Y) = 0$ we have $
-    I(X; Y, Z) &= I(X;Y) + I(X; Z|Y)\
-    I(X; Y, Z) &= I(X;Z) + I(X; Y|Z)
+  Since $X -> Y -> Z$ then there is no extra information given from $Z$ knowing $Y$ thus $I_D (X; Z|Y) = 0$ we have $
+    I_D (X; Y, Z) &= I_D (X;Y) + I_D (X; Z|Y)\
+    I_D (X; Y, Z) &= I_D (X;Z) + I_D (X; Y|Z)
   $ hence $
-    I(X;Y) + I(X;Z|Y) = I(X;Z) + I(X;Y|Z)\
-    => I(X;Y) = I(X;Z) + I(X;Y|Z)
-  $ since $I(X;Y|Z) >= 0$ then $I(X;Y) >= I(X;Z)$.
+    I_D (X;Y) + I_D (X;Z|Y) = I_D (X;Z) + I_D (X;Y|Z)\
+    => I_D (X;Y) = I_D (X;Z) + I_D (X;Y|Z)
+  $ since $I_D (X;Y|Z) >= 0$ then $I_D (X;Y) >= I_D (X;Z)$.
 ]]
 
 #chapter[Source Coding][
@@ -485,7 +475,7 @@ The most important part of coding theory is achieving the most efficient reliabl
 
 
 #def(name: "Coding Function", ovcount: false)[
-  Let $c: cal(X) -> DD^+$, we call it a coding function, which takes characters of our set of symbols, and represent it as a string in $DD^+$ which is the set of words with $d$ alphabets.
+  Let $c: cal(X) -> DD^+$, we call it a coding function, which takes characters of our set of symbols, and represent it as a string in $DD^+$ which is the set of words with $D$ alphabets.
 ]
 
 To measure the efficiency of our coding function, we define the average code length, the less the average, the more efficient the transmission will be.
@@ -546,65 +536,36 @@ To measure the efficiency of our coding function, we define the average code len
 ]
 
 
+#subsection[Principles Of Instantaneous Code Construction]
 
-// #section[Shannon Theorems]
-// #ooc[
-//   To prove Shannon theorems, we need the following statements.
-//
-//   #def(name: "Prefix Code", ovcount: false)[
-//     A coding function $c: cal(X) -> BB^+$ is said to have the prefix property if $forall x, y in cal(X), forall u in BB^*, c(x) != c(y) u$.
-//   ]
-//
-//   That is, no code is a prefix of another. An example of a prefix code is ${0, 10}$ while a non-prefix code is ${1, 10}$ since $1$ is a prefix of $10$. These codes are also called instantaneous codes, that is because given a binary string, even incomplete, one can know if it maps to a symbol or not. The proof of such statement is left for the reader.
-//
-//   #def(name: "Uniquely Decodable Code", ovcount: false)[
-//     A coding function $c: cal(X) -> BB^+$ is said to be uniquely decodable if $c$ is injective, that is, each coding is unique to the symbol.
-//   ]
-//
-//   #pro(ovcount: false)[
-//     A uniquely decodable code $c$ can be turned into a prefix code $c'$ such that $forall i in [|1, n|], |c(x_i)| = |c'(x_i)|$.
-//   ]
-//
-//   // #prf[
-//   //   Let $c = {c_1, dots, c_m}$ be a uniquely Without loss of generality, consider 
-//   // ]
-//
-//
-//   #lem(name: "Kraft Inequality", ovcount: false)[
-//     Let $X$ be a random variable with values in $cal(X)$, $c: cal(X) -> BB^+$ a coding function and $l(x) = |c(x)|$, then we have that $
-//       sum_(i=1)^n 2^(- l(x_i)) <= 1
-//     $
-//   ]
-//
-// ]
-//
-// #thm(name: "Shannon's First Theorem", ovcount: false)[
-//   Let $X$ be a random variable with values in $cal(X)$, for any coding function $c: cal(X) -> BB^+$ we have $
-//     overline(L)_c >= H(X)
-//   $
-// ]
-//
-// Huffman's algorithm provides a systematic way to construct an optimal prefix code, where symbols with higher probability should have shorter code words, and achieves a lower bound of average coding weight.
-//
-// #alg(name: "Huffman", ovcount: false)[
-//   + Sort symbols by probability in descending order.
-//   + Combine the two smallest probabilities.
-//   + Repeat until one node remains.
-//   + Build the tree.
-//   + Assign 0 and 1 to branches.
-//   + Read codewords.
-//   + Compute the average code length.
-// ]
-//
-// #exm[
-// ]
-//
-// The closer this value is to the entropy, the more efficient the compression is, using Huffman coding, the message is compressed, meaning that fewer bits are needed on average per symbol compared to a fixed length code such code is called optimal code which is a code that minimizes average code length. In source coding, our goal was to remove redundancy in order to compress the message. Now, we move to a different problem, what happens when the channel is noisy?
-//
-// #subsection[Noise And Errors]
-// To reduce the probability of error, we need to make the sent message more robust to disturbances through channel coding.
-//
-//
-// #thm(name: "Shannon's Second Theorem", ovcount: false)[
-//   For any noisy channel, there exists a code that allows reliable transmission if the rate is less than the channel capacity.
-// ]
+#lem(name: "Kraft Inequality", ovcount: false)[
+  Let $cal(X) = {x_1, dots, x_n}$ be a set of symbols, and $c$ be a coding function, set $l_i = |c(x_i)|$ the length of the coding of the $i^"th"$ symbol, then the following statements are true.
+  + If $c$ is an instantaneous code then $sum_(i=1)^n D^(-l_i) <= 1$.
+  + If $c$ satisfies $sum_(i=1)^n D^(-l_i) <= 1$, then there exists an instantaneous code $c': cal(X) -> DD^+$ such that $forall i in [|1, n|], |c'(x_i)| = |c(x_i)|$.
+]
+
+#thm(name: "Shannon's First Theorem", ovcount: false)[
+  Let $X$ be a random variable with values in $cal(X)$, for any coding function $c: cal(X) -> DD^+$ we have $
+    overline(L)_c >= H_D (X)
+  $ and there exists a prefix code $c': cal(X) -> DD^+$ such that $
+    H_D (X) <= overline(L)_c' <= H_D (X) + 1
+  $
+]
+
+#alg(name: "Shannon-Fanon", ovcount: false)[
+  + Sort symbols in decreasing order of probability.
+  + Partition the set into two subsets with approximately equal probability.
+  + Assign $0$ to one subset and $1$ to the other.
+  + Recursively apply steps 2-3 to each subset.
+]
+
+Huffman's algorithm provides a systematic way to construct an optimal prefix code, where symbols with higher probability should have shorter code words, and achieves a lower bound of average coding weight.
+
+#alg(name: "Huffman", ovcount: false)[
+  + Sort symbols by probability in descending order.
+  + While there is more than one node:
+    + Find two nodes with smallest probability.
+    + Create a new node with these children, the probability of the node is the sum of the probabilities of the children.
+    + Assign $0$ to one branch and $1$ to another.
+  + Recursively apply the steps 1-2 until only one node remains.
+]

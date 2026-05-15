@@ -59,7 +59,7 @@ contexts:
     # ─────────────────────────────────────────────
     # CONTROL KEYWORDS
     # ─────────────────────────────────────────────
-    - match: \b(if|then|else|elseif|endif|for|to|downto|step|endfor|while|end|repeat|until|return|break|continue|do|in)\b
+    - match: \b(if|then|else|elseif|endif|for|to|downto|step|endfor|while|end|repeat|until|return|break|continue|do|in|procedure)\b
       scope: keyword.control.pseudo
 
     # ─────────────────────────────────────────────

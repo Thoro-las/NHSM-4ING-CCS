@@ -11,6 +11,7 @@
 
 #let card = math.op("#")
 #let iso = $tilde.equiv$
+#let RSA = math.op("RSA")
 
 #chapter[Introduction][
   Cryptography is the study of securing information so that the only parties that are authorized are able to access it. Multiple algorithms using difficult to solve problems from the theory of complexity to ensure data security in transmission. Here we will see the most known algorithms.
@@ -153,11 +154,11 @@ Notice that we obtain the class of $m$ after the decryption, so to make this map
   - *Encryption:*
     + Let $m in NN$ be a message.
     + If $m > n$, divide it into parts that are.
-    + Encrypt $"RSA"_(e, n) equiv m^e mod n$.
+    + Encrypt $RSA_(e, n) equiv m^e mod n$.
 
   - *Decryption:*
     + Let $c in NN$ an encrypted message.
-    + Decrypt $"RSA"^(-1)_(d, n) equiv m^d mod n$.
+    + Decrypt $RSA^(-1)_(d, n) equiv m^d mod n$.
 ]
 
 The correctness of this algorithm comes from the previous theorem and the fact that we consider only message of length at most $n - 1$ to have uniqueness.
@@ -185,31 +186,28 @@ Notice that in both encryption and decryption, we use modular exponentiation, th
   $ so the only factors that matter is when $b_i = 1$, and we have $a^(2^(i+1)) = (a^2^i)^2$. Hence, we get the following algorithm for calculating the modular exponential.
 ]
 
-#alg(count: false, name: "Square-And-Multiply Algorithm")[
-  #code[
-    ```pcode
-    input: 
-      - base: a
-      - exponent: b
-      - modulus: n
-    output:
-      - c = a^b mod n
+```pcode
+procedure SquareAndMultiply:
+  input: 
+    - base: a
+    - exponent: b
+    - modulus: n
+  output:
+    - c = a^b mod n
 
-    algorithm:
-      res = 1
-      base = a % n
+  algorithm:
+    res = 1
+    base = a % n
 
-      while b > 0:
-        if b % 2 = 1:
-          res = (res * base) mod n
+    while b > 0:
+      if b % 2 = 1:
+        res = (res * base) mod n
 
-        base = (base * base) mod n
-        b = b / 2
+      base = (base * base) mod n
+      b = b / 2
 
-      return res
-    ```
-  ]
-]
+    return res
+```
 
 #ooc[
   As discussed before, base here refers to $a^(2^i)$ in each iteration it is squared, and we add it as a factor of the product of the result if and only if $b equiv 1 mod 2$ which is equivalent to saying $b_i = 1$. Now to prove the efficiency, let's calculate the complexity of each methods.
@@ -246,3 +244,17 @@ Notice that in both encryption and decryption, we use modular exponentiation, th
     We use the CRT to find $m$ that satisfies $m equiv m_p mod p$ and $m equiv m_q mod q$. We start from the first equation that $m = m_q + q dot.c k$, by replacing in the second equation we have that $m_q + q dot.c k equiv m_p mod p => q dot.c k equiv m_p - m_q mod p => k equiv q' (q k) equiv q' (m_p - m_q) mod p$, by replacing in the second equation $m = m_q + q dot.c (q' (m_p - m_q) mod p)$ and thus we get the class of $m$ being $m_q + q dot.c (q' (m_p - m_q) mod p) mod n$.
   ]
 ]
+
+#exr(count: false)[
+  Explain the deterministic nature of the RSA algorithm. Discuss whether this property is an advantage or a disadvantage.
+]
+
+RSA is clearly deterministic, which is disadvantageous given that sending repeated message or having a small message space results in the same ciphertexts thus giving information to the attacker. More specifically, we say that it is not semantically secure, which is defined as follows.
+
+#def(name: "Semantic Security", count: false)[
+  An encryption scheme is semantically secure if knowing the ciphertext does not give an attacker any information about the plaintext.
+]
+
+To solve this problem, we make a new method adding some randomness to the process of encryption, RSA-OAEP is an example of such a method. Another weakness that comes from the mathematical formulation of the RSA is the malleability, also called the multiplicative property, which comes from the fact that given two message $m_1, m_2$, we have $
+  RSA_(e, n) (m_1) dot.c RSA_(e, n) (m_2) equiv RSA_(e, n) (m_1 m_2) mod n
+$
