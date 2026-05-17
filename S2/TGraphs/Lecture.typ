@@ -1,4 +1,4 @@
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge, shapes
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node, shapes
 
 #import "@THR/Course:1.0.0": *
 #show: template.with(
@@ -6,7 +6,7 @@
     title: "Advanced Graph Theory",
     writer: "HADIOUCHE Azouaou",
     disclaimer: [This document contains the lectures given by Dr. MEHDAOUI.],
-  )
+  ),
 )
 
 #let card = math.op("#")
@@ -50,9 +50,7 @@
 ]
 
 #lem(name: "Handshake", ovcount: false)[
-  For an undirected graph $G=(V, E)$ then $
-    sum_(v in V) deg(v) = 2 card E
-  $
+  For an undirected graph $G=(V, E)$ then $ sum_(v in V) deg(v) = 2 card E $
 ]
 
 #prf[
@@ -64,9 +62,7 @@
 ]
 
 #prf[
-  Let $V_o = {v in V | d(v) "odd"}$ and $V_e = {v in V | d(v) "even"}$, by the handshake lemma we have $
-    2 card E = sum_(v in V) deg(v) &= sum_(v in V_o) deg(v) + sum_(v in V_e) deg(v)
-  $ given that $2 card E$ is even and $sum_(v in V_e) deg(V)$ is even then necessarily $sum_(v in V_o) deg(v)$ is even, and since the sum of odd numbers is even if and only if the number of odd numbers is even then $card V_o$ is even so there is an even number of odd degree vertices.
+  Let $V_o = {v in V | d(v) "odd"}$ and $V_e = {v in V | d(v) "even"}$, by the handshake lemma we have $ 2 card E = sum_(v in V) deg(v) & = sum_(v in V_o) deg(v) + sum_(v in V_e) deg(v) $ given that $2 card E$ is even and $sum_(v in V_e) deg(V)$ is even then necessarily $sum_(v in V_o) deg(v)$ is even, and since the sum of odd numbers is even if and only if the number of odd numbers is even then $card V_o$ is even so there is an even number of odd degree vertices.
 ]
 
 #subsection[Simple & Multigraphs]
@@ -137,41 +133,35 @@ There are several ways to represent graphs in computer memory, each with differe
 We assume throughout the course that $card V(G) = n$ vertices and $card E(G) = m$ edges, vertices are labeled from $1$ to $n$. Graphs may be directed or undirected.
 
 #subsection[Adjacency Matrix]
-Let $G=(V, E)$ be a graph with $V = {v_1, dots, v_n}$, the adjacency matrix of $G$ is an $n times n$ matrix $A = (a_(i j))$ where $
-  a_(i j) = cases(
-    1 &"if" v_i v_j in E(G),
-    0 &"otherwise"
-  )
-$
+Let $G=(V, E)$ be a graph with $V = {v_1, dots, v_n}$, the adjacency matrix of $G$ is an $n times n$ matrix $A = (a_(i j))$ where $ a_(i j) = cases(
+  1 & "if" v_i v_j in E(G),
+  0 & "otherwise"
+) $
 
 #exm[
   Here is a simple graph with its adjacency matrix
-  #align(center,
-    grid(
-      columns: 2,
-      column-gutter: 1cm,
-      align: center + horizon,
-      diagram({
-        node((0cm, 0cm), $1$, stroke: 0.5pt, name: "1", radius: 0.4cm)
-        node((2cm, 0cm), $2$, stroke: 0.5pt, name: "2", radius: 0.4cm)
-        node((4cm, 0cm), $3$, stroke: 0.5pt, name: "3", radius: 0.4cm)
-        node((2cm, -2cm), $4$, stroke: 0.5pt, name: "4", radius: 0.4cm)
+  #align(center, grid(
+    columns: 2,
+    column-gutter: 1cm,
+    align: center + horizon,
+    diagram({
+      node((0cm, 0cm), $1$, stroke: 0.5pt, name: "1", radius: 0.4cm)
+      node((2cm, 0cm), $2$, stroke: 0.5pt, name: "2", radius: 0.4cm)
+      node((4cm, 0cm), $3$, stroke: 0.5pt, name: "3", radius: 0.4cm)
+      node((2cm, -2cm), $4$, stroke: 0.5pt, name: "4", radius: 0.4cm)
 
-        edge(label("1"), label("2"))
-        edge(label("2"), label("3"))
-        edge(label("2"), label("4"))
-        edge(label("3"), label("4"))
-      }),
-      $A = mat(0, 1, 0, 0; 1, 0, 1, 1; 0, 1, 0, 1; 0, 1, 1, 0)$
-    )
-  )
+      edge(label("1"), label("2"))
+      edge(label("2"), label("3"))
+      edge(label("2"), label("4"))
+      edge(label("3"), label("4"))
+    }),
+    $A = mat(0, 1, 0, 0; 1, 0, 1, 1; 0, 1, 0, 1; 0, 1, 1, 0)$,
+  ))
 ]
-For weighted graphs we take the adjacency matrix would be $
-  a_(i j) = cases(
-    w(v_i v_j) &"if" v_i v_j in E,
-    "None" &"otherwise"
-  )
-$
+For weighted graphs we take the adjacency matrix would be $ a_(i j) = cases(
+  w(v_i v_j) & "if" v_i v_j in E,
+  "None" & "otherwise"
+) $
 If no edge exists, None, $infinity$ or $0$ can be assigned depending on the application.
 
 + Space complexity the adjacency matrix is $O(n^2)$.
@@ -194,40 +184,34 @@ For a weighted graph, we just add a couple $(v_j, w)$ if $v_i v_j in E$ with $w 
 In sparse graphs the adjacency list is preferred, while in dense graphs the adjacency matrix is preferred.
 
 #subsection[Incidence Matrix]
-Given a graph $G=(V, E)$, the incidence matrix $M$ is defined as follows $
-  M_(i j) = cases(
-    1 &"if" v_i "is incident to" e_j,
-    0 &"otherwise"
-  )
-$
-#align(center,
-  grid(
-    columns: 2,
-    column-gutter: 1cm,
-    align: center + horizon,
-    diagram({
-      node((0cm, 0cm), $1$, stroke: 0.5pt, name: "1", radius: 0.4cm)
-      node((2cm, 0cm), $2$, stroke: 0.5pt, name: "2", radius: 0.4cm)
-      node((4cm, 0cm), $3$, stroke: 0.5pt, name: "3", radius: 0.4cm)
-      node((2cm, -2cm), $4$, stroke: 0.5pt, name: "4", radius: 0.4cm)
+Given a graph $G=(V, E)$, the incidence matrix $M$ is defined as follows $ M_(i j) = cases(
+  1 & "if" v_i "is incident to" e_j,
+  0 & "otherwise"
+) $
+#align(center, grid(
+  columns: 2,
+  column-gutter: 1cm,
+  align: center + horizon,
+  diagram({
+    node((0cm, 0cm), $1$, stroke: 0.5pt, name: "1", radius: 0.4cm)
+    node((2cm, 0cm), $2$, stroke: 0.5pt, name: "2", radius: 0.4cm)
+    node((4cm, 0cm), $3$, stroke: 0.5pt, name: "3", radius: 0.4cm)
+    node((2cm, -2cm), $4$, stroke: 0.5pt, name: "4", radius: 0.4cm)
 
-      edge(label("1"), label("2"), $e_1$)
-      edge(label("2"), label("3"), $e_2$)
-      edge(label("3"), label("4"), $e_3$, bend: 30deg)
-      edge(label("2"), label("4"), $e_4$)
-      edge(label("1"), label("4"), $e_5$, bend: -30deg)
-    }),
-    $M = mat(1, 0, 0, 0, 1; 1, 1, 0, 1, 0; 0, 1, 1, 0, 0; 0, 0, 1, 1, 1)$
-  )
-)
+    edge(label("1"), label("2"), $e_1$)
+    edge(label("2"), label("3"), $e_2$)
+    edge(label("3"), label("4"), $e_3$, bend: 30deg)
+    edge(label("2"), label("4"), $e_4$)
+    edge(label("1"), label("4"), $e_5$, bend: -30deg)
+  }),
+  $M = mat(1, 0, 0, 0, 1; 1, 1, 0, 1, 0; 0, 1, 1, 0, 0; 0, 0, 1, 1, 1)$,
+))
 
-For a directed graph, we define the following representation $
-  M_(i j) = cases(
-    +1 &"if" e_j "enters the vertex" v_i,
-    -1 &"if" e_j "leaves the vertex" v_i,
-    0 &"otherwise"
-  )
-$
+For a directed graph, we define the following representation $ M_(i j) = cases(
+  +1 & "if" e_j "enters the vertex" v_i,
+  -1 & "if" e_j "leaves the vertex" v_i,
+  0 & "otherwise"
+) $
 #colbreak()
 #exm[
   Consider the following graph
@@ -259,8 +243,7 @@ $
   We have the following representations
   #grid(
     columns: (1fr, 1fr),
-    [Adjacency matrix: $
-      A = mat(
+    [Adjacency matrix: $ A = mat(
         0, 1, 1, 1, 0, 0, 0;
         0, 0, 0, 1, 0, 0, 0;
         0, 0, 0, 1, 0, 0, 1;
@@ -268,14 +251,11 @@ $
         0, 0, 0, 0, 0, 0, 1;
         0, 0, 1, 0, 1, 0, 0;
         0, 0, 0, 0, 0, 0, 0;
-      )
-    $],
-    [Adjacency list: $
-      &"Adj" = [\
-        &quad 1 -> {2, 3, 4}, 2 -> {4}, 3 -> {4, 7},\
-        &quad 4 -> {5, 6}, 5 -> {7}, 6 -> {5}, 7 -> {}\
-      &]
-    $]
+      ) $],
+    [Adjacency list: $ & "Adj" = [ \
+      & quad 1 -> {2, 3, 4}, 2 -> {4}, 3 -> {4, 7}, \
+      & quad 4 -> {5, 6}, 5 -> {7}, 6 -> {5}, 7 -> {} \
+      & ] $],
   )
 
   #align(center)[
@@ -285,7 +265,7 @@ $
       [Space], $O(n^2)$, $O(n + m)$, $O(n dot.c m)$,
       [Check if edge exists], $O(1)$, $O(d(v))$, $O(m)$,
       [Find all neighbors], $O(n)$, $O(d(v))$, $O(m)$,
-      [Add Edge], $O(1)$, $O(1)$, $O(n)$
+      [Add Edge], $O(1)$, $O(1)$, $O(n)$,
     )
   ]
 ]
@@ -328,9 +308,9 @@ Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)
 #colbreak()
 #exm[
   Let us apply BFS to the following graph $G=(V, E)$
-  $ 
-    V &= {A, B, C, D, E, F, G, H}\
-    E &= {(A, B), (A, C), (B, D), (B, E), (C, F)\
+  $
+    V & = {A, B, C, D, E, F, G, H} \
+    E & = {(A, B), (A, C), (B, D), (B, E), (C, F) \
       & quad (D, G), (E, G), (E, H), (F, H), (G, H)}
   $
 
@@ -338,27 +318,28 @@ Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)
     #diagram(
       mark-scale: 130%,
       {
-      node((0cm, -1cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
-      node((-2cm, -2cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
-      node((2cm, -2cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
-      node((-3cm, -4cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
-      node((-1cm, -4cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
-      node((2cm, -4cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
-      node((-2cm, -6cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
-      node((1cm, -6cm), $H$, stroke: 0.5pt, name: "H", radius: 0.4cm)
+        node((0cm, -1cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
+        node((-2cm, -2cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
+        node((2cm, -2cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
+        node((-3cm, -4cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
+        node((-1cm, -4cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
+        node((2cm, -4cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
+        node((-2cm, -6cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
+        node((1cm, -6cm), $H$, stroke: 0.5pt, name: "H", radius: 0.4cm)
 
 
-      edge(label("A"), label("B"), "-|>")
-      edge(label("B"), label("D"), "-|>")
-      edge(label("B"), label("E"), "-|>")
-      edge(label("D"), label("G"), "-|>")
-      edge(label("E"), label("G"), "-|>")
-      edge(label("E"), label("H"), "-|>")
-      edge(label("G"), label("H"), "-|>")
-      edge(label("A"), label("C"), "-|>")
-      edge(label("C"), label("F"), "-|>")
-      edge(label("F"), label("H"), "-|>")
-    })
+        edge(label("A"), label("B"), "-|>")
+        edge(label("B"), label("D"), "-|>")
+        edge(label("B"), label("E"), "-|>")
+        edge(label("D"), label("G"), "-|>")
+        edge(label("E"), label("G"), "-|>")
+        edge(label("E"), label("H"), "-|>")
+        edge(label("G"), label("H"), "-|>")
+        edge(label("A"), label("C"), "-|>")
+        edge(label("C"), label("F"), "-|>")
+        edge(label("F"), label("H"), "-|>")
+      },
+    )
   ]
   Starting from vertex $A$ we have
   #columns(2)[
@@ -411,10 +392,10 @@ Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)
   ]
   $Q$ is empty, algorithm stops. Which gives us the following results
   #table(
-    columns: (1.3cm,)*9,
+    columns: (1.3cm,) * 9,
     $v$, $A$, $B$, $C$, $D$, $E$, $F$, $G$, $H$,
     $d(v)$, $0$, $1$, $1$, $2$, $2$, $2$, $3$, $3$,
-    $P[v]$, "None", $A$, $A$, $B$, $B$, $C$, $D$, $E$
+    $P[v]$, "None", $A$, $A$, $B$, $B$, $C$, $D$, $E$,
   )
 ]
 
@@ -423,9 +404,7 @@ Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)
 ]
 
 #lem(ovcount: false)[
-  Let $G=(V, E)$ be a directed or undirected graph, and let $s in V$ be a fixed source point. For every edge $(u, v) in E$, we have $
-    delta(s, v) <= delta(s, u) + 1
-  $ where $delta(s, x)$ denotes the length of the shortest path.
+  Let $G=(V, E)$ be a directed or undirected graph, and let $s in V$ be a fixed source point. For every edge $(u, v) in E$, we have $ delta(s, v) <= delta(s, u) + 1 $ where $delta(s, x)$ denotes the length of the shortest path.
 ]
 
 #prf[
@@ -456,14 +435,12 @@ Global complexity with adjacency list is $O(n+m)$, and space complexity is $O(n)
 ]
 
 #exr(count: false)[
-  The diameter of a tree $T=(V, E)$ is defined as $
-    max_(u, v in V) delta(u, v)
-  $ that is the longest of all shortest path distances in the tree. Give an efficient algorithm to compute the diameter of a tree and analyze its complexity.
+  The diameter of a tree $T=(V, E)$ is defined as $ max_(u, v in V) delta(u, v) $ that is the longest of all shortest path distances in the tree. Give an efficient algorithm to compute the diameter of a tree and analyze its complexity.
 ]
 
 ```pcode
 procedure BFSmodified(T, s):
-  - create a queue Q 
+  - create a queue Q
   - create distances d
   - initialize d for all vertices to infinity
 
@@ -504,10 +481,10 @@ The BFS builds a BFS-Tree as it searches the graph. The tree corresponds to the 
   Run the BFS algorithm on the following graph and give the BFS tree starting from vertex $A$.
 
   #align(center, diagram({
-    node((0cm,  0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
-    node((2cm,  0cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
-    node((4cm,  0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
-    node((6cm,  0cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
+    node((0cm, 0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
+    node((2cm, 0cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
+    node((4cm, 0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
+    node((6cm, 0cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
     node((0cm, -1.5cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
     node((2cm, -1.5cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
     node((4cm, -1.5cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
@@ -527,10 +504,10 @@ The BFS builds a BFS-Tree as it searches the graph. The tree corresponds to the 
 
 Going through the same procedure as the previous example to get
 #align(center, diagram({
-  node((0cm,  0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
-  node((2cm,  0cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
-  node((4cm,  0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
-  node((6cm,  0cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
+  node((0cm, 0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
+  node((2cm, 0cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
+  node((4cm, 0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
+  node((6cm, 0cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
   node((0cm, -1.5cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
   node((2cm, -1.5cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
   node((4cm, -1.5cm), $G$, stroke: 0.5pt, name: "G", radius: 0.4cm)
@@ -606,10 +583,10 @@ There are two ways to implement DFS, either recursive or iterative.
 #exm[
   We consider the following graph, and we apply the DFS starting from the vertex $S$.
   #align(center, diagram({
-    node((0cm,  0cm), $S$, stroke: 0.5pt, name: "S", radius: 0.4cm)
-    node((3cm,  0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
-    node((6cm,  0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
-    node((9cm,  0cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
+    node((0cm, 0cm), $S$, stroke: 0.5pt, name: "S", radius: 0.4cm)
+    node((3cm, 0cm), $A$, stroke: 0.5pt, name: "A", radius: 0.4cm)
+    node((6cm, 0cm), $C$, stroke: 0.5pt, name: "C", radius: 0.4cm)
+    node((9cm, 0cm), $E$, stroke: 0.5pt, name: "E", radius: 0.4cm)
     node((0cm, -3cm), $B$, stroke: 0.5pt, name: "B", radius: 0.4cm)
     node((3cm, -3cm), $D$, stroke: 0.5pt, name: "D", radius: 0.4cm)
     node((6cm, -3cm), $F$, stroke: 0.5pt, name: "F", radius: 0.4cm)
@@ -630,8 +607,9 @@ There are two ways to implement DFS, either recursive or iterative.
     edge(label("G"), label("C"), "->")
   }))
   #colbreak()
-  
-  #grid(columns: (1fr, 1fr),
+
+  #grid(
+    columns: (1fr, 1fr),
     [
       + Initialization:
         - $Q = [S]$
@@ -677,7 +655,7 @@ There are two ways to implement DFS, either recursive or iterative.
         - Neighbors $C$, $D$
         - All visited.
         - $S = []$.
-    ]
+    ],
   )
 ]
 
@@ -702,10 +680,10 @@ It is clear that $d[U] < f[U]$ for any vertex $U$.
 
 #exm[
   #align(center, diagram({
-    node((0cm,    0cm), $Y$, stroke: 0.5pt, name: "Y", radius: 0.4cm)
-    node((2cm,    0cm), $Z$, stroke: 0.5pt, name: "Z", radius: 0.4cm)
-    node((4cm,    0cm), $S$, stroke: 0.5pt, name: "S", radius: 0.4cm)
-    node((6cm,    0cm), $T$, stroke: 0.5pt, name: "T", radius: 0.4cm)
+    node((0cm, 0cm), $Y$, stroke: 0.5pt, name: "Y", radius: 0.4cm)
+    node((2cm, 0cm), $Z$, stroke: 0.5pt, name: "Z", radius: 0.4cm)
+    node((4cm, 0cm), $S$, stroke: 0.5pt, name: "S", radius: 0.4cm)
+    node((6cm, 0cm), $T$, stroke: 0.5pt, name: "T", radius: 0.4cm)
     node((0cm, -1.5cm), $X$, stroke: 0.5pt, name: "X", radius: 0.4cm)
     node((2cm, -1.5cm), $W$, stroke: 0.5pt, name: "W", radius: 0.4cm)
     node((4cm, -1.5cm), $V$, stroke: 0.5pt, name: "V", radius: 0.4cm)
@@ -724,9 +702,7 @@ It is clear that $d[U] < f[U]$ for any vertex $U$.
     edge(label("V"), label("S"), "->")
     edge(label("U"), label("V"), "->")
   }))
-  we get the following expression $
-    (S(Z(Y(X X)Y)(W W)Z)S)(T(U(V V)U)T)
-  $
+  we get the following expression $ (S(Z(Y(X X)Y)(W W)Z)S)(T(U(V V)U)T) $
 ]
 
 #thm(ovcount: false)[
@@ -813,7 +789,7 @@ It is clear that $d[U] < f[U]$ for any vertex $U$.
     - as each vertex if finished insert it in front of L
     return L
   ```
-- *Trees:* 
+- *Trees:*
   #def(name: "Tree", ovcount: false)[
     A tree is a connected non-cyclic graph.
     - we say it is rooted if it has one designated vertex called a root.
@@ -850,7 +826,7 @@ It is clear that $d[U] < f[U]$ for any vertex $U$.
 #exr(ovcount: false, name: "The Word Transformer")[
   + Each word $D union {S}$ is a vertex. An edge links two vertices (words) differencing in exactly one letter.
   + All edges are weight $1$, any valid transformation sequence is a path in $G$ and the shortest path gives the minimum chain length which BFS guarantee.
-  + 
+  +
 ]
 
 #section[Minimum Spanning Tree]
@@ -865,7 +841,7 @@ procedure PrimMST(G, r):
     key[v] = ∞
     P[v] = NIL
   end
-  
+
   key[r] = 0
   Q = V
 
@@ -960,26 +936,71 @@ The unique node with $x."parent" = "NIL"$ is the root. A node with $x."left" = x
   A proper vertex coloring of a graph $G$ is a function $c: V(G) -> {1, dots, k}$ such that $forall (u, v) in E(G), c(u) != c(v)$. The minimum number of colors for which we can obtain a proper vertex coloring exists, denoted $chi(G)$.
 ]
 
+#subsection[Vertex Coloring]
+
 #thm(ovcount: false)[
   - $chi(G) >= omega(G)$ where $omega(G)$ is the clique number.
   - $chi(G) <= Delta(G) + 1$.
   - $chi(G) <= n$.
 ]
 
-#exr(count: false)[Prove the theorem]
-
 ```pcode
 procedure GreedyColoring(G):
-  initialize all vertices to uncolored
+  - initialize all vertices to uncolored
   for v in V(G) do
     - find the smallest color not used by any neighbor
     - assign this color for v
   end
 ```
 
-#follow-bar[Big Gap Here Again]
+#subsection[Edge Coloring]
+Edge coloring is an assignment of colors to the edges of a graph such that no adjacent edges have the same color. The chromatic $chi' (G)$ of a graph $G$ is the minimum number of colors needed for a proper edge coloring.
+```pcode
+procedure EdgeColoring(G):
+  - initialize the color of each edge to uncolored
+for each edge e1 in E do
+  create an empty set called used_color
+  for each edge e2 adjacent of e1 do
+    if e2 is already colored then
+      - add the color e2 to used_color
+    end
+  end
+  - choose the smallest positive color that is not used in used_colors
+  - assign this color to edge e1
+end
+```
 
-The complexity of the Djikstra algorithm is $O(n^2 + m) tilde.eq O(n^2)$.
+
+#chapter[Advanced Problems In Graph Theory][
+  In many real world scenarios, we're interested not just in whether a path exists between points, but finding the most efficient or optimal path. For example, the shortest path problem: given a weighted graph, find a path between two vertices such that the sum of the weights of its edges is minimized.
+]
+
+#section[Djikstra's Algorithm]
+Djikstra's algorithm solves the single source shortest path problem. The algorithm works for weighted graphs with non-negative weighted edges.
+
+```pcode
+procedure Djikstra(G, s):
+  - initialize distance d[v] = ∞ for all vertices v
+  - initialize d[s] = 0.4
+  - create a parent array P
+  - create a distance priority queue with all vertices
+
+  while Q not empty do
+    - extract vertex u with minimum distance from Q
+    for each neighbor v of u do
+      alt = d[u] + weight(u, v)
+      if alt < d[v] then
+        d[v] = alt
+        P[v] = u
+        - update priority v in Q
+      end
+    end
+  end
+```
+
+The complexity of the Djikstra algorithm is dependent on the implementation of the extract min function
+- if it is array-based with normal search, the extraction is $O(n)$ and thus the total complexity is $O(n^2 + m) tilde.eq O(n^2)$.
+- if it is implemented as binary heap, then extramin will be in $O(log(n))$ and decreasing key is $O(log(n))$ and thus the total complexity is $O((n+m)log(n))$.
 
 #thm(name: "Djikstra's Algorithm Correctness", ovcount: false)[
   Djikstra's algorithm gives the shortest algorithm on a postive weighted graph.
@@ -992,7 +1013,7 @@ The complexity of the Djikstra algorithm is $O(n^2 + m) tilde.eq O(n^2)$.
 ]
 
 #section[Bellman-Ford Algorithm]
-Which Djikstra's algorithm works efficiently for graphs with non-negative weights if fails when negative wieghts are present. The Bellman-Ford algorithm solves this single source.
+Which Djikstra's algorithm works efficiently for graphs with non-negative weights if fails when negative weights are present. The Bellman-Ford algorithm solves this single source.
 
 ```pcode
 procedure Bellman-Ford(G, s):
@@ -1018,3 +1039,69 @@ procedure Bellman-Ford(G, s):
 
   return d[], p[]
 ```
+
+#exr(ovcount: false)[
+  Prove the correctness of Bellman-Ford algorithm (assuming that there are no negative cycles).
+]
+
+Let $p$ be the shortest path from $s$ to $v$
+- base case $d[s] = 0 = delta(s, s)$.
+- Assume that all shortest path of length $k$ are determined in iteration $1$, all shortest path of length $1$ are determined, same for the next iteration, then continuing each iteration, we have that $d[v] <= d[v_k] + w(v_k, v)$. Hence all shortest path of length $<= k+1$ edges are correctly identified.
+
+#section[Floyd-Wrashall Algorithm]
+Sometimes we need to find shortest paths between all pairs of vertices while we could run Djikstra's algorithm $card V$ times, the Floyd-Warshall algorithm offers an elegant solution.
+
+```pcode
+procedure FloydWarshall(G):
+  - Create distance matrix
+  - d[i, j] = w(i, j), d[i, i] = 0
+  for k = 1 to #V do
+    for j = 1 to #V do
+      for i = 1 to #V do
+        if d[i, k] + d[k, j] < d[i, j] then
+          d[i, j] = d[i, k] + d[k, j]
+        end
+      end
+    end
+  end
+
+  return d
+```
+
+#exr(ovcount: false)[
+  Add an instruction to the pseudocode to reconstruct all shortest paths.
+]
+
+#section[Maximum Flow & Min Cuts]
+Many engineering and optimization problems can be modeled as movement of a material through a network of conducts from a source to a sink. The fundamental algorithmic question is what is the maximum rate at which material can be shipped from source to sink, respecting the capacity of each conduct.
+
+#def(name: "Flow Network", ovcount: false)[
+  A flow network is a directed graph $G=(V, E)$ together with a capacity function $C: V times V -> RR$ satisfying:
+  + $forall u v in E, C(u, v) >= 0$.
+  + $forall u v in.not E, C(u, v) = 0$
+  + No self loops, no anti-parallel pairs.
+  + Two distinguied vertices a source $s$ and sink $t$.
+  + Every vertex $v in V$ lies on a source path $s -> v -> t$.
+]
+
+#def(name: "Flow", ovcount: false)[
+  Let $G = (V, E)$ be a directed graph and $C: V times V -> RR$ a capacity function. A flow in $G$ is a function $f: V times V -> RR$ satisfying the two following properties
+  - Capacity constraint: $forall u, v in V, 0 <= f(u, v) <= C(u, v)$.
+  - Flow conservation: $forall u in V \\ {s, t}, sum_(v in V) f(u, v) = sum_(v in V) f(v, u)$
+  The value of a flow is $|f| = sum_(v in V) f(s, v) - sum_(v in V) f(v, s)$.
+]
+
+What if the problem has several sources ${s_1, dots, s_n}$ and several sinks ${t_1, dots, t_n}$? Given a flow $f$ in $G$, the residual network $G_f = (V, E_f)$ captures how additional flow can be pushed away each edge in either directions.
+
+#def(name: "Residual Capacity/Residual Network", ovcount: false)[
+  Let $G = (V, E)$ be a flow network, for vertices $u, v in V$ the residual capacities are defined as $ C_f (u, v) = cases(
+    C(u, v) - f(u, v) & "if" u v in E_f "(Forward residual edge)",
+    f(v, u) & "if" v u in E_f "(Backward residual edge)",
+    0 & "otherwise"
+  ) $
+  The residual network is $G_f = (V, E_f)$ where $ E_f = {(u, v) in V times V | C_f (u, v) > 0} $
+]
+
+#def(name: "Augmenting Path", ovcount: false)[
+  Let $G$ be a flow network, an augmenting path $p$ is a simple path from $s$ to $t$ in the residual network $G_f$, the residual capacity of $p$ is $C_f (p) = min_((u, v) in p) C_f (u, v)$.
+]

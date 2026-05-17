@@ -1,5 +1,5 @@
-#import "@preview/finite:0.5.0" as finite: automaton
 #import "@preview/wrap-it:0.1.1": wrap-content
+#import "@preview/commute:0.3.0": *
 
 #import "@THR/Course:1.0.0": *
 #show: template.with(
@@ -11,7 +11,6 @@
 )
 
 #let card = math.op("#")
-#let subset = $subset.eq$
 
 #chapter[Introduction][]
 
@@ -317,6 +316,121 @@ In general, prime ideal factorization does not hold even if $I$ is invertible, t
   + Show that a number ring has only finitely many ideals $I$ satisfying for some fixed bound $B$, $card (R:I) <= B$.
 ]
 
+Let $K$ be a number field, we have that $K = QQ(alpha)$ for some primitive element $alpha$. We have that $ZZ subset QQ$ thus $ZZ subset K$ and $alpha in K$ so $ZZ[alpha] subset K$.
+
+#align(center)[
+  #commutative-diagram(
+    node-padding: (2cm, 2cm),
+    padding: 0.3cm,
+    node((0, 1), $QQ$),
+    node((0, 0), $ZZ$),
+    node((1, 1), $K$),
+    node((1, 0), $ZZ[alpha]$),
+
+    arr($QQ$, $K$, $n$, "inj"),
+    arr($ZZ$, $ZZ[alpha]$, "", "inj"),
+    arr($ZZ[alpha]$, $K$, $subset$),
+    arr($ZZ$, $QQ$, $subset$),
+  )
+]
+
+$ZZ[alpha]^star$ can be infinite, but it is finitely generated, as stated in the Dirichlet unit theorem.
+
 Consider now the field $K = QQ[X]\/(f(X))$ where $f(X) = X^2 + 5$, and the ring $R = ZZ[sqrt(-5)]$, take the ideal $I = (6) = 6 ZZ[sqrt(-5)]$ which we want to factorize, we start by finding all prime ideals $frak(p)$ such that $(6) subset frak(p) subset ZZ[sqrt(-5)]$. We have that $ZZ[sqrt(-5)] = ZZ + ZZ sqrt(-5)$, $
   R\/I = (ZZ + ZZ sqrt(-5))/(6 ZZ + 6 ZZ sqrt(-5)) tilde.equiv (ZZ\/6 ZZ) times (ZZ\/6ZZ)
-$ and therefore $card R\/I = 36 = 2^2 dot.c 3^2$, since any ideal of a number field is maximal, then $R\/I$ is a field, we have $4$ possible fields it can be, either a field of order $2, 3, 2^2, 3^2$ so $R\/I$ can have either characteristic $2$, $3$. Suppose that the characteristic is $3$, and consider the map from $ZZ[sqrt(-5)]$ to $FF_3$ defined as $phi_3: a + b sqrt(-5) |-> a + b alpha mod 3$
+$ and therefore $card R\/I = 36 = 2^2 dot.c 3^2$, since any ideal of a number field is maximal, then $R\/I$ is a field, we have $4$ possible fields it can be, either a field of order $2, 3, 2^2, 3^2$ so $R\/I$ can have either characteristic $2$, $3$. Suppose that the characteristic is $3$, and consider a morphism from $ZZ[sqrt(-5)]$ to $FF_3$ defined as $phi_3: a + b sqrt(-5) |-> a + b alpha mod 3$, for $phi_3$ to be a ring morphism we need $alpha$ to be a root of $f mod 3$ which is $X^2 - 1 = (X - 1)(X + 1) mod 3$ so we take $alpha = plus.minus 1$, the kernel of those morphisms would give ideals of $ZZ[sqrt(-5)]$ which are $frak(p)_3 = ker (a + b sqrt(-5) |-> a + b mod 3) = (3, 1 - sqrt(-5))$ and $frak(q)_3 = ker (a + b sqrt(-5) |-> a - b mod 3 = (3, 1 + sqrt(-5))$, notice now that $frak(p)_3 frak(q)_3 = (3, 1 - sqrt(-5)) (3, 1 + sqrt(-5)) = (9, 3 + 3 sqrt(-5), 3 - 3 sqrt(-5), 6) = (3)$, now suppose that the field is of characteristic $2$, then $phi_2: a + b sqrt(-5) |-> a + b mod 2$ since $X^2 + 5 = (X + 1)^2 mod 2$, $ker phi_2 = (2, 1 + sqrt(-5)) = frak(p)_2$, we have that $frak(p)_2^2 = (4, 2 + 2 sqrt(-5), -4 + 2 sqrt(-5)) = (2)$. We have that $6 = 2 dot.c 3 => (6) = (2) (3) = frak(p)_2^2 frak(p)_3 frak(q)_3$, notice that we can get other decomposition of $6$ inside of $ZZ[sqrt(-5)]$ by considering other orders of the product of those ideals, for example taking $(6) = frak(p)_2 frak(p)_3 frak(p)_2 frak(q)_3 = (6, 1 + sqrt(-5)) (6, 1 - sqrt(-5))$, so $6$ can be decomposed also into $(1 + sqrt(-5)) (1 - sqrt(-5))$.
+
+#follow-bar[Stevenhagen Course Unfinished]
+#chapter[Rings Of Integers][]
+
+#def(name: "Integral Element/Ring Of Integers", ovcount: false)[
+  Let $K$ be a number field, and $beta in K$. We say that $beta$ is an integral element in $K$ if there exists a monic polynomial $f in ZZ[T]$ such that $f(beta) = 0$, denote the set of all integral elements of $K$ as $O_K$ which is called the ring of integers.
+]
+
+#pro(ovcount: false)[
+  Let $x in K$, the following statements are equivalent:
+  + $x$ is integral.
+  + the minimal polynomial of $x$, $f_(x,QQ)$ is in $ZZ[X]$.
+  + there exists a finitely generated subgroup $M subset K$ such that $x M subset M$.
+]
+
+#prf[
+  - $1. => 2.$ By Gauss lemma.
+  - $2. => 3.$ Let $f_(x, QQ) = T^n + a_(n-1) T^(n-1) + dots.c + a_0 in ZZ[T]$, consider $M = ZZ x + ZZ x^2 + dots.c + ZZ x^(n-1)$, we have that $x^n = x x^(n-1) = -a_(n-1) x^(n-1) - dots.c - a_0 in M$ then $x M subset M$.
+  - $3. => 1.$ Consider $M = ZZ e_1 + dots.c + ZZ e_n$ with $e_i in K$, by hypothesis, we have that $forall i, x e_i in M$ thus there exists $a_(i, j) in ZZ, x e_i = a_(i, 1) e_1 + dots.c + a_(i, n) e_n$, we can write it in the following way $
+      mat(a_(11), dots.c, a_(1 n); dots.v, dots.down, dots.v; a_(n 1), dots.c, a_(n n)) vec(e_1, dots.v, e_n) = x vec(e_1, dots.v, e_n) => (A - x 1_n) vec(e_1, dots.v, e_n) = 0
+    $ thus $x$ is a root of characteristic polynomial of $A$, which is monic and has integer coefficients, thus $x$ is integral.
+]
+
+#pro(ovcount: false)[
+  $O_K$ is a ring.
+]
+
+#prf[
+  + Let $x, y in O_K$, we want to prove that $x y, x + y in O_K$, let $M = ZZ e_1 + dots.c + ZZ e_m$, $x M subset M$ and $N = ZZ f_1 + dots.c + ZZ f_n$, $y N subset N$. Take $L = sum_(i,j) ZZ e_i f_j$, we have that $(x y) (e_i f_j) = (x e_i) (y f_j) in L$ and thus $x y L subset L$ and $L$ is finitely generated thus $x y in O_K$.
+]
+
+Combined with Kummer-Dedekind, we can produce elements in the ring of integers: let $alpha in O_K => ZZ[alpha] subset O_K$, suppose that $frak(p) = (p, g(alpha))$ is singular ($f = g q + p s$, $q(alpha), s(alpha) in frak(p)$), we have that $1/p q(alpha)$ is in the multiplier ring of $frak(p)$: $
+  1/p q(alpha) (p R + g(alpha) R) = q(alpha) R + s(alpha) R in frak(p)
+$ but notice that $frak(p) = p R + g(alpha) R = alpha (ZZ + ZZ alpha + dots.c + ZZ alpha^(-1) + g(alpha) (ZZ + ZZ alpha + dots.c + ZZ alpha^(n-1)) subset frak(p)$
+
+#exm[
+  + Let $K = QQ(alpha)$, $alpha = root(3, 10)$, $f_(alpha) = X^3 - 10 => alpha in O_K => ZZ[alpha] subset O_K$. $Delta f_alpha = - 3^3 dot.c 2^2 dot.c 5^2$
+    - $p = 2$: $f_alpha mod 2 = X^3 -> frak(p)_2 = (2, alpha)$ and $2^2 divides.not 10 => frak(p)_2$ is regular.
+    - $p = 5$: $f_alpha mod 5 = X^3 -> frak(p)_5 = (5, alpha)$ which is regular since $5^2 divides.not 10$.
+    - $p = 3$: $f_alpha mod 3 = (X - 1)^3 -> frak(p)_3 = (3, alpha - 1)$, $f_alpha (X) = X^3 - 10 = X^3 - 1 - 9 = (X-1)(X^2 + X + 1) - 9 => 3^2 | 9$ and thus $frak(p)_3$ is singular, from Kummer-Dedekind, we have that $beta = (alpha^2 + alpha + 1)/3 in O_K$, we can verify that by calculating the minimal polynomial $f_beta = X^3 - X^2 - 3 X - 3$.
+    
+    We can deduce from the formula $Delta f = [O_K:ZZ[alpha]]^2 Delta_K$, thus $[O_K:ZZ[alpha]]=3$ and $Delta_K = -3 dot.c 2^2 dot.c 5^2$, we deduce that $ZZ[alpha] subset.neq ZZ[alpha, beta] = O_K$, we claim that $O_K = ZZ[beta]$, by Kummer-Dedekind, we have that $(alpha - 1) beta = 3 => alpha = 3/beta + 1$, from the minimal polynomial of $beta$ we have that $beta (beta^2 - beta - 3) = beta^3 - beta^2 - 3 beta = 3 => beta/3 = beta^3 - beta^2 - 3 beta$ hence $alpha = beta^2 - beta - 2 in ZZ[beta]$.
+
+    We expect that all rings of integers are of the form $ZZ[alpha]$, which is not the case, and we call those who happen to be of that form to be monogenic.
+  + Let $K = QQ(alpha)$ with $f_alpha = X^3 - X + 8$, we have that $Delta f_alpha = - 2^2 dot.c 431$, we have that $ZZ[alpha subset O_K$, only possible singular prime is $2$, $f_alpha equiv X (X-1)^2 mod 2 -> frak(p)_2 = (2, alpha)$ and $frak(p)'_2 = (2, alpha - 1)$, $frak(p)_2$ is regular, $f_alpha = X^3 - X + 8 = (X-1) (X^2 + X) + 8$, $2^2 | 8$ then $frak(p)'_2$ is singular. From Kummer-Dedekind we have that $beta = (alpha^2 + alpha)/2 in O_K \\ ZZ[alpha]$ with $f_beta = X^3 - X^2 + 6 X - 8$, from the formula we have that $[O_K:ZZ[alpha]] = 2$ then $ZZ[alpha, beta] = O_K$, the question now is $ZZ[alpha, beta] = ZZ[beta]$ like before?
+    - $p = 2$: $f_beta equiv X^2 (X-1) mod 2$, then in $ZZ[beta]$, $2$ primes $frak(q)_2 = (2, beta)$ and $frak(q)'_2 = (2, beta - 1)$, $frak(q)'_2$ is regular, and $frak(q)_2$ is singular, thus $ZZ[beta] != O_K$
+  Suppose now that there is $gamma in O_K$ such that $O_K = ZZ[gamma]$, we have that $(alpha - 1) beta = -4 <=> (alpha - 1) beta = 0 in FF_2$, which gives $3$ ring homomorphisms, $(alpha, beta) |-> (1, 0), (alpha, beta) |-> (1, 1), (alpha, beta) |-> (0, 0)$, in fact all possibilities occur: $
+    2 O_K = (2, alpha-1, beta) (2, alpha-1, beta-1) (2, alpha, beta)
+  $ if by contradiction $O_K$ is monogenic, $O_K = ZZ[gamma]$, it has at most $2$ homomorphisms to $FF_2$ which is a contradiction.
+]
+
+#section[Trace And Norm]
+
+#def(name: "Trace/Norm", ovcount: false)[
+  Let $K$ a number field and $x in K$, define the map $m_x: K |-> K, alpha |-> x alpha$ which is a $QQ$-linear map.
+  - Characteristic polynomial of $x$ is $"char"(m_x) in QQ[X]$.
+  - Norm of $x$ is $det(m_x)$, denoted $N_(K\/Q) (x) in QQ$.
+  - Trace of $x$ is $tr(m_x)$, denoted $"Tr"_(K\/Q) (x) in QQ$.
+]
+
+#pro(ovcount: false)[
+  Let $K$ be a number field, let $x in K$ with a characteristic polynomial $"char"(m_x) = T^n + a_(m-1) T^(m-1) + dots.c + a_0$. We have that
+  - $N_(K\/Q) (x) = (-1)^m a_0 in QQ$.
+  - $"Tr"_(K\/Q) (x) = - a_(m-1) in QQ$.
+  - $N_(K\/Q) (x y) = N_(K\/Q) (x) N_(K\/Q) (y)$.
+  - $"Tr"(x + y) = "Tr"(x) + "Tr"(y)$.
+]
+
+#exm[
+  - Let $K = QQ(sqrt(d))$, we have $N_(K\/Q) (a + b sqrt(d)) = a^2 - d b^2$. Lets verify that this agrees with the new definition, $X = a + b sqrt(d)$, consider the basis $(1, sqrt(d))$ then $x dot.c 1 = a + b sqrt(d)$ and $x sqrt(d) = d b + sqrt(d)$ then $m_x = mat(a, d b; b, a)$, which has norm $a^2 - d b^2$, and trace $2 a$.
+  - Let $K = QQ(root(4, 2))$, and $x = sqrt(2)$, we have a basis $(1, alpha, alpha^2, alpha^3)$ with $alpha = root(4, 2)$, notice that $x = alpha^2$, we have $
+    cases(
+      alpha^2 dot.c 1 &= alpha^2,
+      alpha^2 dot.c alpha &= alpha^3,
+      alpha^2 dot.c alpha^2 &= 2,
+      alpha^2 dot.c alpha^3 &= 2 alpha
+    ) => m_x = mat(0, 0, 2, 0; 0, 0, 0, 2; 1, 0, 0, 0; 0, 1, 0, 0)
+  $ we have that $"char"(x), "char"(m_x) = T^4 - 4 T^2 + 4 = (T^2 - 2)^2$, let now $L = QQ(sqrt(2))$, $x in L$, we have that $"char"(x) = T^2 - 2$.
+]
+
+#section[Embeddings]
+Let $K$ be a number field, by the primitive root theorem, there exists a primitive element $alpha$ such that $K = QQ(alpha) = QQ[X]\/(f)$ with $f = f_alpha^QQ$. $K$ can be embedded in $CC$ $n=[K:QQ]$ different ways, the embeddings would be of the form $Phi_i: alpha - X mod f |-> alpha_i$ where $alpha_1, dots, alpha_n$ are the complex roots of $alpha$. The $Phi_i$ for which $Phi_i (K) subset RR$ are called real embeddings, and the number of those embeddings is denoted $r$, and the other embeddings such that $Phi_i (K) subset.not RR$ we call them complex embeddings, which come in pairs $Phi_i, overline(Phi_i)$, and we take $s$ the number of pairs of complex embeddings. $(r, s)$ is the signature of $K$.
+
+We can consider all the embeddings at the same time, instead of looking to $QQ[X]\/(f)$, we look for $CC[X]\/(f)$, notice that $QQ[X]\/(f)$ is a field while $CC[X]\/(f)$ is a ring, but notice that in $CC[X]$ we have that $f = product (X - alpha_i)$, thus by the CRT we have that $CC[X]\/(f) tilde.equiv product_(i=1)^n CC[X]\/(X - alpha_i) tilde.equiv product_(i=1)^n CC$, thus the injective map from $QQ[X]\/(f) -> product_(i=1)^n CC$ gives $alpha = X mod f |-> (alpha_1, dots, alpha_n) = (phi_1 (alpha), dots, phi_n (alpha)$, denote this map $Phi$$
+  Phi: QQ[X]\/(f) &-> product_(i=1)^n CC, quad quad alpha &|-> (Phi_1 (alpha), dots, Phi_n (alpha))
+$
+
+#thm(ovcount: false)[
+  Let $K$ be a number field and $x in K$.
+  - $N_(K\/QQ) (x) = product_(i=1)^n Phi_i (x)$.
+
+  - $"Tr"_(K\/QQ) (x) = sum_(i=1)^n Phi_i (x)$.
+
+  - $"char" (x) = (f_(K, QQ))^([K:QQ(x)])$.
+]
